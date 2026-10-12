@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   Search, ChevronRight, MessageCircle, Mail, Bot, ShieldCheck,
   Rocket, Truck, CreditCard, ShieldAlert, UserCircle, FileText,
-  Boxes,
+  Boxes, Phone,
 } from "lucide-react";
 import { toast, Toaster } from "sonner";
 import {
@@ -196,12 +196,18 @@ export function HelpView() {
                   <MessageCircle className="w-4 h-4" /> Chat now
                 </button>
                 <a
-                  href="https://wa.me/233501234567"
+                  href="https://wa.me/2250707365136"
                   target="_blank"
                   rel="noreferrer"
                   className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] text-white text-[12px] font-bold uppercase tracking-wide px-4 py-2.5 hover:opacity-90"
                 >
-                  <MessageCircle className="w-4 h-4" /> WhatsApp us
+                  <MessageCircle className="w-4 h-4" /> WhatsApp : +225 0707 36 51 36
+                </a>
+                <a
+                  href="tel:+2250707365136"
+                  className="w-full inline-flex items-center justify-center gap-2 border border-[#DADAD9] text-[#222] text-[12px] font-bold uppercase tracking-wide px-4 py-2.5 hover:bg-[#F5F5F5]"
+                >
+                  <Phone className="w-4 h-4" /> Appeler : +225 0707 36 51 36
                 </a>
                 <a
                   href="mailto:support@benjaminbazaar.com"

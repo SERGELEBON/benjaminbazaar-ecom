@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useApp } from "@/lib/store";
 import { MessageCircle } from "lucide-react";
 
-const PHONE = "2250700000000"; // BENJAMINBAZAAR WhatsApp business line (Côte d'Ivoire)
+const PHONE = "2250707365136"; // BENJAMINBAZAAR WhatsApp business line (Côte d'Ivoire)
 
 export function WhatsAppButton() {
   const view = useApp((s) => s.view);
