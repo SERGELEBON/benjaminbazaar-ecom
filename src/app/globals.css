@@ -1,0 +1,352 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   BENJAMIN BAZAAR — Alibaba structure, BENJAMIN editorial skin
+   Palette Côte d'Ivoire : Orange #FF6A00 + Vert #16A34A + Noir #000.
+   Editorial, flat, no border-radius, 1px grey separators. Open Sans.
+   Fond : image e-commerce pro (entrepôt / logistique).
+   ============================================================ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-open-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* BENJAMIN brand tokens — palette ivoirienne orange + vert */
+  --color-benjamin-orange: #FF6A00;
+  --color-benjamin-orange-dark: #E55A00;
+  --color-benjamin-green: #16A34A;
+  --color-benjamin-green-dark: #15803D;
+  --color-benjamin-black: #000000;
+  --color-benjamin-grey-line: #DADAD9;
+  --color-benjamin-panel: #ECECEC;
+  --color-benjamin-link: #337AB7;
+  --color-benjamin-success: #16A34A;
+
+  /* Force NO radius everywhere */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+}
+
+:root {
+  --radius: 0px;
+  --background: #ffffff;
+  --foreground: #333333;
+  --card: #ffffff;
+  --card-foreground: #333333;
+  --popover: #ffffff;
+  --popover-foreground: #333333;
+  --primary: #FF6A00;
+  --primary-foreground: #ffffff;
+  --secondary: #000000;
+  --secondary-foreground: #ffffff;
+  --muted: #ECECEC;
+  --muted-foreground: #6b6b6b;
+  --accent: #ECECEC;
+  --accent-foreground: #333333;
+  --destructive: #FF6A00;
+  --border: #DADAD9;
+  --input: #DADAD9;
+  --ring: #FF6A00;
+  --chart-1: #FF6A00;
+  --chart-2: #000000;
+  --chart-3: #16A34A;
+  --chart-4: #337AB7;
+  --chart-5: #DADAD9;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #333333;
+  --sidebar-primary: #FF6A00;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ECECEC;
+  --sidebar-accent-foreground: #333333;
+  --sidebar-border: #DADAD9;
+  --sidebar-ring: #FF6A00;
+}
+
+.dark {
+  --background: #0b0b0b;
+  --foreground: #ECECEC;
+  --card: #0b0b0b;
+  --card-foreground: #ECECEC;
+  --popover: #0b0b0b;
+  --popover-foreground: #ECECEC;
+  --primary: #FF6A00;
+  --primary-foreground: #ffffff;
+  --secondary: #ECECEC;
+  --secondary-foreground: #000000;
+  --muted: #1a1a1a;
+  --muted-foreground: #9b9b9b;
+  --accent: #1a1a1a;
+  --accent-foreground: #ECECEC;
+  --destructive: #FF6A00;
+  --border: #2a2a2a;
+  --input: #2a2a2a;
+  --ring: #FF6A00;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    border-radius: 0 !important;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: var(--font-open-sans), "Open Sans", system-ui, sans-serif;
+    font-size: 13px;
+    color: #333;
+  }
+}
+
+/* ── Fond du site complet : image e-commerce pro, teintée orange + vert ── */
+/* HORS @layer pour garantir la priorité (Tailwind v4 purge les classes custom en @layer base) */
+.benjamin-bg {
+  background-color: #1f1a14 !important;
+  background-image:
+    linear-gradient(115deg, rgba(255,106,0,0.5), rgba(22,163,74,0.42), rgba(15,12,8,0.85)),
+    url("https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=2000&q=75") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+
+.benjamin-column {
+  position: relative;
+  background: #ffffff;
+}
+/* Bande orange (14px) + bande verte (4px) = drapeau Côte d'Ivoire */
+.benjamin-column::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background: #FF6A00;
+  z-index: 5;
+}
+.benjamin-column::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #16A34A;
+  z-index: 5;
+}
+@media (max-width: 768px) {
+  .benjamin-column::before {
+    width: 100%;
+    height: 6px;
+    bottom: auto;
+    right: 0;
+    left: 0;
+    background: linear-gradient(90deg, #FF6A00 0%, #FF6A00 60%, #16A34A 60%, #16A34A 100%);
+  }
+  .benjamin-column::after { display: none; }
+}
+
+@layer components {
+  /* BENJAMIN black bar with orange ▼ triangle + white bold title */
+  .benjamin-bar {
+    background: #000;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+  }
+  .benjamin-bar::before {
+    content: "▼";
+    color: #FF6A00;
+    font-size: 11px;
+  }
+  .benjamin-bar-red {
+    background: #FF6A00;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 8px 14px;
+    font-size: 15px;
+  }
+  /* Green bar variant (vert ivoirien) */
+  .benjamin-bar-green {
+    background: #16A34A;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 8px 14px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .benjamin-bar-green::before {
+    content: "▼";
+    color: #fff;
+    font-size: 11px;
+  }
+  /* BENJAMIN stacked tiles */
+  .benjamin-tile {
+    background: #ECECEC;
+    border: 1px solid #DADAD9;
+    color: #333;
+    padding: 9px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .benjamin-tile:hover,
+  .benjamin-tile.active {
+    background: #FF6A00;
+    color: #fff;
+  }
+  .benjamin-tile:hover .benjamin-tile-arrow,
+  .benjamin-tile.active .benjamin-tile-arrow {
+    transform: translateX(2px);
+  }
+  /* Square black button UPPERCASE */
+  .btn-square-black {
+    background: #000;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-size: 12px;
+    padding: 9px 16px;
+    border: 1px solid #000;
+    cursor: pointer;
+    transition: opacity 0.12s ease;
+  }
+  .btn-square-black:hover { opacity: 0.85; }
+  /* Red primary button */
+  .btn-benjamin-orange {
+    background: #FF6A00;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-size: 12px;
+    padding: 9px 16px;
+    border: 1px solid #FF6A00;
+    cursor: pointer;
+    transition: background 0.12s ease;
+  }
+  .btn-benjamin-orange:hover { background: #E55A00; }
+  /* Green primary button (vert ivoirien) */
+  .btn-benjamin-green {
+    background: #16A34A;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-size: 12px;
+    padding: 9px 16px;
+    border: 1px solid #16A34A;
+    cursor: pointer;
+    transition: background 0.12s ease;
+  }
+  .btn-benjamin-green:hover { background: #15803D; }
+  .btn-outline-grey {
+    background: #fff;
+    color: #333;
+    border: 1px solid #DADAD9;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .btn-outline-grey:hover { border-color: #FF6A00; color: #FF6A00; }
+  /* Section title red uppercase (PREMIÈRE LECTURE style) */
+  .benjamin-section-title {
+    color: #FF6A00;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-size: 13px;
+  }
+  /* Square pagination buttons */
+  .benjamin-nav-btn {
+    background: #000;
+    color: #fff;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid #000;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  .benjamin-nav-btn:hover { opacity: 0.85; }
+  .benjamin-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  /* Editor's inline link */
+  .benjamin-link { color: #337AB7; text-decoration: underline; }
+  .benjamin-link:hover { color: #FF6A00; }
+  /* Custom scrollbar for long lists */
+  .benjamin-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+  .benjamin-scroll::-webkit-scrollbar-track { background: #ECECEC; }
+  .benjamin-scroll::-webkit-scrollbar-thumb { background: #999; }
+  .benjamin-scroll::-webkit-scrollbar-thumb:hover { background: #FF6A00; }
+  /* WhatsApp pulse */
+  @keyframes benjamin-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.55); }
+    70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+  }
+  .wa-pulse { animation: benjamin-pulse 2s infinite; }
+  /* Hide native number input spinners */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  /* No shadow policy */
+  * { box-shadow: none !important; }
+}

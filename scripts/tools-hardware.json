@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "hardware tools wrench drill screwdriver hammer product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a40091eace6e.jpg",
+      "caption": "",
+      "source": "Alibaba.com",
+      "original_width": "1500px",
+      "original_height": "1287px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3ef3d3055889.jpg",
+      "caption": "",
+      "source": "HOTO",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2638e75efd5d.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "894px",
+      "original_height": "908px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b9bde09a1e2b.jpg",
+      "caption": "",
+      "source": "Alibaba.com",
+      "original_width": "1280px",
+      "original_height": "1280px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/76c085c04617.jpg",
+      "caption": "",
+      "source": "The Home Depot",
+      "original_width": "1241px",
+      "original_height": "650px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3e609a6fe3c1.jpeg",
+      "caption": "",
+      "source": "Lowe's",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7d5cbfb8bc7f.webp",
+      "caption": "",
+      "source": "Century Drill & Tool",
+      "original_width": "2000px",
+      "original_height": "1335px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/83371919e17f.jpg",
+      "caption": "",
+      "source": "Norfolk Hardware",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ed33ea60b855.jpg",
+      "caption": "",
+      "source": "workpro tools",
+      "original_width": "1946px",
+      "original_height": "1946px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6b79ce681bfb.png",
+      "caption": "",
+      "source": "Walmart",
+      "original_width": "1254px",
+      "original_height": "1254px"
+    }
+  ]
+}

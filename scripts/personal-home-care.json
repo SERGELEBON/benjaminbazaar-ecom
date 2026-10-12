@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "personal care shampoo soap hygiene bottle product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4dac90df12d8.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "1000px",
+      "original_height": "981px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6df0416f3d80.png",
+      "caption": "",
+      "source": "www.soapboxsoaps.com",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e6c69e816d6f.jpg",
+      "caption": "",
+      "source": "Deposit Photos",
+      "original_width": "1600px",
+      "original_height": "1695px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a4e14c07e590.jpg",
+      "caption": "",
+      "source": "The Honest Company",
+      "original_width": "1946px",
+      "original_height": "1946px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2d74e5f8386b.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "1600px",
+      "original_height": "1600px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9ab9fc2f12a7.jpg",
+      "caption": "",
+      "source": "www.publicgoods.com",
+      "original_width": "832px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b4727a0a4157.jpg",
+      "caption": "",
+      "source": "Pinterest",
+      "original_width": "675px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/90e14c07f8e5.jpg",
+      "caption": "",
+      "source": "The New York Times",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d1d1993c9e18.jpg",
+      "caption": "",
+      "source": "www.suave.com",
+      "original_width": "804px",
+      "original_height": "1540px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f1f8434f95c1.jpg",
+      "caption": "",
+      "source": "rawsugarliving.com",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    }
+  ]
+}

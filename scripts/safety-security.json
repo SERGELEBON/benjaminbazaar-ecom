@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "safety helmet security camera CCTV vest gloves product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/da7264b3f8eb.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/215c0acd0e60.png",
+      "caption": "",
+      "source": "CCTV-MALL",
+      "original_width": "1400px",
+      "original_height": "788px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9da519294be6.jpg",
+      "caption": "",
+      "source": "LinkedIn",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/35db5509a50b.png",
+      "caption": "",
+      "source": "iFactory AI",
+      "original_width": "1535px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0f71ddc629b3.png",
+      "caption": "",
+      "source": "Visionify",
+      "original_width": "1600px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b75a71805863.jpg",
+      "caption": "",
+      "source": "IncoreSoft",
+      "original_width": "1200px",
+      "original_height": "795px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0e35f7337b7f.jpg",
+      "caption": "",
+      "source": "Justdial",
+      "original_width": "1280px",
+      "original_height": "1280px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f967a44175c7.jpg",
+      "caption": "",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1690px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/22f1f1cec09e.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "910px",
+      "original_height": "1390px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d715d08f5c71.png",
+      "caption": "",
+      "source": "visionplatform.ai",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    }
+  ]
+}

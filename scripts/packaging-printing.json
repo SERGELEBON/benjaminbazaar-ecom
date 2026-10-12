@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "packaging boxes cardboard shipping cartons product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a1e0f14b44c1.jpeg",
+      "caption": "",
+      "source": "Lowe's",
+      "original_width": "1601px",
+      "original_height": "1601px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f33d2daaeb91.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "859px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6167067544c1.jpg",
+      "caption": "",
+      "source": "IDL Packaging",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/615a08c25231.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "894px",
+      "original_height": "894px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8bff42c7db80.jpg",
+      "caption": "",
+      "source": "The Boxery",
+      "original_width": "2240px",
+      "original_height": "1260px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8364df27134b.jpg",
+      "caption": "",
+      "source": "Best Of Signs",
+      "original_width": "2240px",
+      "original_height": "2040px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a125a6dcb4b1.jpeg",
+      "caption": "",
+      "source": "Lowe's",
+      "original_width": "3000px",
+      "original_height": "3000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/809af79ee7f6.jpg",
+      "caption": "",
+      "source": "General Partition",
+      "original_width": "1024px",
+      "original_height": "807px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1368adbcd895.png",
+      "caption": "",
+      "source": "EPE USA",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c99b6998506e.jpg",
+      "caption": "",
+      "source": "Sticky Brand",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    }
+  ]
+}

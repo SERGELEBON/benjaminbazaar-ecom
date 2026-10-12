@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "logistics shipping warehouse business services containers",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c72453812394.jpeg",
+      "caption": "",
+      "source": "Denholm Good Logistics",
+      "original_width": "6016px",
+      "original_height": "4016px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4dd176ef13a6.jpg",
+      "caption": "",
+      "source": "PODS",
+      "original_width": "4240px",
+      "original_height": "2832px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/89e8a39e2a26.png",
+      "caption": "",
+      "source": "O'Neill Logistics",
+      "original_width": "1471px",
+      "original_height": "903px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a90ee7b62c11.jpg",
+      "caption": "",
+      "source": "Ideal Business Services Ltd",
+      "original_width": "1600px",
+      "original_height": "500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2f3f4cb8ed7f.jpg",
+      "caption": "",
+      "source": "Crowley",
+      "original_width": "1024px",
+      "original_height": "768px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7435866eb22f.jpg",
+      "caption": "",
+      "source": "Kuehne+Nagel",
+      "original_width": "1280px",
+      "original_height": "959px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c67cc34ef19d.jpg",
+      "caption": "",
+      "source": "Deposit Photos",
+      "original_width": "1600px",
+      "original_height": "1168px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e43462848ca5.jpg",
+      "caption": "",
+      "source": "NedLine Logistics",
+      "original_width": "1200px",
+      "original_height": "700px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/16aca44d8082.jpeg",
+      "caption": "",
+      "source": "This Old House",
+      "original_width": "1920px",
+      "original_height": "1280px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a2067d80ff23.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    }
+  ]
+}

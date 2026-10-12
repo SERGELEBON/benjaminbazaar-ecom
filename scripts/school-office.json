@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "office supplies stationery school notebook pen product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d4b8704c040a.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "894px",
+      "original_height": "889px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ba21957c7d7d.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "894px",
+      "original_height": "898px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e61a04b0b443.jpg",
+      "caption": "",
+      "source": "Alibaba.com",
+      "original_width": "1500px",
+      "original_height": "1473px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a502e9fc988e.png",
+      "caption": "",
+      "source": "Pentel",
+      "original_width": "1535px",
+      "original_height": "2048px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8cb4c613b954.jpg",
+      "caption": "",
+      "source": "yosekastationery.com",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/aac3b95151d5.jpg",
+      "caption": "",
+      "source": "Wrapables",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/087ab53a29cc.jpg",
+      "caption": "",
+      "source": "YouTube",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/23eb099bf6f1.jpeg",
+      "caption": "",
+      "source": "Reddit",
+      "original_width": "1711px",
+      "original_height": "2608px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2e41dd12f13e.jpg",
+      "caption": "",
+      "source": "YouTube",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ba6d1a4ba523.jpg",
+      "caption": "",
+      "source": "Yoseka Stationery",
+      "original_width": "5758px",
+      "original_height": "3839px"
+    }
+  ]
+}

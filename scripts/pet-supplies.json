@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "pet supplies dog cat food bowl leash product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e194291224b1.jpg",
+      "caption": "",
+      "source": "Amazon UK",
+      "original_width": "994px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/be2b495c4a15.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "2560px",
+      "original_height": "2560px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/aa7c121d463b.jpg",
+      "caption": "",
+      "source": "GoSupps.com",
+      "original_width": "1001px",
+      "original_height": "1001px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9c8befd43aec.jpeg",
+      "caption": "",
+      "source": "Walmart",
+      "original_width": "4167px",
+      "original_height": "4167px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9704d667271d.jpg",
+      "caption": "",
+      "source": "Approved by Fritz",
+      "original_width": "1080px",
+      "original_height": "1350px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e90299c5d1c4.png",
+      "caption": "",
+      "source": "www.flufftrough.com",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/32730602ea7a.jpg",
+      "caption": "",
+      "source": "VETRESKA",
+      "original_width": "1080px",
+      "original_height": "1446px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9072ae6794b0.jpg",
+      "caption": "",
+      "source": "tomlinsons.com",
+      "original_width": "4897px",
+      "original_height": "3266px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1b9e9e3d267d.jpg",
+      "caption": "",
+      "source": "Only Natural Pet",
+      "original_width": "1140px",
+      "original_height": "1140px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/45a529c9277a.jpg",
+      "caption": "",
+      "source": "The New York Times",
+      "original_width": "2048px",
+      "original_height": "1024px"
+    }
+  ]
+}

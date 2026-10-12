@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "solar panels renewable energy battery inverter product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b6a1160f8306.jpg",
+      "caption": "",
+      "source": "sungoldpower.com",
+      "original_width": "750px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/60f62ee35a19.png",
+      "caption": "",
+      "source": "Anern Store",
+      "original_width": "1536px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d7cb46f6a995.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "894px",
+      "original_height": "906px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2412c8c91a55.jpg",
+      "caption": "",
+      "source": "Alibaba.com",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cbc0a9d74daa.jpg",
+      "caption": "",
+      "source": "SunGoldPower",
+      "original_width": "900px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1dff1e093bda.jpg",
+      "caption": "",
+      "source": "RELiON batteries",
+      "original_width": "1080px",
+      "original_height": "800px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/553b6c954226.jpg",
+      "caption": "",
+      "source": "ubetter",
+      "original_width": "800px",
+      "original_height": "1178px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b96689446c0f.jpg",
+      "caption": "",
+      "source": "newuseenergy.com",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/452b935a26a2.jpg",
+      "caption": "",
+      "source": "SolarQuotes",
+      "original_width": "999px",
+      "original_height": "999px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c76efe75547f.jpg",
+      "caption": "",
+      "source": "ubetter",
+      "original_width": "800px",
+      "original_height": "1200px"
+    }
+  ]
+}

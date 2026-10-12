@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "car truck motorcycle bicycle vehicle product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/03a90edb3db3.jpg",
+      "caption": "",
+      "source": "YouTube",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f8db656b2478.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "1600px",
+      "original_height": "1600px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e68d5164523a.png",
+      "caption": "",
+      "source": "Autoweek",
+      "original_width": "1128px",
+      "original_height": "1134px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3732b715485f.jpg",
+      "caption": "",
+      "source": "LongRamps.com",
+      "original_width": "1200px",
+      "original_height": "1597px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bb6e0b52220f.jpg",
+      "caption": "",
+      "source": "eBay",
+      "original_width": "1200px",
+      "original_height": "1022px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ade6e15195c3.jpg",
+      "caption": "",
+      "source": "Monkey Pen",
+      "original_width": "994px",
+      "original_height": "1404px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f9dee47bcc28.jpg",
+      "caption": "",
+      "source": "Alibaba.com",
+      "original_width": "900px",
+      "original_height": "1377px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/754f67434d3f.jpg",
+      "caption": "",
+      "source": "Popular Science",
+      "original_width": "2000px",
+      "original_height": "1333px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/dc44785f191c.jpeg",
+      "caption": "",
+      "source": "Ayzeze",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/30e3f691fae0.jpeg",
+      "caption": "",
+      "source": "Walmart",
+      "original_width": "2200px",
+      "original_height": "2200px"
+    }
+  ]
+}

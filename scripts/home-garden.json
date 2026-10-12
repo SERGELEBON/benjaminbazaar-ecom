@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "home decor garden tools kitchen accessories product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3c449aa5b9d3.jpg",
+      "caption": "",
+      "source": "The New York Times",
+      "original_width": "1536px",
+      "original_height": "1536px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9e1e1ae4cf54.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "894px",
+      "original_height": "899px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7dd0b75f0bcf.png",
+      "caption": "",
+      "source": "www.everythingkitchens.com",
+      "original_width": "1920px",
+      "original_height": "864px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/364fb8d9573f.jpg",
+      "caption": "",
+      "source": "Pinterest",
+      "original_width": "736px",
+      "original_height": "1412px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/817bbe71fbee.jpg",
+      "caption": "",
+      "source": "ELLE Decor",
+      "original_width": "1120px",
+      "original_height": "1122px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b361ebbe4735.jpg",
+      "caption": "",
+      "source": "Magnolia",
+      "original_width": "1920px",
+      "original_height": "2400px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a4a544de2431.jpg",
+      "caption": "",
+      "source": "www.thefoundryhomegoods.com",
+      "original_width": "2048px",
+      "original_height": "1536px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a337bc7deb1f.jpg",
+      "caption": "",
+      "source": "Family Handyman",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/87c4e8219180.jpg",
+      "caption": "",
+      "source": "Etsy",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/69805a07cd6e.png",
+      "caption": "",
+      "source": "Shabbyfufu",
+      "original_width": "1000px",
+      "original_height": "1500px"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "furniture sofa chair table desk office home product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6bf3d7f15603.jpg",
+      "caption": "",
+      "source": "Woodland Creek Furniture",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/db4489149b05.jpg",
+      "caption": "",
+      "source": "Apartment Therapy",
+      "original_width": "1733px",
+      "original_height": "1155px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c56f4412da02.png",
+      "caption": "",
+      "source": "DWR",
+      "original_width": "1000px",
+      "original_height": "1414px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2fd500396738.jpg",
+      "caption": "",
+      "source": "Bed Bath & Beyond",
+      "original_width": "2048px",
+      "original_height": "2048px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3b9db7e0742a.png",
+      "caption": "",
+      "source": "www.geigerfurniture.com",
+      "original_width": "2560px",
+      "original_height": "1439px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/58912a492a82.jpg",
+      "caption": "",
+      "source": "The New York Times",
+      "original_width": "1456px",
+      "original_height": "971px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bf8cef773f86.jpeg",
+      "caption": "",
+      "source": "Walmart",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/11166f39b1e9.jpg",
+      "caption": "",
+      "source": "Story & Lee Furniture",
+      "original_width": "1000px",
+      "original_height": "817px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6c7b00589bf3.jpg",
+      "caption": "",
+      "source": "WIRED",
+      "original_width": "1600px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fcccc46b23de.jpg",
+      "caption": "",
+      "source": "Castlery",
+      "original_width": "1995px",
+      "original_height": "1995px"
+    }
+  ]
+}

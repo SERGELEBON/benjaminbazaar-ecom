@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "agriculture food beverage rice grains coffee cocoa product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6d5cb724210a.jpg",
+      "caption": "",
+      "source": "www.amazon.com",
+      "original_width": "1910px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ffa5ba44d248.jpg",
+      "caption": "",
+      "source": "www.amazon.com",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6fd20cc187cf.jpg",
+      "caption": "",
+      "source": "www.amazon.com",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e1a6a986d708.png",
+      "caption": "",
+      "source": "link.springer.com",
+      "original_width": "1200px",
+      "original_height": "1314px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/afd5e644c391.jpg",
+      "caption": "",
+      "source": "www.vox.com",
+      "original_width": "2640px",
+      "original_height": "2667px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/627ce0d10517.png",
+      "caption": "",
+      "source": "horizonvertfoods.com",
+      "original_width": "1341px",
+      "original_height": "1173px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/11494b41268d.png",
+      "caption": "",
+      "source": "drinkhappyviking.com",
+      "original_width": "1800px",
+      "original_height": "1800px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/548d1ec05942.jpg",
+      "caption": "",
+      "source": "chefshop.com",
+      "original_width": "3000px",
+      "original_height": "3000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5fe0506de78e.png",
+      "caption": "",
+      "source": "wholefoodearth.com",
+      "original_width": "2048px",
+      "original_height": "2048px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/888f16e3a8d6.jpg",
+      "caption": "",
+      "source": "foodtolive.com",
+      "original_width": "1160px",
+      "original_height": "1160px"
+    }
+  ]
+}

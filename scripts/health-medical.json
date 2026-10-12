@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "medical equipment hospital device stethoscope health product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4eaaa6fc6a97.jpg",
+      "caption": "",
+      "source": "www.littmann.com",
+      "original_width": "1575px",
+      "original_height": "1050px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8316bfee2578.jpg",
+      "caption": "",
+      "source": "www.medisave.net",
+      "original_width": "2000px",
+      "original_height": "1333px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/17606bf254f3.jpg",
+      "caption": "",
+      "source": "www.ekohealth.com",
+      "original_width": "1600px",
+      "original_height": "739px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/aab7bbd8e766.jpg",
+      "caption": "",
+      "source": "LinkedIn",
+      "original_width": "800px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/07a38748d1f5.jpg",
+      "caption": "",
+      "source": "www.medisave.net",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a2401321b172.jpg",
+      "caption": "",
+      "source": "www.medisave.co.uk",
+      "original_width": "3832px",
+      "original_height": "1642px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0104bf66ddad.jpg",
+      "caption": "",
+      "source": "CME Blog - CME Corp",
+      "original_width": "2048px",
+      "original_height": "1463px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5141e9f9b366.jpg",
+      "caption": "",
+      "source": "YouTube",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ab5e65a16451.jpg",
+      "caption": "",
+      "source": "Medikabazaar",
+      "original_width": "3358px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5020635ff7fc.png",
+      "caption": "",
+      "source": "Wellue",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    }
+  ]
+}

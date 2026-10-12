@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "backpacks luggage bags travel suitcase handbag product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/33e0c6240d35.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "857px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a2e0bb7af4b2.webp",
+      "caption": "",
+      "source": "TROCHI Luggage",
+      "original_width": "900px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/81f9465367e3.jpg",
+      "caption": "",
+      "source": "Samsonite",
+      "original_width": "3000px",
+      "original_height": "3000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/db4b7dd66ae6.webp",
+      "caption": "",
+      "source": "Witzman",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/eec24421074f.jpg",
+      "caption": "",
+      "source": "Beis Travel Europe",
+      "original_width": "1946px",
+      "original_height": "2918px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/555cd7f108ed.webp",
+      "caption": "",
+      "source": "TLF Apparel",
+      "original_width": "767px",
+      "original_height": "1151px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e887080c5596.jpg",
+      "caption": "",
+      "source": "Eagle Creek",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1047c71f2c70.jpeg",
+      "caption": "",
+      "source": "Walmart",
+      "original_width": "800px",
+      "original_height": "1067px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2fdc7db67982.jpg",
+      "caption": "",
+      "source": "Pinnacle Promotions",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/34305a6a5112.jpg",
+      "caption": "",
+      "source": "Eagle Creek",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    }
+  ]
+}

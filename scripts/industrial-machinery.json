@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "industrial machinery factory CNC equipment metalworking",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4c1a92df574a.jpg",
+      "caption": "",
+      "source": "A to Z Machine",
+      "original_width": "2500px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2e39ce7a6ef2.jpg",
+      "caption": "",
+      "source": "Proto&Go!",
+      "original_width": "2560px",
+      "original_height": "1516px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c90be799ae41.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/85b896b2b290.jpg",
+      "caption": "",
+      "source": "Insight Solutions Global",
+      "original_width": "1024px",
+      "original_height": "768px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a352c2ff8175.jpg",
+      "caption": "",
+      "source": "JLCCNC",
+      "original_width": "1408px",
+      "original_height": "768px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/62d75c211223.jpg",
+      "caption": "",
+      "source": "3ERP",
+      "original_width": "1600px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/14f6e351cd7c.jpg",
+      "caption": "",
+      "source": "Mountain CNC",
+      "original_width": "1600px",
+      "original_height": "893px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/859ef3b5d6cd.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/aec68aa90570.jpeg",
+      "caption": "",
+      "source": "Merchants Fabrication, Inc",
+      "original_width": "2560px",
+      "original_height": "1673px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/99e8f0df7d31.webp",
+      "caption": "",
+      "source": "InfiMaker",
+      "original_width": "1100px",
+      "original_height": "733px"
+    }
+  ]
+}

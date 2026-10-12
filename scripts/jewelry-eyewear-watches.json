@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "jewelry watches eyewear sunglasses gold ring product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/db272ea2c99e.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "894px",
+      "original_height": "980px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/dba9b966ab13.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "1600px",
+      "original_height": "1600px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/85bf056e62df.webp",
+      "caption": "",
+      "source": "vincerocollective.com",
+      "original_width": "1000px",
+      "original_height": "1333px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e84e2afbc49d.jpg",
+      "caption": "",
+      "source": "Swarovski",
+      "original_width": "1024px",
+      "original_height": "768px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cded0812f5cc.webp",
+      "caption": "",
+      "source": "Treehut Watches",
+      "original_width": "2000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/19151b3787c8.jpg",
+      "caption": "",
+      "source": "Isabel Marant",
+      "original_width": "900px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c2aafa7711a5.jpg",
+      "caption": "",
+      "source": "Tekcoplus Ltd.",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f807c6b560be.webp",
+      "caption": "",
+      "source": "www.charriol.com",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/adfee80f31cd.webp",
+      "caption": "",
+      "source": "www.mjewelry.com",
+      "original_width": "3840px",
+      "original_height": "1296px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/89164e8fa15e.jpg",
+      "caption": "",
+      "source": "laloop.com",
+      "original_width": "2400px",
+      "original_height": "2400px"
+    }
+  ]
+}

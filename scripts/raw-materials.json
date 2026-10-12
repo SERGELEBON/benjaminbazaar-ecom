@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "raw materials metal steel plastic sheets industrial",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/78edbb0f6707.jpg",
+      "caption": "",
+      "source": "Alibaba.com",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cadc7d05470f.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/197eea2eba5f.png",
+      "caption": "",
+      "source": "Bobco Metals",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/202d63346a65.png",
+      "caption": "",
+      "source": "OREA SHOP",
+      "original_width": "3360px",
+      "original_height": "2590px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/09bdc3631485.jpg",
+      "caption": "",
+      "source": "RapidDirect",
+      "original_width": "1536px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4ba3eb7318f0.jpg",
+      "caption": "",
+      "source": "Shalco",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5259a369b6f2.png",
+      "caption": "",
+      "source": "Alibaba.com",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/06de7360011e.jpg",
+      "caption": "",
+      "source": "Online Metals",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/eb452030087f.jpg",
+      "caption": "",
+      "source": "One Army",
+      "original_width": "1920px",
+      "original_height": "1280px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/03c0c25a3fdf.png",
+      "caption": "",
+      "source": "Geomiq",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    }
+  ]
+}

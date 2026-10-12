@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "auto car parts engine tire brake headlight product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9e475aca2366.jpg",
+      "caption": "",
+      "source": "auxito",
+      "original_width": "2560px",
+      "original_height": "1440px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/71e1be92832f.jpg",
+      "caption": "",
+      "source": "Amazon.ae",
+      "original_width": "1000px",
+      "original_height": "945px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/354ed6525d3f.webp",
+      "caption": "",
+      "source": "The Engineering Choice",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3ee86cad0fdb.webp",
+      "caption": "",
+      "source": "Aniioki",
+      "original_width": "1440px",
+      "original_height": "1680px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/681dc18de22c.jpg",
+      "caption": "",
+      "source": "Super73",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cd3c04c69e06.jpg",
+      "caption": "",
+      "source": "actbest",
+      "original_width": "1200px",
+      "original_height": "938px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/91dbf82eba2a.jpg",
+      "caption": "",
+      "source": "Qlife Bike Qlife Bike",
+      "original_width": "1200px",
+      "original_height": "938px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f4bd19b2479d.jpg",
+      "caption": "",
+      "source": "eBay",
+      "original_width": "1200px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9eb1cebbd52e.jpg",
+      "caption": "",
+      "source": "www.bevinsee.com",
+      "original_width": "1000px",
+      "original_height": "1400px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1b61e93f31d4.png",
+      "caption": "",
+      "source": "Centennial Toyota",
+      "original_width": "1200px",
+      "original_height": "675px"
+    }
+  ]
+}

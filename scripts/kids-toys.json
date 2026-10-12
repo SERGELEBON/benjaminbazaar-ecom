@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "kids toys children playset blocks teddy product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5060766f1105.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "1600px",
+      "original_height": "1300px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/81660255ad27.jpg",
+      "caption": "",
+      "source": "Etsy",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6e6abceb4770.jpeg",
+      "caption": "",
+      "source": "Walmart",
+      "original_width": "1600px",
+      "original_height": "1600px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7decadbd2cb4.jpg",
+      "caption": "",
+      "source": "The Sensory Sloth",
+      "original_width": "945px",
+      "original_height": "1260px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/231f2ea8f606.jpg",
+      "caption": "",
+      "source": "eBay",
+      "original_width": "1464px",
+      "original_height": "600px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/39b31dbcfef0.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/239d4c39bbaf.jpeg",
+      "caption": "",
+      "source": "Lowe's",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/84a45d66a06b.jpg",
+      "caption": "",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1690px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/453c73ace9f6.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "924px",
+      "original_height": "1390px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/668e145a9f9b.png",
+      "caption": "",
+      "source": "Walmart",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    }
+  ]
+}

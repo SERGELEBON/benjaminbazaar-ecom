@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "construction materials bricks cement steel building",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6d4e55dc8ded.png",
+      "caption": "",
+      "source": "AECORD",
+      "original_width": "1536px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5ca27111747d.png",
+      "caption": "",
+      "source": "Buildiyo Store",
+      "original_width": "1676px",
+      "original_height": "939px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5312477ce228.jpg",
+      "caption": "",
+      "source": "JMVC Consulting Structural Engineers",
+      "original_width": "1400px",
+      "original_height": "700px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b067928a758a.png",
+      "caption": "",
+      "source": "ArchitectureCourses.org",
+      "original_width": "1672px",
+      "original_height": "941px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ded65772ba68.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "975px",
+      "original_height": "1390px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2cd54b28a647.jpg",
+      "caption": "",
+      "source": "Shutterstock",
+      "original_width": "1500px",
+      "original_height": "1225px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ef188355fd2f.jpg",
+      "caption": "",
+      "source": "JSW One Homes",
+      "original_width": "1200px",
+      "original_height": "800px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/404cef584b9e.jpg",
+      "caption": "",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "934px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0564178d4aef.jpg",
+      "caption": "",
+      "source": "AD Middle East",
+      "original_width": "1888px",
+      "original_height": "1416px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/949b8fb45775.jpg",
+      "caption": "",
+      "source": "Pinterest",
+      "original_width": "2480px",
+      "original_height": "3508px"
+    }
+  ]
+}

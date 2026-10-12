@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "consumer electronics gadgets smartphone headphones product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/92c54eb2e4a5.jpg",
+      "caption": "",
+      "source": "The New York Times",
+      "original_width": "2048px",
+      "original_height": "1365px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a04b92df934a.jpg",
+      "caption": "",
+      "source": "Shopify",
+      "original_width": "1848px",
+      "original_height": "782px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/20518500cc85.png",
+      "caption": "",
+      "source": "Mashable",
+      "original_width": "1248px",
+      "original_height": "702px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4e34affc7848.jpg",
+      "caption": "",
+      "source": "Sennheiser - Sennheiser Hearing",
+      "original_width": "2400px",
+      "original_height": "2400px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6c99738606a6.jpg",
+      "caption": "",
+      "source": "Sennheiser Hearing",
+      "original_width": "1080px",
+      "original_height": "1920px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1812baacb7af.jpg",
+      "caption": "",
+      "source": "PCMag",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fe32e4f3f404.jpg",
+      "caption": "",
+      "source": "Rolling Stone",
+      "original_width": "930px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3e619ae57629.jpg",
+      "caption": "",
+      "source": "The Guardian",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f4c3bf4a6fdd.jpg",
+      "caption": "",
+      "source": "What Hi-Fi?",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b3d345e24618.jpg",
+      "caption": "",
+      "source": "Forbes",
+      "original_width": "1600px",
+      "original_height": "900px"
+    }
+  ]
+}

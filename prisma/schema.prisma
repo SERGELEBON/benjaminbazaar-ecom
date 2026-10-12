@@ -1,0 +1,290 @@
+// AELF Bazaar — Prisma schema (SQLite)
+// Models mirror the Alibaba structure: User, Supplier, Category (tree),
+// Product, PriceTier, Variant, Attribute, Certification, Cart, Order,
+// OrderItem, RFQ, Quote, Conversation, Message, Review, Payout, Banner.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  phone     String?
+  name      String?
+  password  String?
+  role      String   @default("BUYER") // BUYER | SUPPLIER | ADMIN
+  country   String   @default("Ghana")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart      Cart?
+  orders    Order[]
+  rfqs      RFQ[]
+  reviews   Review[]
+  favorites Favorite[]
+  addresses Address[]
+  supplier  Supplier?
+}
+
+model Supplier {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  name           String
+  slug           String   @unique
+  logo           String?
+  city           String
+  country        String   @default("China")
+  years          Int      @default(3)
+  type           String   @default("Manufacturer") // Manufacturer | Trading Company
+  verified       Boolean  @default(true)
+  storeRating    Float    @default(4.5)
+  responseTime   String   @default("<=2h")
+  onTimeDispatch Float    @default(98.0)
+  reorderRate    Float    @default(43.0)
+  mainCategory   String?
+  employees      String?
+  annualRevenue  String?
+  // JSON string arrays
+  certifications String   @default("[]") // ISO9001, BSCI, CE ...
+  markets        String   @default("[]")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  products Product[]
+  orders   Order[]
+  quotes   Quote[]
+  reviews  Review[]
+  payouts  Payout[]
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  name      String
+  slug      String     @unique
+  icon      String?
+  parentId  String?
+  parent    Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryTree")
+  order     Int        @default(0)
+  products  Product[]
+  createdAt DateTime   @default(now())
+}
+
+model Product {
+  id            String       @id @default(cuid())
+  title         String
+  slug          String       @unique
+  description   String
+  categoryId    String
+  category      Category     @relation(fields: [categoryId], references: [id])
+  supplierId    String
+  supplier      Supplier     @relation(fields: [supplierId], references: [id])
+  images        String       @default("[]") // JSON array of urls
+  videoUrl      String?
+  minOrder      String       @default("1")
+  minOrderUnit  String       @default("piece")
+  unit          String       @default("piece")
+  sold          Int          @default(0)
+  popularity    Int          @default(0)
+  rating        Float        @default(4.5)
+  reviewCount   Int          @default(0)
+  reorderRate   Float        @default(43.0)
+  lowestPrice   Boolean      @default(false)
+  // JSON arrays of badges/attrs/certs
+  certifications String      @default("[]") // CE, HALAL, RoHS...
+  keyAttributes  String      @default("[]") // JSON: [{k,v}]
+  variantsJson   String      @default("[]") // JSON: [{name, options[]}]
+  tradeAssurance Boolean     @default(true)
+  readyToShip    Boolean      @default(false)
+  customizable   Boolean      @default(true)
+  rank           Int         @default(0)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  priceTiers PriceTier[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+  reviews    Review[]
+  favorites  Favorite[]
+}
+
+model PriceTier {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  minQty    Int
+  maxQty    Int?
+  price     Float
+  unit      String  @default("piece")
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+  variant   String?
+  unit      String  @default("piece")
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  ref          String      @unique
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  supplierId   String
+  supplier     Supplier    @relation(fields: [supplierId], references: [id])
+  status       String      @default("pending") // pending|paid|shipped|delivered|cancelled
+  paymentMethod String     @default("mtn_momo")
+  currency     String      @default("GHS")
+  subtotal     Float
+  shipping     Float       @default(0)
+  total        Float
+  addressId    String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  items        OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  title     String
+  image     String
+  quantity  Int
+  unit      String
+  price     Float
+  variant   String?
+}
+
+model RFQ {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  title       String
+  category    String
+  quantity    String
+  unit        String
+  budget      String?
+  details     String
+  attachments String   @default("[]")
+  status      String   @default("open") // open|closed
+  createdAt   DateTime @default(now())
+  quotes      Quote[]
+}
+
+model Quote {
+  id        String   @id @default(cuid())
+  rfqId     String
+  rfq       RFQ      @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  supplierId String
+  supplier  Supplier @relation(fields: [supplierId], references: [id])
+  price     Float
+  unit      String
+  moq       String
+  leadTime  String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  userId    String
+  supplierId String
+  productId String?
+  createdAt DateTime  @default(now())
+  messages  Message[]
+}
+
+model Message {
+  id              String      @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  fromRole        String // buyer | supplier
+  content         String
+  createdAt       DateTime    @default(now())
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  supplierId String?
+  supplier   Supplier? @relation(fields: [supplierId], references: [id])
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  rating    Float
+  title     String
+  content   String
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Payout {
+  id        String   @id @default(cuid())
+  supplierId String
+  supplier  Supplier @relation(fields: [supplierId], references: [id])
+  amount    Float
+  currency  String   @default("GHS")
+  status    String   @default("pending") // pending|paid
+  method    String   @default("bank")
+  createdAt DateTime @default(now())
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  title     String
+  subtitle  String
+  image     String
+  link      String?
+  placement String   @default("home_right")
+  active    Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@unique([userId, productId])
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  name      String
+  phone     String
+  country   String
+  city      String
+  line      String
+  zip       String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

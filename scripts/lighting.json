@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "LED lighting lamp bulb ceiling fixture product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e7b70d3f3ea4.jpg",
+      "caption": "",
+      "source": "DEPULEY",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2b2abb95a6da.jpg",
+      "caption": "",
+      "source": "City Lights SF",
+      "original_width": "1946px",
+      "original_height": "1946px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1932eb8b19c2.png",
+      "caption": "",
+      "source": "Feit Electric",
+      "original_width": "1707px",
+      "original_height": "1023px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0aa60dd055ca.jpg",
+      "caption": "",
+      "source": "Linea di Liara",
+      "original_width": "2560px",
+      "original_height": "2560px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3ed726f2b555.jpg",
+      "caption": "",
+      "source": "The Home Depot",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0f897a6340ee.jpg",
+      "caption": "",
+      "source": "AM Conservation",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a2e0ce453784.jpg",
+      "caption": "",
+      "source": "Bed Bath & Beyond",
+      "original_width": "1920px",
+      "original_height": "1920px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/43e5d24fefa8.jpg",
+      "caption": "",
+      "source": "Walmart",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/dc12651eb116.jpg",
+      "caption": "",
+      "source": "Cedar & Moss",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fe1de14bfd8e.jpg",
+      "caption": "",
+      "source": "DoorDash",
+      "original_width": "1194px",
+      "original_height": "672px"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "gifts crafts handmade decorative artisan product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/92b7c0d0e969.jpg",
+      "caption": "",
+      "source": "Country Living Magazine",
+      "original_width": "2303px",
+      "original_height": "2879px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/414e9c30a6d8.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "1025px",
+      "original_height": "1025px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6b26be3848b4.jpg",
+      "caption": "",
+      "source": "House Beautiful",
+      "original_width": "1200px",
+      "original_height": "1197px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3a1a859e3f0a.jpg",
+      "caption": "",
+      "source": "YouTube",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7f48257dfbde.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3d6624c8edbe.jpg",
+      "caption": "",
+      "source": "theindiacrafthouse.com",
+      "original_width": "901px",
+      "original_height": "1088px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0a1bbc328f23.jpeg",
+      "caption": "",
+      "source": "Reddit",
+      "original_width": "2048px",
+      "original_height": "2048px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ee5f79a9bdeb.jpg",
+      "caption": "",
+      "source": "Alibaba",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/42d00072c81f.jpg",
+      "caption": "",
+      "source": "Sustain My Craft Habit",
+      "original_width": "1000px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6b705789aac6.png",
+      "caption": "",
+      "source": "Alibaba",
+      "original_width": "948px",
+      "original_height": "948px"
+    }
+  ]
+}

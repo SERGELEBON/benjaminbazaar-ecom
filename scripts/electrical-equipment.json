@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "electrical cables wires switches circuit breaker product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/93cc63fd4fd5.jpg",
+      "caption": "",
+      "source": "Sweetwater",
+      "original_width": "1800px",
+      "original_height": "1217px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/358732ead927.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "787px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7cf1a51e695c.jpg",
+      "caption": "",
+      "source": "Generator Factory Outlet",
+      "original_width": "1170px",
+      "original_height": "1170px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7d3dd96ac22e.jpg",
+      "caption": "",
+      "source": "Energy Avenue",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/44f46dfc7a6a.jpg",
+      "caption": "",
+      "source": "World Electric Supply",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/eb48e7b2fa88.jpg",
+      "caption": "",
+      "source": "RS Americas",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fdfe32d6bb96.jpg",
+      "caption": "",
+      "source": "S&S Electrical Supply",
+      "original_width": "1200px",
+      "original_height": "1600px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/850dad5a53f9.jpg",
+      "caption": "",
+      "source": "River City Industrial",
+      "original_width": "960px",
+      "original_height": "1280px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1dcaf1d01c2d.jpg",
+      "caption": "",
+      "source": "Zirgo",
+      "original_width": "2048px",
+      "original_height": "2048px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c0c7ef5d20ff.png",
+      "caption": "",
+      "source": "Alibaba.com",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    }
+  ]
+}

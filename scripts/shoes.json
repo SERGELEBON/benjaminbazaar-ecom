@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "sneakers shoes footwear leather running product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/452a174ed6e2.webp",
+      "caption": "",
+      "source": "The Jacket Maker",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/97487f3433fd.webp",
+      "caption": "",
+      "source": "The Jacket Maker",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3fdd55ad90eb.jpg",
+      "caption": "",
+      "source": "MSC Direct",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/170063b3b463.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "1084px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b057b0cf551f.jpg",
+      "caption": "",
+      "source": "Corneliani",
+      "original_width": "1585px",
+      "original_height": "2000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/da1069a8ef7f.jpg",
+      "caption": "",
+      "source": "ICS Shoes",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f26ca98eb9f6.jpg",
+      "caption": "",
+      "source": "Playmakers",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b10d74be6b0b.jpg",
+      "caption": "",
+      "source": "Universal Works",
+      "original_width": "800px",
+      "original_height": "1077px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2cdc4aeb81bd.jpeg",
+      "caption": "",
+      "source": "Shoplifestyle",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/37f637ad992d.jpg",
+      "caption": "",
+      "source": "Stylerunner",
+      "original_width": "800px",
+      "original_height": "1200px"
+    }
+  ]
+}

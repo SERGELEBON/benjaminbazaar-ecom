@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "sports equipment fitness gear dumbbell product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d306917f0a73.jpg",
+      "caption": "",
+      "source": "www.marcypro.com",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8641b1052699.jpg",
+      "caption": "",
+      "source": "GoSupps.com",
+      "original_width": "1500px",
+      "original_height": "1458px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b5d6816247cf.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "1000px",
+      "original_height": "837px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5a713e9d82f8.jpg",
+      "caption": "",
+      "source": "titan.fitness",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/76ab69c1976c.jpg",
+      "caption": "",
+      "source": "PowerBlock",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/03db02f0a8be.jpg",
+      "caption": "",
+      "source": "Amazon.in",
+      "original_width": "894px",
+      "original_height": "915px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/25c92ca6a718.jpg",
+      "caption": "",
+      "source": "www.gymreapers.com",
+      "original_width": "1300px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a23d8986ed1e.jpg",
+      "caption": "",
+      "source": "www.fringesport.com",
+      "original_width": "1080px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/08dd022a8763.jpg",
+      "caption": "",
+      "source": "diagnostools.com",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/06c8591cb3b9.png",
+      "caption": "",
+      "source": "giantlifting.com",
+      "original_width": "1400px",
+      "original_height": "788px"
+    }
+  ]
+}

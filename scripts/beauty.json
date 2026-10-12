@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "beauty cosmetics skincare makeup cream bottle product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1e475a0483e0.webp",
+      "caption": "",
+      "source": "kbeautyworld.com",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/81f1195f0185.jpg",
+      "caption": "",
+      "source": "Loreal Paris - L'Oréal Paris",
+      "original_width": "2000px",
+      "original_height": "815px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/433b47cb0241.jpg",
+      "caption": "",
+      "source": "beekman1802.com",
+      "original_width": "4320px",
+      "original_height": "1896px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0446f782c0a3.png",
+      "caption": "",
+      "source": "Organic Beauty Lover",
+      "original_width": "1584px",
+      "original_height": "1052px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/150e5efa916a.jpg",
+      "caption": "",
+      "source": "GoSupps.com",
+      "original_width": "1500px",
+      "original_height": "1404px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/66f0a795867f.jpg",
+      "caption": "",
+      "source": "Shutterstock",
+      "original_width": "1500px",
+      "original_height": "1110px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1447cbca6d18.jpg",
+      "caption": "",
+      "source": "Hypebae",
+      "original_width": "800px",
+      "original_height": "1198px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3e9cfe5b9d03.jpg",
+      "caption": "",
+      "source": "Brides Today",
+      "original_width": "1200px",
+      "original_height": "675px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ed2102356e58.webp",
+      "caption": "",
+      "source": "K Beauty World",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/440826d5bf13.jpg",
+      "caption": "",
+      "source": "indu Beauty",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    }
+  ]
+}

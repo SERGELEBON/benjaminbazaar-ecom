@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "query": "home appliances kitchen blender microwave rice cooker product",
+  "count": 10,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/aa801f4f6085.jpg",
+      "caption": "",
+      "source": "KitchenAid",
+      "original_width": "1920px",
+      "original_height": "1280px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2413a292c5f1.jpg",
+      "caption": "",
+      "source": "Kath Eats",
+      "original_width": "768px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/96b3844caee0.jpg",
+      "caption": "",
+      "source": "South Georgia Style",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bdc301acc5e4.png",
+      "caption": "",
+      "source": "Good Housekeeping",
+      "original_width": "1200px",
+      "original_height": "675px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/02094f6d3bcb.jpg",
+      "caption": "",
+      "source": "YouTube",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0e80565be0e1.jpg",
+      "caption": "",
+      "source": "Amazon.ae",
+      "original_width": "1500px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/408f63ee5c7d.png",
+      "caption": "",
+      "source": "Good Housekeeping",
+      "original_width": "829px",
+      "original_height": "1039px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d8332964c6a0.jpg",
+      "caption": "",
+      "source": "YouTube",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c0bd55c99f0f.jpg",
+      "caption": "",
+      "source": "Cosori",
+      "original_width": "1600px",
+      "original_height": "933px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9784c3a21ce0.jpg",
+      "caption": "",
+      "source": "Our Place",
+      "original_width": "1600px",
+      "original_height": "600px"
+    }
+  ]
+}
