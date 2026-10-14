@@ -215,15 +215,15 @@ export function ProductDetailView() {
             {breadcrumbCat ?? "Category"}
           </button>
           <span className="mx-1 text-[#DADAD9]">›</span>
-          <span className="text-[#333] line-clamp-1 inline">{product.title}</span>
+          <span className="hidden sm:inline text-[#333]">{product.title}</span>
         </div>
       </div>
 
       <div className="max-w-[1280px] mx-auto px-3 lg:px-6 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-[440px_1fr_300px] gap-4">
-          {/* LEFT: gallery + supplier card */}
-          <div className="space-y-4">
-            <div className="bg-white border border-[#DADAD9] p-3">
+          {/* LEFT: gallery + supplier card (on mobile children join the grid so we can reorder) */}
+          <div className="contents lg:block lg:space-y-4">
+            <div className="order-1 lg:order-none bg-white border border-[#DADAD9] p-2 sm:p-3">
               <div className="flex gap-3">
                 {/* thumbs */}
                 <div className="hidden sm:flex flex-col gap-1.5 w-14 max-h-[440px] overflow-y-auto benjamin-scroll">
@@ -252,7 +252,7 @@ export function ProductDetailView() {
                       <img
                         src={product.images[activeImg]}
                         alt={product.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain bg-white"
                       />
                     ) : product.videoUrl ? (
                       <video src={product.videoUrl} controls className="w-full h-full object-cover" />
@@ -290,7 +290,7 @@ export function ProductDetailView() {
             </div>
 
             {/* Supplier card */}
-            <div className="bg-white border border-[#DADAD9]">
+            <div className="order-4 lg:order-none bg-white border border-[#DADAD9]">
               <div className="benjamin-bar">Supplier information</div>
               <div className="p-4">
                 <div className="flex items-start gap-3">
@@ -349,7 +349,7 @@ export function ProductDetailView() {
           </div>
 
           {/* CENTER: info */}
-          <div className="bg-white border border-[#DADAD9] p-5">
+          <div className="order-2 lg:order-none bg-white border border-[#DADAD9] p-4 sm:p-5">
             <h1 className="text-[21px] font-medium leading-snug text-[#1a1a1a]">{product.title}</h1>
 
             {/* meta line */}
@@ -543,8 +543,8 @@ export function ProductDetailView() {
           </div>
 
           {/* RIGHT: order box */}
-          <div>
-            <div className="bg-white border border-[#DADAD9] sticky top-[124px]">
+          <div className="order-3 lg:order-none">
+            <div className="bg-white border border-[#DADAD9] lg:sticky lg:top-[124px]">
               <div className="benjamin-bar-red">Start order</div>
               <div className="p-4 space-y-3">
                 {/* Shipping calculator */}
@@ -820,7 +820,7 @@ export function ProductDetailView() {
       </div>
 
       {/* MOBILE STICKY BOTTOM BAR */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#DADAD9] z-40 flex">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#DADAD9] z-40 flex pb-[env(safe-area-inset-bottom)]">
         <button
           onClick={() => {
             if (data?.product) {

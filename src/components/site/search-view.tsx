@@ -399,7 +399,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
             <button
               key={t}
               onClick={() => setActiveTab(t)}
-              className={`px-3 h-8 text-[12px] font-semibold uppercase tracking-wide ${
+              className={`shrink-0 whitespace-nowrap px-3 h-8 text-[12px] font-semibold uppercase tracking-wide ${
                 activeTab === t
                   ? "bg-[#000] text-white"
                   : "bg-[#ECECEC] text-[#333] hover:bg-[#DADAD9]"
@@ -534,9 +534,9 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
                       <div className="grid grid-cols-2 gap-1.5">
                         <button
                           onClick={() => handleAddToCart(p)}
-                          className="btn-square-black text-[10px] py-1.5"
+                          className="btn-square-black text-[10px] !px-1 py-1.5 whitespace-nowrap"
                         >
-                          Add to cart
+                          <span className="sm:hidden">Cart</span><span className="hidden sm:inline">Add to cart</span>
                         </button>
                         <button
                           onClick={() => {
@@ -544,9 +544,9 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
                             useApp.getState().setChatProductId(p.id);
                             useApp.getState().setView("chat");
                           }}
-                          className="btn-benjamin-orange text-[10px] py-1.5 flex items-center justify-center gap-1"
+                          className="btn-benjamin-orange text-[10px] !px-1 py-1.5 whitespace-nowrap flex items-center justify-center gap-1"
                         >
-                          <MessageCircle className="w-3 h-3" /> Chat now
+                          <MessageCircle className="w-3 h-3 shrink-0" /> <span className="sm:hidden">Chat</span><span className="hidden sm:inline">Chat now</span>
                         </button>
                       </div>
                     </div>

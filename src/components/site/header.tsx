@@ -75,7 +75,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
     <header className="sticky top-0 z-50 bg-white border-b border-[#DADAD9]">
       {/* ROW 1 */}
       <div className="max-w-[1280px] mx-auto px-3 lg:px-6">
-        <div className="flex items-center gap-3 h-16">
+        <div className="flex items-center gap-2 md:gap-3 h-14 md:h-16">
           {/* burger / mobile menu */}
           <button
             className="md:hidden p-1"
@@ -91,7 +91,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
             className="flex items-center gap-2 shrink-0"
           >
             <div className="leading-tight text-left">
-              <div className="text-[19px] font-extrabold tracking-tight text-[#16A34A] uppercase">
+              <div className="text-[17px] sm:text-[19px] font-extrabold tracking-tight text-[#16A34A] uppercase">
                 BENJAMIN<span className="text-black">BAZAAR</span>
               </div>
               <div className="hidden sm:block text-[9px] text-[#888] leading-none uppercase tracking-wider">
@@ -124,13 +124,13 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
             </button>
           </div>
 
-          {/* search icon mobile */}
+          {/* account icon mobile */}
           <button
-            className="md:hidden ml-auto p-1"
-            onClick={() => setMobileSearch((v) => !v)}
-            aria-label="Search"
+            className="md:hidden ml-auto p-1.5"
+            onClick={() => setView("auth")}
+            aria-label={t.sign_in}
           >
-            <Search className="w-6 h-6" />
+            <User className="w-6 h-6" strokeWidth={1.6} />
           </button>
 
           {/* deliver to */}
@@ -217,26 +217,30 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
           </button>
         </div>
 
-        {/* mobile search bar */}
-        {mobileSearch && (
-          <div className="md:hidden pb-3 flex items-center border-2 border-[#FF6A00] h-10 bg-white">
+        {/* mobile search bar (always visible) */}
+        <div className="md:hidden pb-2.5">
+          <div className={`flex items-center border-2 h-10 bg-white ${mobileSearch ? "border-[#FF6A00]" : "border-[#16A34A]"}`}>
             <input
-              autoFocus
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && (doSearch(), setMobileSearch(false))}
+              onFocus={() => setMobileSearch(true)}
+              onBlur={() => setMobileSearch(false)}
+              onKeyDown={(e) => e.key === "Enter" && doSearch()}
               placeholder={t.search_placeholder}
-              className="flex-1 h-full px-3 text-[13px] outline-none bg-transparent"
+              className="flex-1 min-w-0 h-full px-3 text-[14px] outline-none bg-transparent placeholder:text-[#999]"
             />
-            <button onClick={() => (doSearch(), setMobileSearch(false))} className="bg-[#FF6A00] text-white px-3 h-full">
+            <button className="px-2.5 h-full border-l border-[#ECECEC]" aria-label={lang === "fr" ? "Recherche par image" : "Image search"} onClick={() => doSearch()}>
+              <Camera className="w-5 h-5 text-[#555]" strokeWidth={1.6} />
+            </button>
+            <button onClick={() => doSearch()} className="bg-[#FF6A00] text-white w-11 h-full flex items-center justify-center shrink-0" aria-label="Search">
               <Search className="w-5 h-5" />
             </button>
           </div>
-        )}
+        </div>
       </div>
 
-      {/* ROW 2 */}
-      <div className="border-t border-[#ECECEC] bg-white">
+      {/* ROW 2 (tablet / desktop) */}
+      <div className="hidden md:block border-t border-[#ECECEC] bg-white">
         <div className="max-w-[1280px] mx-auto px-3 lg:px-6 flex items-center h-10 text-[12px]">
           <div
             className="relative"
@@ -245,7 +249,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
           >
             <button
               onClick={() => setMenuOpen((v) => !v)}
-              className="flex items-center gap-2 font-bold uppercase tracking-wide h-10 pr-4 text-[#333] hover:text-[#FF6A00]"
+              className="flex items-center gap-2 font-bold uppercase tracking-wide whitespace-nowrap h-10 pr-4 text-[#333] hover:text-[#FF6A00]"
             >
               <Menu className="w-5 h-5" />
               {t.all_categories}
@@ -301,22 +305,22 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
           </div>
 
           <nav className="flex items-center gap-5 ml-2">
-            <button onClick={() => setView("manufacturers")} className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide text-[11px]">
+            <button onClick={() => setView("manufacturers")} className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide whitespace-nowrap text-[11px]">
               {t.verified_manufacturers}
             </button>
-            <button onClick={() => setView("dropshipping")} className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide text-[11px]">
+            <button onClick={() => setView("dropshipping")} className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide whitespace-nowrap text-[11px]">
               {t.dropshipping}
             </button>
           </nav>
 
           <nav className="ml-auto flex items-center gap-5">
-            <button onClick={() => setView("home")} className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide text-[11px] hidden sm:inline">
+            <button onClick={() => setView("home")} className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide whitespace-nowrap text-[11px] hidden sm:inline">
               {t.about_us}
             </button>
-            <button onClick={() => setView("help")} className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide text-[11px]">
+            <button onClick={() => setView("help")} className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide whitespace-nowrap text-[11px]">
               {t.help_center}
             </button>
-            <button className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide text-[11px] flex items-center gap-1 hidden sm:flex">
+            <button className="hover:text-[#FF6A00] font-semibold uppercase tracking-wide whitespace-nowrap text-[11px] flex items-center gap-1 hidden sm:flex">
               <Bot className="w-3.5 h-3.5 text-[#FF6A00]" />
               {t.ai_assistant}
             </button>
@@ -329,7 +333,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
 
       {/* SEARCH TABS (home only) */}
       {view === "home" && (
-        <div className="border-t border-[#ECECEC] bg-[#fafafa]">
+        <div className="hidden md:block border-t border-[#ECECEC] bg-[#fafafa]">
           <div className="max-w-[1280px] mx-auto px-3 lg:px-6 flex items-center h-9 gap-1 text-[12px]">
             {[
               { k: t.ai_mode, v: "home", icon: Bot },
@@ -340,7 +344,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
               <button
                 key={tt.k}
                 onClick={() => tt.v !== "home" && setView(tt.v as any)}
-                className="px-3 h-7 font-semibold uppercase tracking-wide hover:text-[#FF6A00] hover:bg-white"
+                className="px-3 h-7 font-semibold uppercase tracking-wide whitespace-nowrap hover:text-[#FF6A00] hover:bg-white"
               >
                 {tt.k}
               </button>
@@ -352,10 +356,60 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
       {/* MOBILE MENU DRAWER */}
       {mobileMenu && (
         <div className="fixed inset-0 z-[70] bg-black/50 md:hidden" onClick={() => setMobileMenu(false)}>
-          <div className="absolute left-0 top-0 bottom-0 w-72 bg-white overflow-y-auto benjamin-scroll" onClick={(e) => e.stopPropagation()}>
+          <div className="absolute left-0 top-0 bottom-0 w-[85vw] max-w-[320px] bg-white overflow-y-auto benjamin-scroll" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between p-3 border-b border-[#ECECEC]">
               <span className="font-bold uppercase text-[#FF6A00]">{lang === "fr" ? "Menu" : "Menu"}</span>
               <button onClick={() => setMobileMenu(false)}><X className="w-5 h-5" /></button>
+            </div>
+            {/* quick links */}
+            <div className="p-3 grid grid-cols-2 gap-2 border-b border-[#ECECEC]">
+              <button onClick={() => { setView("auth"); setMobileMenu(false); }} className="btn-square-black !px-2 text-[11px]">
+                {t.sign_in}
+              </button>
+              <button onClick={() => { setView("supplier-dashboard"); setMobileMenu(false); }} className="btn-benjamin-orange !px-2 text-[11px]">
+                {lang === "fr" ? "Vendre" : "Sell"}
+              </button>
+            </div>
+            {[
+              { label: t.verified_manufacturers, v: "manufacturers" },
+              { label: t.dropshipping, v: "dropshipping" },
+              { label: lang === "fr" ? "Demande de devis" : "Request for quotation", v: "rfq" },
+              { label: lang === "fr" ? "Top classement" : "Top ranking", v: "ranking" },
+              { label: t.help_center, v: "help" },
+            ].map((l) => (
+              <button
+                key={l.v}
+                onClick={() => { setView(l.v as any); setMobileMenu(false); }}
+                className="w-full flex items-center px-3 py-3 border-b border-[#ECECEC] text-left text-[13px] font-semibold uppercase tracking-wide hover:bg-[#ECECEC]"
+              >
+                {l.label}
+                <span className="ml-auto text-[#999]">›</span>
+              </button>
+            ))}
+            {/* currency + language */}
+            <div className="p-3 border-b border-[#ECECEC] flex items-center gap-1.5 flex-wrap">
+              {(["XOF", "GHS", "USD"] as const).map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCurrency(c)}
+                  className={`px-2.5 py-1.5 text-[11px] font-semibold border ${currency === c ? "bg-[#FF6A00] text-white border-[#FF6A00]" : "border-[#DADAD9]"}`}
+                >
+                  {c}
+                </button>
+              ))}
+              <span className="w-px h-5 bg-[#DADAD9] mx-1" />
+              {(["fr", "en"] as const).map((l) => (
+                <button
+                  key={l}
+                  onClick={() => setLang(l)}
+                  className={`px-2.5 py-1.5 text-[11px] font-semibold border ${lang === l ? "bg-black text-white border-black" : "border-[#DADAD9]"}`}
+                >
+                  {l.toUpperCase()}
+                </button>
+              ))}
+            </div>
+            <div className="px-3 pt-4 pb-2 text-[11px] font-bold uppercase tracking-wider text-[#888]">
+              {t.all_categories}
             </div>
             {categories.map((c) => (
               <button

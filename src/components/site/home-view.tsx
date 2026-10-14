@@ -248,40 +248,40 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
       <section className="relative bg-gradient-to-b from-[#2a1c14] to-[#1a130d] text-white overflow-hidden">
         {/* motif décoratif vert */}
         <div className="absolute inset-0 opacity-15 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 20% 30%, #16A34A 0, transparent 45%), radial-gradient(circle at 80% 70%, #16A34A 0, transparent 40%)" }} />
-        <div className="relative max-w-[1100px] mx-auto px-4 py-10 lg:py-14 text-center">
-          <div className="inline-flex items-center gap-2 bg-[#16A34A] px-3 py-1 text-[11px] uppercase font-bold tracking-wider mb-4 border border-[#1ea84d]">
+        <div className="relative max-w-[1100px] mx-auto px-4 py-7 sm:py-10 lg:py-14 text-center">
+          <div className="inline-flex items-center gap-2 bg-[#16A34A] px-3 py-1 text-[10px] sm:text-[11px] uppercase font-bold tracking-wider mb-3 sm:mb-4 border border-[#1ea84d]">
             <Bot className="w-3.5 h-3.5" /> Sourcing IA 2025
           </div>
-          <h1 className="text-[28px] lg:text-[40px] font-extrabold leading-tight">
+          <h1 className="text-[24px] sm:text-[30px] lg:text-[40px] font-extrabold leading-tight">
             Sourcez plus intelligemment auprès de <span className="text-[#4ade80]">fabricants vérifiés</span>
           </h1>
-          <p className="text-[#cdbfb5] text-[14px] mt-2 max-w-2xl mx-auto">
+          <p className="text-[#cdbfb5] text-[13px] sm:text-[14px] mt-2 max-w-2xl mx-auto">
             200+ produits en gros · 20 fournisseurs vérifiés · Trade Assurance ·
             Devis en quelques minutes · Livraison en Côte d'Ivoire, Afrique de l'Ouest &amp; dans le monde.
           </p>
 
           {/* big search */}
-          <div className="mt-6 max-w-3xl mx-auto flex items-center bg-white h-14 border-2 border-[#16A34A]">
+          <div className="mt-5 sm:mt-6 max-w-3xl mx-auto flex items-center bg-white h-12 sm:h-14 border-2 border-[#16A34A]">
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && search()}
-              placeholder="Que recherchez-vous ? ex : baskets, panneaux solaires, farine d'igname…"
-              className="flex-1 h-full px-4 text-[14px] text-[#333] outline-none bg-transparent placeholder:text-[#999]"
+              placeholder="Que recherchez-vous ?"
+              className="flex-1 min-w-0 h-full px-3 sm:px-4 text-[14px] text-[#333] outline-none bg-transparent placeholder:text-[#999]"
             />
-            <button className="px-3 h-full border-l border-[#ECECEC] hover:bg-[#ECECEC]" title="Recherche par image">
+            <button className="px-2.5 sm:px-3 h-full border-l border-[#ECECEC] hover:bg-[#ECECEC]" title="Recherche par image">
               <Camera className="w-5 h-5 text-[#555]" />
             </button>
-            <button className="px-3 h-full border-l border-[#ECECEC] hover:bg-[#ECECEC]" title="Recherche par fichier">
+            <button className="hidden sm:block px-3 h-full border-l border-[#ECECEC] hover:bg-[#ECECEC]" title="Recherche par fichier">
               <FileUp className="w-5 h-5 text-[#555]" />
             </button>
-            <button onClick={() => search()} className="bg-[#16A34A] text-white px-7 h-full font-bold uppercase tracking-wider flex items-center gap-2 hover:bg-[#15803D]">
-              <Search className="w-5 h-5" /> Rechercher
+            <button onClick={() => search()} aria-label="Rechercher" className="bg-[#16A34A] text-white px-4 sm:px-7 h-full shrink-0 font-bold uppercase tracking-wider flex items-center gap-2 hover:bg-[#15803D]">
+              <Search className="w-5 h-5" /> <span className="hidden sm:inline">Rechercher</span>
             </button>
           </div>
-          <div className="mt-3 flex flex-wrap justify-center gap-2 text-[11px]">
+          <div className="mt-3 -mx-4 px-4 sm:mx-0 sm:px-0 flex sm:flex-wrap sm:justify-center gap-2 text-[11px] overflow-x-auto no-scrollbar">
             {FREQUENT.slice(0, 7).map((f) => (
-              <button key={f} onClick={() => { setQ(f); search(f); }} className="bg-white/10 hover:bg-[#16A34A] px-2.5 py-1 border border-white/20">
+              <button key={f} onClick={() => { setQ(f); search(f); }} className="shrink-0 whitespace-nowrap bg-white/10 hover:bg-[#16A34A] px-2.5 py-1.5 border border-white/20">
                 {f}
               </button>
             ))}
@@ -291,27 +291,46 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
 
       {/* welcome + quick links */}
       <div className="bg-[#000] text-white">
-        <div className="max-w-[1280px] mx-auto px-4 lg:px-6 flex flex-wrap items-center gap-x-6 gap-y-2 h-11 text-[12px]">
-          <span className="font-bold uppercase tracking-wide">
+        <div className="max-w-[1280px] mx-auto px-4 lg:px-6 flex items-center gap-x-5 sm:gap-x-6 h-11 text-[12px] overflow-x-auto no-scrollbar whitespace-nowrap">
+          <span className="hidden sm:inline font-bold uppercase tracking-wide">
             ▼ Bienvenue sur BENJAMINBAZAAR
           </span>
-          <button onClick={() => setView("rfq")} className="hover:text-[#FF6A00] flex items-center gap-1">
+          <button onClick={() => setView("rfq")} className="shrink-0 hover:text-[#FF6A00] flex items-center gap-1">
             <FileText className="w-3.5 h-3.5 text-[#FF6A00]" /> Demande de devis
           </button>
-          <button onClick={() => setView("ranking")} className="hover:text-[#FF6A00] flex items-center gap-1">
+          <button onClick={() => setView("ranking")} className="shrink-0 hover:text-[#FF6A00] flex items-center gap-1">
             <TrendingUp className="w-3.5 h-3.5 text-[#FF6A00]" /> Top classement
           </button>
-          <button onClick={() => setView("search")} className="hover:text-[#FF6A00] flex items-center gap-1">
+          <button onClick={() => setView("search")} className="shrink-0 hover:text-[#FF6A00] flex items-center gap-1">
             <Zap className="w-3.5 h-3.5 text-[#FF6A00]" /> Personnalisation rapide
           </button>
         </div>
       </div>
 
       {/* 3-zone row */}
-      <section className="max-w-[1280px] mx-auto px-3 lg:px-6 py-5">
-        <div className="grid grid-cols-1 md:grid-cols-[260px_1fr_280px] gap-3">
-          {/* left categories */}
-          <div className="bg-white border border-[#DADAD9]">
+      <section className="max-w-[1280px] mx-auto px-3 lg:px-6 py-4 sm:py-5">
+        {/* mobile categories: horizontal chips */}
+        <div className="md:hidden bg-white border border-[#DADAD9] mb-3">
+          <div className="benjamin-bar">Catégories pour vous</div>
+          <div className="flex gap-2 p-3 overflow-x-auto no-scrollbar">
+            {topCats.map((c) => (
+              <button
+                key={c.id}
+                onClick={() => openCategory(c.id)}
+                className="shrink-0 w-[84px] flex flex-col items-center gap-1.5 text-center"
+              >
+                <span className="w-12 h-12 bg-[#f4f1ec] border border-[#ECECEC] flex items-center justify-center text-[#FF6A00]">
+                  <CatIcon name={c.icon} className="w-5 h-5" />
+                </span>
+                <span className="text-[11px] leading-tight text-[#333] line-clamp-2">{c.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] lg:grid-cols-[260px_1fr_280px] gap-3">
+          {/* left categories (tablet / desktop) */}
+          <div className="hidden md:block bg-white border border-[#DADAD9]">
             <div className="benjamin-bar">Catégories pour vous</div>
             <div className="relative">
               <div className="max-h-[460px] overflow-y-auto benjamin-scroll">
@@ -357,7 +376,7 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
                   <button
                     key={f}
                     onClick={() => { setQ(f); search(f); }}
-                    className="w-[150px] shrink-0 border border-[#ECECEC] hover:border-[#FF6A00] text-left bg-white"
+                    className="w-[120px] sm:w-[150px] shrink-0 border border-[#ECECEC] hover:border-[#FF6A00] text-left bg-white"
                   >
                     <div className="aspect-[4/3] bg-[#ECECEC] overflow-hidden">
                       <img src={FREQUENT_IMAGES[f] || `https://picsum.photos/seed/benjamin-freq-${i}/300/220`} alt={f} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition-transform" />
@@ -376,7 +395,7 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
           </div>
 
           {/* right promo */}
-          <div className="bg-white border border-[#DADAD9]">
+          <div className="bg-white border border-[#DADAD9] md:col-span-2 lg:col-span-1">
             <div className="benjamin-bar-red">Trade Assurance</div>
             <div className="p-4">
               <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=600&q=70" alt="entrepôt" className="w-full h-32 object-cover" />
@@ -396,7 +415,7 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
       {/* JUST FOR YOU infinite feed */}
       <section className="max-w-[1280px] mx-auto px-3 lg:px-6 pb-10">
         <div className="benjamin-bar mb-3">Pour vous</div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
