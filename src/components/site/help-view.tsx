@@ -11,6 +11,7 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useApp } from "@/lib/store";
+import { BRAND, brandEmail } from "@/lib/brand";
 
 const CATEGORY_TILES = [
   { key: "start", label: "Getting started", icon: Rocket, body: "Place your first order in minutes" },
@@ -30,7 +31,7 @@ const FAQS = [
   },
   {
     q: "What is Trade Assurance and how does it protect me?",
-    a: "Trade Assurance is BENJAMINBAZAAR's free order protection. Your payment is held in escrow and only released to the supplier once you confirm receipt. It covers on-time dispatch, product quality, and order accuracy. Claims are resolved within 7 days.",
+    a: `Trade Assurance is ${BRAND.name}'s free order protection. Your payment is held in escrow and only released to the supplier once you confirm receipt. It covers on-time dispatch, product quality, and order accuracy. Claims are resolved within 7 days.`,
   },
   {
     q: "How long does shipping take to Ghana?",
@@ -57,7 +58,7 @@ const FAQS = [
     a: "All suppliers with a green Verified badge have passed business registration, bank account, and trade license checks. Factory-audited suppliers carry an additional ISO badge. You can request a fresh audit report from any supplier's storefront.",
   },
   {
-    q: "Can I dropship from BENJAMINBAZAAR?",
+    q: `Can I dropship from ${BRAND.name}?`,
     a: "Yes. Switch on Dropshipping mode in your account settings and suppliers will hide their branding from shipments. You can also automate order routing via our API for Shopify, WooCommerce, or TikTok Shop integrations.",
   },
   {
@@ -76,12 +77,12 @@ export function HelpView() {
 
       <div className="benjamin-bar">Help Center</div>
 
-      <div className="bg-gradient-to-b from-[#2a1c14] to-[#1a130d] text-white">
+      <div className="bg-brand-gradient text-white">
         <div className="max-w-[900px] mx-auto px-4 py-10 text-center">
           <h1 className="text-[26px] lg:text-[34px] font-extrabold leading-tight">
             How can we help?
           </h1>
-          <p className="text-[#cdbfb5] text-[13px] mt-2 max-w-xl mx-auto">
+          <p className="text-[#CFD6F5] text-[13px] mt-2 max-w-xl mx-auto">
             Search articles, browse categories, or chat with our team 24/7.
           </p>
           <div className="mt-5 max-w-xl mx-auto flex items-center bg-white h-12 border-2 border-[#FF6A00]">
@@ -159,7 +160,7 @@ export function HelpView() {
 
           {/* AI ASSISTANT PROMO */}
           <aside className="space-y-5">
-            <div className="bg-[#000] text-white">
+            <div className="bg-[#0A0F4D] text-white">
               <div className="benjamin-bar-red">AI Assistant</div>
               <div className="p-5">
                 <div className="w-12 h-12 bg-[#FF6A00] flex items-center justify-center mb-3">
@@ -168,9 +169,9 @@ export function HelpView() {
                 <h3 className="text-[18px] font-extrabold leading-tight">
                   Get instant answers
                 </h3>
-                <p className="text-[12px] text-[#cdbfb5] mt-2 leading-relaxed">
+                <p className="text-[12px] text-[#CFD6F5] mt-2 leading-relaxed">
                   Draft RFQs, compare quotes, translate specs and resolve disputes —
-                  all with the BENJAMIN AI Assistant. Available 24/7.
+                  all with the {BRAND.shortName} AI Assistant. Available 24/7.
                 </p>
                 <button
                   onClick={() => toast.success("AI Assistant opening…")}
@@ -210,7 +211,7 @@ export function HelpView() {
                   <Phone className="w-4 h-4" /> Appeler : +225 0707 36 51 36
                 </a>
                 <a
-                  href="mailto:support@benjaminbazaar.com"
+                  href={`mailto:${brandEmail("support")}`}
                   className="w-full inline-flex items-center justify-center gap-2 bg-[#337AB7] text-white text-[12px] font-bold uppercase tracking-wide px-4 py-2.5 hover:opacity-90"
                 >
                   <Mail className="w-4 h-4" /> Email support

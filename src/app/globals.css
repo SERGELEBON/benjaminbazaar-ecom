@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   BENJAMIN BAZAAR — Alibaba structure, BENJAMIN editorial skin
-   Palette Côte d'Ivoire : Orange #FF6A00 + Vert #16A34A + Noir #000.
+   I.JOBS.C (Ivoire Jobs Connexion) — Alibaba structure, editorial skin
+   Palette I.JOBS.C : Bleu principal #1A1F8A (dégradé #070B3D → #2E35C8) + harmonie Orange #FF6A00 / Blanc / Vert #16A34A.
    Editorial, flat, no border-radius, 1px grey separators. Open Sans.
    Fond : image e-commerce pro (entrepôt / logistique).
    ============================================================ */
@@ -45,12 +45,20 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  /* BENJAMIN brand tokens — palette ivoirienne orange + vert */
+  /* I.JOBS.C brand — primary blue (from logo) */
+  --color-brand-950: #070B3D;
+  --color-brand-900: #0A0F4D;
+  --color-brand-800: #0F1460;
+  --color-brand-700: #1A1F8A;
+  --color-brand-600: #2E35C8;
+  --color-brand-100: #E8EAFB;
+
+  /* Harmony colours — palette ivoirienne orange + blanc + vert */
   --color-benjamin-orange: #FF6A00;
   --color-benjamin-orange-dark: #E55A00;
   --color-benjamin-green: #16A34A;
   --color-benjamin-green-dark: #15803D;
-  --color-benjamin-black: #000000;
+  --color-benjamin-black: #0A0F4D; /* now brand navy */
   --color-benjamin-grey-line: #DADAD9;
   --color-benjamin-panel: #ECECEC;
   --color-benjamin-link: #337AB7;
@@ -64,6 +72,12 @@
 }
 
 :root {
+  --brand-950: #070B3D;
+  --brand-900: #0A0F4D;
+  --brand-800: #0F1460;
+  --brand-700: #1A1F8A;
+  --brand-600: #2E35C8;
+  --brand-gradient: linear-gradient(135deg, #070B3D 0%, #0F1460 40%, #1A1F8A 70%, #2E35C8 100%);
   --radius: 0px;
   --background: #ffffff;
   --foreground: #333333;
@@ -71,9 +85,9 @@
   --card-foreground: #333333;
   --popover: #ffffff;
   --popover-foreground: #333333;
-  --primary: #FF6A00;
+  --primary: #1A1F8A;
   --primary-foreground: #ffffff;
-  --secondary: #000000;
+  --secondary: #0A0F4D;
   --secondary-foreground: #ffffff;
   --muted: #ECECEC;
   --muted-foreground: #6b6b6b;
@@ -84,7 +98,7 @@
   --input: #DADAD9;
   --ring: #FF6A00;
   --chart-1: #FF6A00;
-  --chart-2: #000000;
+  --chart-2: #1A1F8A;
   --chart-3: #16A34A;
   --chart-4: #337AB7;
   --chart-5: #DADAD9;
@@ -105,7 +119,7 @@
   --card-foreground: #ECECEC;
   --popover: #0b0b0b;
   --popover-foreground: #ECECEC;
-  --primary: #FF6A00;
+  --primary: #1A1F8A;
   --primary-foreground: #ffffff;
   --secondary: #ECECEC;
   --secondary-foreground: #000000;
@@ -137,9 +151,9 @@
 /* ── Fond du site complet : image e-commerce pro, teintée orange + vert ── */
 /* HORS @layer pour garantir la priorité (Tailwind v4 purge les classes custom en @layer base) */
 .benjamin-bg {
-  background-color: #1f1a14 !important;
+  background-color: #070B3D !important;
   background-image:
-    linear-gradient(115deg, rgba(255,106,0,0.5), rgba(22,163,74,0.42), rgba(15,12,8,0.85)),
+    linear-gradient(115deg, rgba(7,11,61,0.92), rgba(26,31,138,0.78), rgba(46,53,200,0.7)),
     url("https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=2000&q=75") !important;
   background-size: cover !important;
   background-position: center !important;
@@ -187,7 +201,7 @@
 @layer components {
   /* BENJAMIN black bar with orange ▼ triangle + white bold title */
   .benjamin-bar {
-    background: #000;
+    background: var(--brand-900);
     color: #fff;
     font-weight: 700;
     text-transform: uppercase;
@@ -255,18 +269,18 @@
   }
   /* Square black button UPPERCASE */
   .btn-square-black {
-    background: #000;
+    background: var(--brand-900);
     color: #fff;
     text-transform: uppercase;
     font-weight: 700;
     letter-spacing: 0.05em;
     font-size: 12px;
     padding: 9px 16px;
-    border: 1px solid #000;
+    border: 1px solid var(--brand-900);
     cursor: pointer;
     transition: opacity 0.12s ease;
   }
-  .btn-square-black:hover { opacity: 0.85; }
+  .btn-square-black:hover { background: var(--brand-700); border-color: var(--brand-700); }
   /* Red primary button */
   .btn-benjamin-orange {
     background: #FF6A00;
@@ -315,7 +329,7 @@
   }
   /* Square pagination buttons */
   .benjamin-nav-btn {
-    background: #000;
+    background: var(--brand-900);
     color: #fff;
     width: 34px;
     height: 34px;
@@ -323,7 +337,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: 1px solid #000;
+    border: 1px solid var(--brand-900);
     text-transform: uppercase;
     font-size: 12px;
   }
@@ -358,3 +372,6 @@
 @media (max-width: 767px) {
   html, body { overflow-x: clip; }
 }
+
+/* Brand blue gradient (logo background) */
+.bg-brand-gradient { background: var(--brand-gradient); }

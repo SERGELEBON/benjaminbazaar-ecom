@@ -311,7 +311,7 @@ export function CheckoutView() {
                           <div key={`${l.productId}-${l.variant}`} className="flex items-start gap-2 mb-2">
                             <div className="relative w-12 h-12 shrink-0 bg-[#ECECEC]">
                               <img src={l.image} alt={l.title} className="w-full h-full object-cover" />
-                              <span className="absolute -top-1.5 -right-1.5 bg-[#000] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center">
+                              <span className="absolute -top-1.5 -right-1.5 bg-[#0A0F4D] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center">
                                 {l.quantity}
                               </span>
                             </div>

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { toast } from "sonner";
+import { BRAND } from "@/lib/brand";
 
 // ---------------- Types ----------------
 interface ChatMessage {
@@ -534,7 +535,7 @@ export function ChatView() {
             {active && messageGroups.map((group, gi) => (
               <div key={gi}>
                 <div className="flex justify-center my-3">
-                  <span className="bg-[#000] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5">
+                  <span className="bg-[#0A0F4D] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5">
                     {group.day}
                   </span>
                 </div>
@@ -742,7 +743,7 @@ export function ChatView() {
               <div className="p-3 mt-auto">
                 <div className="bg-[#FFF3E8] border-l-[3px] border-l-[#FF6A00] p-2.5">
                   <div className="text-[11px] font-bold text-[#FF6A00] flex items-center gap-1.5">
-                    <AlertCircle className="w-3.5 h-3.5" /> Conseil BENJAMIN
+                    <AlertCircle className="w-3.5 h-3.5" /> Conseil {BRAND.shortName}
                   </div>
                   <p className="text-[11px] text-[#555] mt-1 leading-relaxed">
                     Demandez toujours une facture proforma et l&apos;envoi d&apos;un échantillon

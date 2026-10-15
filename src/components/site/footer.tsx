@@ -1,6 +1,8 @@
 "use client";
 
 import { useApp } from "@/lib/store";
+import { BRAND } from "@/lib/brand";
+import { BrandLogo } from "./brand-logo";
 import { Facebook, Twitter, Instagram, Youtube, Linkedin, Apple, Smartphone } from "lucide-react";
 
 const COLS: { title: string; links: string[] }[] = [
@@ -13,16 +15,16 @@ const COLS: { title: string; links: string[] }[] = [
     links: ["Trade Assurance", "Paiement sécurisé", "Protection remboursement", "Résolution des litiges", "Vérification fournisseur"],
   },
   {
-    title: "Sourcer sur BENJAMINBAZAAR",
+    title: `Sourcer sur ${BRAND.shortName}`,
     links: ["Demande de devis", "Top classement", "Dropshipping", "Personnalisation rapide", "Assistant IA sourcing"],
   },
   {
-    title: "Vendre sur BENJAMINBAZAAR",
+    title: `Vendre sur ${BRAND.shortName}`,
     links: ["Devenir fournisseur", "Tableau de bord fournisseur", "Services de vérification", "Publicité", "Design de boutique"],
   },
   {
     title: "À propos de nous",
-    links: ["À propos de BENJAMINBAZAAR", "Carrières", "Communiqués de presse", "Durabilité", "Contactez-nous"],
+    links: [`À propos de ${BRAND.shortName}`, "Carrières", "Communiqués de presse", "Durabilité", "Contactez-nous"],
   },
 ];
 
@@ -30,32 +32,25 @@ export function Footer() {
   const setView = useApp((s) => s.setView);
 
   return (
-    <footer className="mt-auto bg-[#1b3a28] text-[#c8e0d2] border-t-2 border-[#16A34A]">
+    <footer className="mt-auto bg-[#0A0F4D] bg-gradient-to-br from-[#070B3D] via-[#0F1460] to-[#1A1F8A] text-[#CFD6F5] border-t-2 border-[#16A34A]">
       <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-9">
         {/* Brand row */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-7 pb-6 border-b border-[#2a5040]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#16A34A] flex items-center justify-center">
-              <span className="text-white font-extrabold text-[18px]">B</span>
-            </div>
-            <div>
-              <div className="text-[18px] font-extrabold tracking-tight text-white uppercase">
-                BENJAMIN<span className="text-[#4ade80]">BAZAAR</span>
-              </div>
-              <div className="text-[10px] text-[#7fa896] uppercase tracking-wider">
-                Marché de gros B2B · Côte d'Ivoire 🇨🇮
-              </div>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-7 pb-6 border-b border-[#26308F]">
+          <div>
+            <BrandLogo variant="dark" size={56} />
+            <div className="text-[11px] text-[#9AA6E0] uppercase tracking-wider mt-2">
+              {BRAND.tagline} 🇨🇮 · <span className="normal-case italic">{BRAND.slogan}</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-[#7fa896] uppercase tracking-wide mr-2">Suivez-nous</span>
+            <span className="text-[11px] text-[#9AA6E0] uppercase tracking-wide mr-2">Suivez-nous</span>
             {[Facebook, Twitter, Instagram, Youtube, Linkedin].map((Ic, i) => (
               <a
                 key={i}
                 href="#"
-                className="w-8 h-8 border border-[#2a5040] flex items-center justify-center hover:bg-[#16A34A] hover:border-[#16A34A] transition-colors"
+                className="w-8 h-8 border border-[#26308F] flex items-center justify-center hover:bg-[#16A34A] hover:border-[#16A34A] transition-colors"
               >
-                <Ic className="w-4 h-4 text-[#c8e0d2] hover:text-white" strokeWidth={1.6} />
+                <Ic className="w-4 h-4 text-[#CFD6F5] hover:text-white" strokeWidth={1.6} />
               </a>
             ))}
           </div>
@@ -77,7 +72,7 @@ export function Footer() {
                         else if (l === "Dropshipping") setView("dropshipping");
                         else if (l === "Devenir fournisseur" || l === "Tableau de bord fournisseur") setView("supplier-dashboard");
                         else if (l === "Centre d'aide" || l === "Chat en direct") setView("help");
-                        else if (l === "À propos de BENJAMINBAZAAR") setView("home");
+                        else if (l === `À propos de ${BRAND.shortName}`) setView("home");
                         else if (l === "Assistant IA sourcing") setView("help");
                       }}
                     >
@@ -93,17 +88,17 @@ export function Footer() {
           <div>
             <h4 className="text-[#4ade80] uppercase font-bold tracking-wide text-[12px] mb-3">Restez connecté</h4>
             <div className="flex flex-col gap-2">
-              <button className="flex items-center gap-2 border border-[#2a5040] px-3 py-2 hover:border-[#16A34A] hover:bg-[#0e2a1c] transition-colors">
+              <button className="flex items-center gap-2 border border-[#26308F] px-3 py-2 hover:border-[#16A34A] hover:bg-[#070B3D] transition-colors">
                 <Apple className="w-4 h-4 text-white" />
                 <div className="text-left leading-tight">
-                  <div className="text-[9px] text-[#7fa896]">Télécharger sur</div>
+                  <div className="text-[9px] text-[#9AA6E0]">Télécharger sur</div>
                   <div className="text-[11px] text-white font-semibold">App Store</div>
                 </div>
               </button>
-              <button className="flex items-center gap-2 border border-[#2a5040] px-3 py-2 hover:border-[#16A34A] hover:bg-[#0e2a1c] transition-colors">
+              <button className="flex items-center gap-2 border border-[#26308F] px-3 py-2 hover:border-[#16A34A] hover:bg-[#070B3D] transition-colors">
                 <Smartphone className="w-4 h-4 text-white" />
                 <div className="text-left leading-tight">
-                  <div className="text-[9px] text-[#7fa896]">Disponible sur</div>
+                  <div className="text-[9px] text-[#9AA6E0]">Disponible sur</div>
                   <div className="text-[11px] text-white font-semibold">Google Play</div>
                 </div>
               </button>
@@ -112,20 +107,20 @@ export function Footer() {
         </div>
 
         {/* trust badges */}
-        <div className="mt-7 pt-5 border-t border-[#2a5040] flex flex-wrap items-center justify-center gap-4 text-[11px] text-[#7fa896]">
+        <div className="mt-7 pt-5 border-t border-[#26308F] flex flex-wrap items-center justify-center gap-4 text-[11px] text-[#9AA6E0]">
           <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Trade Assurance</span>
-          <span className="text-[#2a5040]">|</span>
+          <span className="text-[#26308F]">|</span>
           <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Paiement sécurisé</span>
-          <span className="text-[#2a5040]">|</span>
+          <span className="text-[#26308F]">|</span>
           <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Fournisseurs vérifiés</span>
-          <span className="text-[#2a5040]">|</span>
+          <span className="text-[#26308F]">|</span>
           <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Livraison en Côte d'Ivoire 🇨🇮</span>
         </div>
 
         {/* legal */}
-        <div className="border-t border-[#2a5040] mt-6 pt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div className="text-[11px] text-[#7fa896]">
-            © {new Date().getFullYear()} BENJAMINBAZAAR. Tous droits réservés. Marché de gros B2B — Côte d'Ivoire.
+        <div className="border-t border-[#26308F] mt-6 pt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div className="text-[11px] text-[#9AA6E0]">
+            © {new Date().getFullYear()} {BRAND.name} ({BRAND.shortName}). Tous droits réservés. Marché de gros B2B — Côte d'Ivoire.
           </div>
           <div className="flex flex-wrap gap-4 text-[11px]">
             <a href="#" className="text-[#a8c4b4] hover:text-white hover:underline">Politique de confidentialité</a>

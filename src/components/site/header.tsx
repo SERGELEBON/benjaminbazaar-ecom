@@ -9,6 +9,8 @@ import { useApp } from "@/lib/store";
 import type { CategoryNode } from "@/lib/format";
 import { TR } from "@/lib/format";
 import { CatIcon } from "./cat-icon";
+import { BrandLogo } from "./brand-logo";
+import { BRAND } from "@/lib/brand";
 
 const SUGGESTIONS = {
   fr: [
@@ -89,19 +91,13 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
           <button
             onClick={() => setView("home")}
             className="flex items-center gap-2 shrink-0"
+            aria-label={`${BRAND.name} — accueil`}
           >
-            <div className="leading-tight text-left">
-              <div className="text-[17px] sm:text-[19px] font-extrabold tracking-tight text-[#16A34A] uppercase">
-                BENJAMIN<span className="text-black">BAZAAR</span>
-              </div>
-              <div className="hidden sm:block text-[9px] text-[#888] leading-none uppercase tracking-wider">
-                Marché de gros · Côte d'Ivoire 🇨🇮
-              </div>
-            </div>
+            <BrandLogo size={40} />
           </button>
 
           {/* search bar (desktop) */}
-          <div className="hidden md:flex flex-1 items-center border-2 border-[#FF6A00] h-10 bg-white">
+          <div className="hidden md:flex flex-1 items-center border-2 border-[#1A1F8A] h-10 bg-white">
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -138,7 +134,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
             <MapPin className="w-4 h-4 text-[#FF6A00]" strokeWidth={1.8} />
             <div className="leading-tight">
               <div className="text-[9px] text-[#888] uppercase">{t.deliver_to}</div>
-              <div className="text-[12px] font-semibold flex items-center gap-1">
+              <div className="text-[12px] font-semibold flex items-center gap-1 whitespace-nowrap">
                 🇨🇮 Côte d'Ivoire <ChevronDown className="w-3 h-3" />
               </div>
             </div>
@@ -176,7 +172,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
                     <button
                       key={l}
                       onClick={() => { setLang(l); setGlobeOpen(false); }}
-                      className={`px-2 py-1 text-[11px] font-semibold border ${lang === l ? "bg-[#000] text-white border-[#000]" : "border-[#DADAD9]"}`}
+                      className={`px-2 py-1 text-[11px] font-semibold border ${lang === l ? "bg-[#0A0F4D] text-white border-[#0A0F4D]" : "border-[#DADAD9]"}`}
                     >
                       {l === "fr" ? "FR" : "EN"}
                     </button>
@@ -205,13 +201,13 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
             className="hidden md:flex items-center gap-1 px-2 hover:text-[#FF6A00]"
           >
             <User className="w-5 h-5" strokeWidth={1.6} />
-            <span className="text-[12px] font-semibold hidden lg:inline">{t.sign_in}</span>
+            <span className="text-[12px] font-semibold hidden xl:inline whitespace-nowrap">{t.sign_in}</span>
           </button>
 
           {/* create account */}
           <button
             onClick={() => setView("auth")}
-            className="btn-square-black hidden md:inline-flex"
+            className="btn-square-black hidden md:inline-flex whitespace-nowrap"
           >
             {t.create_account}
           </button>
@@ -219,7 +215,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
 
         {/* mobile search bar (always visible) */}
         <div className="md:hidden pb-2.5">
-          <div className={`flex items-center border-2 h-10 bg-white ${mobileSearch ? "border-[#FF6A00]" : "border-[#16A34A]"}`}>
+          <div className={`flex items-center border-2 h-10 bg-white ${mobileSearch ? "border-[#FF6A00]" : "border-[#1A1F8A]"}`}>
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -358,7 +354,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
         <div className="fixed inset-0 z-[70] bg-black/50 md:hidden" onClick={() => setMobileMenu(false)}>
           <div className="absolute left-0 top-0 bottom-0 w-[85vw] max-w-[320px] bg-white overflow-y-auto benjamin-scroll" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between p-3 border-b border-[#ECECEC]">
-              <span className="font-bold uppercase text-[#FF6A00]">{lang === "fr" ? "Menu" : "Menu"}</span>
+              <BrandLogo size={36} />
               <button onClick={() => setMobileMenu(false)}><X className="w-5 h-5" /></button>
             </div>
             {/* quick links */}
@@ -402,7 +398,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
                 <button
                   key={l}
                   onClick={() => setLang(l)}
-                  className={`px-2.5 py-1.5 text-[11px] font-semibold border ${lang === l ? "bg-black text-white border-black" : "border-[#DADAD9]"}`}
+                  className={`px-2.5 py-1.5 text-[11px] font-semibold border ${lang === l ? "bg-[#0A0F4D] text-white border-[#0A0F4D]" : "border-[#DADAD9]"}`}
                 >
                   {l.toUpperCase()}
                 </button>

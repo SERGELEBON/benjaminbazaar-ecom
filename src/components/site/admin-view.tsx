@@ -8,6 +8,7 @@ import {
 import { toast, Toaster } from "sonner";
 import { useApp } from "@/lib/store";
 import { formatPrice, type SupplierT, type CategoryNode } from "@/lib/format";
+import { BRAND, brandEmail } from "@/lib/brand";
 
 type Tab =
   | "users" | "suppliers" | "categories" | "banners"
@@ -18,7 +19,7 @@ const MOCK_USERS = [
   { id: "u2", name: "Wei Zhang", email: "wei@lumelec.cn", role: "SUPPLIER", status: "active", joined: "Aug 02, 2024" },
   { id: "u3", name: "Aya Kouassi", email: "aya@abidjan.ci", role: "BUYER", status: "active", joined: "Oct 21, 2024" },
   { id: "u4", name: "Priya Nair", email: "priya@indtex.in", role: "SUPPLIER", status: "pending", joined: "Oct 28, 2024" },
-  { id: "u5", name: "Admin", email: "admin@benjaminbazaar.com", role: "ADMIN", status: "active", joined: "Jan 01, 2024" },
+  { id: "u5", name: "Admin", email: brandEmail("admin"), role: "ADMIN", status: "active", joined: "Jan 01, 2024" },
   { id: "u6", name: "Mehmet Yilmaz", email: "mehmet@istapp.tr", role: "SUPPLIER", status: "suspended", joined: "Mar 19, 2024" },
   { id: "u7", name: "John Owusu", email: "john@owusu.gh", role: "BUYER", status: "active", joined: "Jul 11, 2024" },
 ];
@@ -75,10 +76,10 @@ export function AdminView() {
           <ShieldAlert className="w-10 h-10 mx-auto text-[#FF6A00]" />
           <h2 className="text-[18px] font-bold mt-3">Admin access required</h2>
           <p className="text-[12px] text-[#666] mt-1.5">
-            This area is restricted to BENJAMINBAZAAR administrators.
+            This area is restricted to {BRAND.name} administrators.
           </p>
           <button
-            onClick={() => { signIn("Admin", "admin@benjaminbazaar.com", "ADMIN"); toast.success("Welcome, Admin"); }}
+            onClick={() => { signIn("Admin", brandEmail("admin"), "ADMIN"); toast.success("Welcome, Admin"); }}
             className="btn-benjamin-orange mt-5 w-full"
           >
             Sign in as admin
@@ -105,7 +106,7 @@ export function AdminView() {
     { label: "Users", value: "1,284", accent: "#FF6A00" },
     { label: "Suppliers", value: supplierCount === null ? "…" : supplierCount.toString(), accent: "#FF6A00" },
     { label: "Products", value: productTotal === null ? "…" : productTotal.toString(), accent: "#FF6A00" },
-    { label: "GMV (30d)", value: formatPrice(1_240_000, currency), accent: "#000" },
+    { label: "GMV (30d)", value: formatPrice(1_240_000, currency), accent: "#0A0F4D" },
     { label: "Pending disputes", value: "12", accent: "#FF6A00" },
     { label: "Commissions", value: formatPrice(38_400, currency), accent: "#16A34A" },
   ];
@@ -120,7 +121,7 @@ export function AdminView() {
         {/* greeting */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
-            <div className="text-[11px] uppercase tracking-wide text-[#666]">BENJAMINBAZAAR · Control panel</div>
+            <div className="text-[11px] uppercase tracking-wide text-[#666]">{BRAND.shortName} · Control panel</div>
             <div className="text-[20px] font-extrabold">Hello, {user.name}</div>
           </div>
           <button
@@ -205,7 +206,7 @@ function RoleBadge({ role }: { role: string }) {
   const map: Record<string, string> = {
     BUYER: "bg-[#337AB7]",
     SUPPLIER: "bg-[#FF6A00]",
-    ADMIN: "bg-[#000]",
+    ADMIN: "bg-[#0A0F4D]",
   };
   return (
     <span className={`${map[role] || "bg-[#999]"} text-white text-[10px] font-bold uppercase px-2 py-0.5 tracking-wide`}>

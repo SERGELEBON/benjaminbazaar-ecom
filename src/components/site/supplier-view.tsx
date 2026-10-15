@@ -9,6 +9,7 @@ import { useApp } from "@/lib/store";
 import { formatPrice, type ProductT, type SupplierT } from "@/lib/format";
 import { ProductCard } from "./product-card";
 import { toast } from "sonner";
+import { BRAND } from "@/lib/brand";
 
 type SupplierFull = SupplierT & { products: ProductT[] };
 
@@ -280,7 +281,7 @@ export function SupplierView() {
                 onClick={() => setTab(t)}
                 className={`px-5 py-3 text-[12px] font-bold uppercase tracking-wide whitespace-nowrap ${
                   tab === t
-                    ? "bg-[#000] text-white"
+                    ? "bg-[#0A0F4D] text-white"
                     : "text-[#666] hover:bg-[#ECECEC] hover:text-[#FF6A00]"
                 }`}
               >
@@ -369,7 +370,7 @@ export function SupplierView() {
                     established {supplier.years} years ago. Specializing in {supplier.mainCategory ?? "wholesale goods"},
                     the company serves markets across {supplier.markets.slice(0, 3).join(", ") || "the world"}.
                     With {supplier.employees ?? "a dedicated team"} of employees and annual revenue of {supplier.annualRevenue ?? "—"},
-                    {supplier.name} is {supplier.verified ? "a verified supplier" : "an active supplier"} on BENJAMINBAZAAR,
+                    {supplier.name} is {supplier.verified ? "a verified supplier" : "an active supplier"} on {BRAND.name},
                     maintaining a {supplier.storeRating.toFixed(1)} store rating, {supplier.onTimeDispatch}% on-time dispatch,
                     and {Math.round(supplier.reorderRate)}% reorder rate.
                   </p>
@@ -556,7 +557,7 @@ export function SupplierView() {
                     <FileText className="w-4 h-4" /> Send inquiry
                   </button>
                   <p className="text-[10px] text-[#888] text-center">
-                    Your inquiry will be sent via BENJAMINBAZAAR secure messaging. By sending, you agree to our terms.
+                    Your inquiry will be sent via {BRAND.name} secure messaging. By sending, you agree to our terms.
                   </p>
                 </form>
               </div>

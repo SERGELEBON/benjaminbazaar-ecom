@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { toast } from "sonner";
+import { BRAND } from "@/lib/brand";
 
 const UNITS = ["piece", "kilogram", "box", "carton", "set", "ton"];
 
@@ -103,7 +104,7 @@ export function RfqView() {
   return (
     <div className="bg-[#f4f1ec] min-h-[60vh]">
       {/* Hero bar */}
-      <div className="bg-gradient-to-b from-[#2a1c14] to-[#1a130d] text-white">
+      <div className="bg-brand-gradient text-white">
         <div className="max-w-[1100px] mx-auto px-4 py-10 lg:py-12 text-center">
           <div className="inline-flex items-center gap-2 bg-[#FF6A00] px-3 py-1 text-[11px] uppercase font-bold tracking-wider mb-4">
             <FileText className="w-3.5 h-3.5" /> Sourcing on your terms
@@ -111,7 +112,7 @@ export function RfqView() {
           <h1 className="text-[26px] lg:text-[34px] font-extrabold leading-tight">
             Request for Quotation <span className="text-[#FF6A00]">(RFQ)</span>
           </h1>
-          <p className="text-[#cdbfb5] text-[13px] mt-2 max-w-2xl mx-auto">
+          <p className="text-[#CFD6F5] text-[13px] mt-2 max-w-2xl mx-auto">
             Tell us what you need — verified suppliers will send you quotes
             within 24h. Free, no commitment, Trade Assurance protected.
           </p>
@@ -296,7 +297,7 @@ export function RfqView() {
                     )}
                   </button>
                   <p className="text-[11px] text-[#999]">
-                    By submitting, you agree to BENJAMINBAZAAR&apos;s Terms &amp; Privacy Policy.
+                    By submitting, you agree to {BRAND.name}&apos;s Terms &amp; Privacy Policy.
                   </p>
                 </div>
               </form>

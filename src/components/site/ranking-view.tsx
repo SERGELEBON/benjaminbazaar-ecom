@@ -74,7 +74,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
   return (
     <div className="bg-[#f4f1ec] min-h-[60vh]">
       {/* Hero */}
-      <div className="bg-gradient-to-b from-[#2a1c14] to-[#1a130d] text-white">
+      <div className="bg-brand-gradient text-white">
         <div className="max-w-[1100px] mx-auto px-4 py-10 lg:py-12 text-center">
           <div className="inline-flex items-center gap-2 bg-[#FF6A00] px-3 py-1 text-[11px] uppercase font-bold tracking-wider mb-4">
             <Trophy className="w-3.5 h-3.5" /> Weekly rankings
@@ -82,7 +82,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
           <h1 className="text-[26px] lg:text-[34px] font-extrabold leading-tight">
             Top Ranking Products
           </h1>
-          <p className="text-[#cdbfb5] text-[13px] mt-2 max-w-2xl mx-auto">
+          <p className="text-[#CFD6F5] text-[13px] mt-2 max-w-2xl mx-auto">
             Most popular wholesale products this week, ranked by sales.
             Compare verified suppliers &amp; place your order with confidence.
           </p>
@@ -113,7 +113,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                 onClick={() => setRange(r)}
                 className={`px-2.5 py-1.5 text-[12px] font-semibold ${
                   range === r
-                    ? "bg-[#000] text-white"
+                    ? "bg-[#0A0F4D] text-white"
                     : "bg-white text-[#555] hover:bg-[#ECECEC]"
                 }`}
               >
@@ -166,7 +166,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                     </div>
                     {/* trophy icon for #1 */}
                     {rank === 1 && (
-                      <div className="absolute top-0 right-0 z-10 bg-[#000] text-white px-2 py-1 text-[10px] uppercase font-bold flex items-center gap-1">
+                      <div className="absolute top-0 right-0 z-10 bg-[#0A0F4D] text-white px-2 py-1 text-[10px] uppercase font-bold flex items-center gap-1">
                         <Medal className="w-3 h-3" /> #1
                       </div>
                     )}
@@ -244,7 +244,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
             </div>
 
             {/* header row */}
-            <div className="hidden md:grid bg-[#000] text-white text-[11px] uppercase font-bold tracking-wide grid-cols-[60px_70px_1fr_180px_140px_100px_180px] gap-2 px-4 py-2">
+            <div className="hidden md:grid bg-[#0A0F4D] text-white text-[11px] uppercase font-bold tracking-wide grid-cols-[60px_70px_1fr_180px_140px_100px_180px] gap-2 px-4 py-2">
               <span>Rank</span>
               <span>Image</span>
               <span>Product</span>

@@ -9,6 +9,7 @@ import { useApp } from "@/lib/store";
 import type { CategoryNode, ProductT } from "@/lib/format";
 import { CatIcon } from "./cat-icon";
 import { ProductCard } from "./product-card";
+import { BRAND } from "@/lib/brand";
 
 /* ─────────────────────────────────────────────────────────────
    PromoSlider — slider 3 images pro compact, intégré dans la zone pub.
@@ -244,10 +245,10 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
 
   return (
     <div className="bg-transparent">
-      {/* HERO — fond sombre préservé, accents verts */}
-      <section className="relative bg-gradient-to-b from-[#2a1c14] to-[#1a130d] text-white overflow-hidden">
+      {/* HERO — dégradé bleu de la marque, accents orange / vert */}
+      <section className="relative bg-brand-gradient text-white overflow-hidden">
         {/* motif décoratif vert */}
-        <div className="absolute inset-0 opacity-15 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 20% 30%, #16A34A 0, transparent 45%), radial-gradient(circle at 80% 70%, #16A34A 0, transparent 40%)" }} />
+        <div className="absolute inset-0 opacity-15 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 15% 20%, #2E35C8 0, transparent 45%), radial-gradient(circle at 85% 80%, #FF6A00 0, transparent 35%)" }} />
         <div className="relative max-w-[1100px] mx-auto px-4 py-7 sm:py-10 lg:py-14 text-center">
           <div className="inline-flex items-center gap-2 bg-[#16A34A] px-3 py-1 text-[10px] sm:text-[11px] uppercase font-bold tracking-wider mb-3 sm:mb-4 border border-[#1ea84d]">
             <Bot className="w-3.5 h-3.5" /> Sourcing IA 2025
@@ -255,7 +256,7 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
           <h1 className="text-[24px] sm:text-[30px] lg:text-[40px] font-extrabold leading-tight">
             Sourcez plus intelligemment auprès de <span className="text-[#4ade80]">fabricants vérifiés</span>
           </h1>
-          <p className="text-[#cdbfb5] text-[13px] sm:text-[14px] mt-2 max-w-2xl mx-auto">
+          <p className="text-[#CFD6F5] text-[13px] sm:text-[14px] mt-2 max-w-2xl mx-auto">
             200+ produits en gros · 20 fournisseurs vérifiés · Trade Assurance ·
             Devis en quelques minutes · Livraison en Côte d'Ivoire, Afrique de l'Ouest &amp; dans le monde.
           </p>
@@ -290,10 +291,10 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
       </section>
 
       {/* welcome + quick links */}
-      <div className="bg-[#000] text-white">
+      <div className="bg-[#0A0F4D] text-white">
         <div className="max-w-[1280px] mx-auto px-4 lg:px-6 flex items-center gap-x-5 sm:gap-x-6 h-11 text-[12px] overflow-x-auto no-scrollbar whitespace-nowrap">
           <span className="hidden sm:inline font-bold uppercase tracking-wide">
-            ▼ Bienvenue sur BENJAMINBAZAAR
+            ▼ Bienvenue sur {BRAND.name}
           </span>
           <button onClick={() => setView("rfq")} className="shrink-0 hover:text-[#FF6A00] flex items-center gap-1">
             <FileText className="w-3.5 h-3.5 text-[#FF6A00]" /> Demande de devis
@@ -444,7 +445,7 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
               <div className="w-9 h-9 bg-[#FF6A00] flex items-center justify-center">
                 <Bot className="w-5 h-5 text-white" />
               </div>
-              <div className="font-bold text-[13px]">Assistant IA BENJAMIN</div>
+              <div className="font-bold text-[13px]">Assistant IA {BRAND.shortName}</div>
             </div>
             <p className="text-[12px] text-[#555] leading-snug">
               Négociez sans effort avec l'IA — rédigez des demandes de devis, comparez les offres, traduisez les spécifications. Essai gratuit.

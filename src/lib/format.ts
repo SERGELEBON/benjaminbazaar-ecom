@@ -1,5 +1,6 @@
-// BENJAMINBAZAAR — shared types & helpers
+// Ivoire Jobs Connexion (I.JOBS.C) — shared types & helpers
 
+import { BRAND } from "@/lib/brand";
 export type Currency = "GHS" | "XOF" | "USD";
 export type Lang = "en" | "fr";
 
@@ -121,12 +122,12 @@ export const TR = {
     about_us: "About us",
     help_center: "Help Center",
     ai_assistant: "AI assistant",
-    sell_on: "Sell on BENJAMINBAZAAR",
+    sell_on: `Sell on ${BRAND.shortName}`,
     ai_mode: "AI Mode",
     products: "Products",
     manufacturers: "Manufacturers",
     worldwide: "Worldwide",
-    welcome: "Welcome to BENJAMINBAZAAR",
+    welcome: `Welcome to ${BRAND.name}`,
     rfq: "Request for Quotation",
     top_ranking: "Top Ranking",
     fast_customization: "Fast customization",
@@ -156,12 +157,12 @@ export const TR = {
     about_us: "À propos",
     help_center: "Centre d'aide",
     ai_assistant: "Assistant IA",
-    sell_on: "Vendre sur BENJAMINBAZAAR",
+    sell_on: `Vendre sur ${BRAND.shortName}`,
     ai_mode: "Mode IA",
     products: "Produits",
     manufacturers: "Fabricants",
     worldwide: "Mondial",
-    welcome: "Bienvenue sur BENJAMINBAZAAR",
+    welcome: `Bienvenue sur ${BRAND.name}`,
     rfq: "Demande de devis",
     top_ranking: "Top classement",
     fast_customization: "Personnalisation rapide",
