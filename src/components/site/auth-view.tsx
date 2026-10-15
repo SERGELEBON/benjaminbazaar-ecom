@@ -335,7 +335,13 @@ export function AuthView() {
 
                     <label className="flex items-start gap-2 text-[12px] text-[#555] cursor-pointer">
                       <input type="checkbox" checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)} className="mt-0.5 accent-[#1A1F8A]" />
-                      <span>J&apos;accepte les conditions d&apos;utilisation et la politique de confidentialité de {BRAND.name}.</span>
+                      <span>
+                        J&apos;accepte les{" "}
+                        <a href="/conditions" target="_blank" rel="noopener" className="benjamin-link">conditions d&apos;utilisation</a>{" "}
+                        et la{" "}
+                        <a href="/confidentialite" target="_blank" rel="noopener" className="benjamin-link">politique de confidentialité</a>{" "}
+                        de {BRAND.name}.
+                      </span>
                     </label>
                     <SubmitButton busy={busy}>Créer mon compte</SubmitButton>
                   </form>
