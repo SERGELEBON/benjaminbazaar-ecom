@@ -375,3 +375,6 @@
 
 /* Brand blue gradient (logo background) */
 .bg-brand-gradient { background: var(--brand-gradient); }
+
+/* Auth form inputs */
+.auth-input { flex: 1; min-width: 0; padding: 10px 8px; font-size: 14px; outline: none; background: transparent; }
