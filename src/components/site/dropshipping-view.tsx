@@ -57,7 +57,7 @@ export function DropshippingView() {
   return (
     <div className="bg-[#f4f1ec] min-h-[60vh]">
       {/* Hero */}
-      <div className="bg-gradient-to-b from-[#2a1c14] to-[#1a130d] text-white">
+      <div className="bg-brand-gradient text-white">
         <div className="max-w-[1100px] mx-auto px-4 py-10 lg:py-12 text-center">
           <div className="inline-flex items-center gap-2 bg-[#FF6A00] px-3 py-1 text-[11px] uppercase font-bold tracking-wider mb-4">
             <Rocket className="w-3.5 h-3.5" /> Dropshipping Center
@@ -65,7 +65,7 @@ export function DropshippingView() {
           <h1 className="text-[26px] lg:text-[34px] font-extrabold leading-tight">
             Sell without inventory
           </h1>
-          <p className="text-[#cdbfb5] text-[13px] mt-2 max-w-2xl mx-auto">
+          <p className="text-[#CFD6F5] text-[13px] mt-2 max-w-2xl mx-auto">
             Source from verified suppliers and ship directly to your customers.
             Low MOQ, automated fulfillment, no upfront stock needed.
           </p>
@@ -139,7 +139,7 @@ export function DropshippingView() {
                     className={`w-full mt-px flex items-center justify-center gap-1.5 py-2 text-[11px] uppercase font-bold tracking-wide ${
                       dropList.has(p.id)
                         ? "bg-[#16A34A] text-white border border-[#16A34A]"
-                        : "bg-[#000] text-white border border-[#000] hover:opacity-85"
+                        : "bg-[#0A0F4D] text-white border border-[#0A0F4D] hover:opacity-85"
                     }`}
                   >
                     {dropList.has(p.id) ? (
@@ -177,7 +177,7 @@ export function DropshippingView() {
           </div>
           <button
             onClick={() => setView("auth")}
-            className="bg-[#000] text-white px-6 py-3 text-[13px] uppercase font-bold tracking-wide hover:opacity-85 flex items-center gap-2 whitespace-nowrap"
+            className="bg-[#0A0F4D] text-white px-6 py-3 text-[13px] uppercase font-bold tracking-wide hover:opacity-85 flex items-center gap-2 whitespace-nowrap"
           >
             Start dropshipping <ArrowRight className="w-4 h-4" />
           </button>
@@ -224,7 +224,7 @@ function Step({
         <div className="w-10 h-10 bg-[#FF6A00] text-white flex items-center justify-center">
           <Icon className="w-5 h-5" strokeWidth={1.8} />
         </div>
-        <span className="absolute -top-1.5 -right-1.5 bg-[#000] text-white text-[10px] font-extrabold w-5 h-5 flex items-center justify-center">
+        <span className="absolute -top-1.5 -right-1.5 bg-[#0A0F4D] text-white text-[10px] font-extrabold w-5 h-5 flex items-center justify-center">
           {n}
         </span>
       </div>

@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { type SupplierT } from "@/lib/format";
+import { BRAND } from "@/lib/brand";
 
 const COUNTRIES = ["All", "China", "Ghana", "India", "Vietnam", "Turkey"];
 const RATINGS = [
@@ -114,7 +115,7 @@ export function ManufacturersView() {
         <div className="bg-white border border-t-0 border-[#DADAD9] p-4">
           <p className="text-[13px] text-[#555] leading-relaxed">
             Source from <b className="text-[#333]">{suppliers.length}+ verified manufacturers</b>{" "}
-            across China, Ghana, India, Vietnam and Turkey. All suppliers pass BENJAMINBAZAAR's
+            across China, Ghana, India, Vietnam and Turkey. All suppliers pass {BRAND.name}'s
             vetting process — verified business license, in-person factory audits, and ongoing
             performance monitoring for response time, on-time dispatch and reorder rate.
           </p>
@@ -304,7 +305,7 @@ export function ManufacturersView() {
       {/* bottom info bar */}
       {!loading && filtered.length > 0 && (
         <div className="max-w-[1280px] mx-auto px-3 lg:px-6 pb-8">
-          <div className="bg-[#000] text-white p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="bg-[#0A0F4D] text-white p-4 flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex-1">
               <div className="text-[14px] font-bold uppercase tracking-wide">▼ Become a verified manufacturer</div>
               <p className="text-[12px] text-[#bdbdbd] mt-1">

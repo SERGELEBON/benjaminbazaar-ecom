@@ -391,7 +391,7 @@ export function ProductDetailView() {
                 </span>
               )}
               {product.customizable && (
-                <span className="inline-flex items-center gap-1 bg-[#000]/5 text-[#333] text-[11px] font-bold px-2 py-1 border border-[#000]/15">
+                <span className="inline-flex items-center gap-1 bg-[#0A0F4D]/5 text-[#333] text-[11px] font-bold px-2 py-1 border border-[#0A0F4D]/15">
                   Customizable
                 </span>
               )}

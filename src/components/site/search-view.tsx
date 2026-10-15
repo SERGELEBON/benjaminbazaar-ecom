@@ -401,7 +401,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
               onClick={() => setActiveTab(t)}
               className={`shrink-0 whitespace-nowrap px-3 h-8 text-[12px] font-semibold uppercase tracking-wide ${
                 activeTab === t
-                  ? "bg-[#000] text-white"
+                  ? "bg-[#0A0F4D] text-white"
                   : "bg-[#ECECEC] text-[#333] hover:bg-[#DADAD9]"
               }`}
             >
@@ -595,7 +595,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
       {/* MOBILE FILTERS SHEET */}
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetContent side="left" className="w-[300px] sm:max-w-[340px] overflow-y-auto benjamin-scroll p-0">
-          <SheetHeader className="bg-[#000] text-white p-3 flex flex-row items-center justify-between gap-2">
+          <SheetHeader className="bg-[#0A0F4D] text-white p-3 flex flex-row items-center justify-between gap-2">
             <SheetTitle className="text-white text-[13px] uppercase tracking-wide font-bold">
               ▼ Filters
             </SheetTitle>

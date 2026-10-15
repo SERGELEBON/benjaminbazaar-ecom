@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useApp } from "@/lib/store";
 import { MessageCircle } from "lucide-react";
+import { BRAND } from "@/lib/brand";
 
-const PHONE = "2250707365136"; // BENJAMINBAZAAR WhatsApp business line (Côte d'Ivoire)
+const PHONE = "2250707365136"; // WhatsApp business line (Côte d'Ivoire)
 
 export function WhatsAppButton() {
   const view = useApp((s) => s.view);
@@ -32,8 +33,8 @@ export function WhatsAppButton() {
   }, [view, productId]);
 
   const text = productName
-    ? `Bonjour BENJAMINBAZAAR, je suis intéressé par : ${productName}`
-    : "Bonjour BENJAMINBAZAAR, j'aimerais une assistance pour mon sourcing.";
+    ? `Bonjour ${BRAND.name}, je suis intéressé par : ${productName}`
+    : `Bonjour ${BRAND.name}, j'aimerais une assistance pour mon sourcing.`;
 
   const href = `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`;
 

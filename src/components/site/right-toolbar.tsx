@@ -25,7 +25,7 @@ export function RightToolbar() {
 
   return (
     <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col">
-      <div className="bg-[#2a2a2a] border border-[#000] flex flex-col">
+      <div className="bg-[#2a2a2a] border border-[#0A0F4D] flex flex-col">
         {TOOLS.map((t) => (
           <button
             key={t.label}

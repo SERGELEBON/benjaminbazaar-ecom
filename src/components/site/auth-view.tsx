@@ -9,6 +9,7 @@ import { useApp } from "@/lib/store";
 import {
   InputOTP, InputOTPGroup, InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { brandEmail } from "@/lib/brand";
 
 type Tab = "buyer" | "supplier";
 
@@ -16,7 +17,7 @@ export function AuthView() {
   const { signIn, setView } = useApp();
 
   // buyer state
-  const [bEmail, setBEmail] = useState("buyer@benjaminbazaar.com");
+  const [bEmail, setBEmail] = useState(brandEmail("buyer"));
   const [bPhone, setBPhone] = useState("+233 50 123 4567");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
@@ -49,7 +50,7 @@ export function AuthView() {
       toast.error("Enter the 6-digit code");
       return;
     }
-    signIn("Demo Buyer", "buyer@benjaminbazaar.com", "BUYER");
+    signIn("Demo Buyer", brandEmail("buyer"), "BUYER");
     toast.success("Welcome back!");
     setView("buyer-dashboard");
   }
@@ -59,7 +60,7 @@ export function AuthView() {
       toast.error("Please fill all fields");
       return;
     }
-    signIn("Demo Supplier", "supplier@benjaminbazaar.com", "SUPPLIER");
+    signIn("Demo Supplier", brandEmail("supplier"), "SUPPLIER");
     toast.success("Welcome to your supplier dashboard");
     setView("supplier-dashboard");
   }
@@ -229,7 +230,7 @@ export function AuthView() {
             </div>
             <button
               onClick={() => {
-                signIn("Demo Buyer", "buyer@benjaminbazaar.com", "BUYER");
+                signIn("Demo Buyer", brandEmail("buyer"), "BUYER");
                 toast.success("Signed in with Google");
                 setView("buyer-dashboard");
               }}
@@ -249,9 +250,9 @@ export function AuthView() {
                 <ShieldCheck className="w-3.5 h-3.5" /> Demo credentials
               </div>
               <ul className="mt-1.5 text-[12px] text-[#444] space-y-0.5">
-                <li>Buyer: <span className="font-bold">buyer@benjaminbazaar.com</span></li>
-                <li>Supplier: <span className="font-bold">supplier@benjaminbazaar.com</span></li>
-                <li>Admin: <span className="font-bold">admin@benjaminbazaar.com</span></li>
+                <li>Buyer: <span className="font-bold">{brandEmail("buyer")}</span></li>
+                <li>Supplier: <span className="font-bold">{brandEmail("supplier")}</span></li>
+                <li>Admin: <span className="font-bold">{brandEmail("admin")}</span></li>
               </ul>
             </div>
           </div>
@@ -259,7 +260,7 @@ export function AuthView() {
 
         {/* PROMO PANEL (desktop only) */}
         <div className="hidden lg:block">
-          <div className="bg-[#000] text-white h-full">
+          <div className="bg-[#0A0F4D] text-white h-full">
             <div className="benjamin-bar-red">Trade Assurance</div>
             <div className="p-6">
               <img
@@ -270,7 +271,7 @@ export function AuthView() {
               <h2 className="text-[22px] font-extrabold leading-tight">
                 Trade Assurance protects every order
               </h2>
-              <p className="text-[13px] text-[#cdbfb5] mt-2">
+              <p className="text-[13px] text-[#CFD6F5] mt-2">
                 Source confidently with money-back guarantees, secure payments, and verified suppliers worldwide.
               </p>
               <ul className="mt-4 space-y-2 text-[13px]">
