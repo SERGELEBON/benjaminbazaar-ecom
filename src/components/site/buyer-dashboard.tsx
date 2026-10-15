@@ -5,7 +5,7 @@ import {
   Package, FileText, Heart, MapPin, User as UserIcon, LogOut, Plus,
   Trash2, Pencil, Star, ChevronRight, Truck, ShieldCheck,
 } from "lucide-react";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { useApp } from "@/lib/store";
 import { formatPrice, type ProductT, type Currency } from "@/lib/format";
 import { ProductCard } from "./product-card";
@@ -62,22 +62,8 @@ export function BuyerDashboard() {
   const { user, signOut, setView, currency, setCurrency, favorites } = useApp();
   const [tab, setTab] = useState<Tab>("orders");
 
-  if (!user) {
-    return (
-      <div className="bg-[#ECECEC] min-h-screen flex items-center justify-center px-4">
-        <div className="bg-white border border-[#DADAD9] max-w-md w-full p-8 text-center">
-          <UserIcon className="w-10 h-10 mx-auto text-[#FF6A00]" />
-          <h2 className="text-[18px] font-bold mt-3">Sign in to view your dashboard</h2>
-          <p className="text-[12px] text-[#666] mt-1.5">
-            Track orders, manage RFQs and update your profile.
-          </p>
-          <button onClick={() => setView("auth")} className="btn-benjamin-orange mt-5 w-full">
-            Sign in
-          </button>
-        </div>
-      </div>
-    );
-  }
+  if (!user) return null; // guarded by <RequireAuth>
+
 
   const tabs: { key: Tab; label: string; icon: typeof Package }[] = [
     { key: "orders", label: "Orders", icon: Package },
@@ -89,7 +75,6 @@ export function BuyerDashboard() {
 
   return (
     <div className="bg-[#ECECEC] min-h-screen">
-      <Toaster position="top-center" richColors closeButton />
 
       {/* top bar */}
       <div className="benjamin-bar">Buyer Dashboard</div>
@@ -99,10 +84,10 @@ export function BuyerDashboard() {
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
             <div className="text-[11px] uppercase tracking-wide text-[#666]">Welcome back</div>
-            <div className="text-[20px] font-extrabold">Hello, {user.name}</div>
+            <div className="text-[20px] font-extrabold">Bonjour, {user.name ?? user.email}</div>
           </div>
           <button
-            onClick={() => { signOut(); setView("home"); toast.success("Signed out"); }}
+            onClick={async () => { await signOut(); toast.success("Vous êtes déconnecté."); }}
             className="btn-outline-grey flex items-center gap-1.5"
           >
             <LogOut className="w-3.5 h-3.5" /> Sign out
@@ -254,7 +239,7 @@ function RfqsTab() {
       try {
         const r = await fetch("/api/rfq");
         const d = (await r.json()) as Rfq[];
-        if (mounted) setRfqs(d);
+        if (mounted) setRfqs(Array.isArray(d) ? d : []);
       } catch {
         if (mounted) setRfqs([]);
       }
@@ -412,37 +397,46 @@ function AccountTab({
   currency: Currency;
   setCurrency: (c: Currency) => void;
 }) {
-  const { user } = useApp();
+  const { user, setSession } = useApp();
   const [name, setName] = useState(user?.name ?? "");
-  const [email, setEmail] = useState(user?.email ?? "");
-  const [phone, setPhone] = useState("+233 50 123 4567");
-  const [country, setCountry] = useState("Ghana");
+  const email = user?.email ?? "";
+  const [phone, setPhone] = useState(user?.phone ?? "");
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    setSaving(true);
+    try {
+      const r = await fetch("/api/me", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error);
+      setSession(d.user);
+      toast.success("Profil enregistré.");
+    } catch {
+      toast.error("Impossible d'enregistrer le profil.");
+    } finally {
+      setSaving(false);
+    }
+  }
 
   return (
     <div className="p-4">
-      <h3 className="benjamin-section-title mb-3">Account settings</h3>
+      <h3 className="benjamin-section-title mb-3">Mon compte</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-[11px] font-bold uppercase tracking-wide text-[#666] mb-1">Full name</label>
+          <label className="block text-[11px] font-bold uppercase tracking-wide text-[#666] mb-1">Nom complet</label>
           <input value={name} onChange={(e) => setName(e.target.value)} className="w-full border border-[#DADAD9] focus:border-[#FF6A00] px-3 py-2 text-[13px] outline-none" />
         </div>
         <div>
-          <label className="block text-[11px] font-bold uppercase tracking-wide text-[#666] mb-1">Email</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-[#DADAD9] focus:border-[#FF6A00] px-3 py-2 text-[13px] outline-none" />
+          <label className="block text-[11px] font-bold uppercase tracking-wide text-[#666] mb-1">Email (identifiant)</label>
+          <input value={email} readOnly className="w-full border border-[#DADAD9] bg-[#F5F5F5] text-[#666] px-3 py-2 text-[13px] outline-none" />
         </div>
         <div>
-          <label className="block text-[11px] font-bold uppercase tracking-wide text-[#666] mb-1">Phone</label>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full border border-[#DADAD9] focus:border-[#FF6A00] px-3 py-2 text-[13px] outline-none" />
-        </div>
-        <div>
-          <label className="block text-[11px] font-bold uppercase tracking-wide text-[#666] mb-1">Country</label>
-          <select value={country} onChange={(e) => setCountry(e.target.value)} className="w-full border border-[#DADAD9] focus:border-[#FF6A00] px-3 py-2 text-[13px] outline-none bg-white">
-            <option>Ghana</option>
-            <option>Côte d'Ivoire</option>
-            <option>Nigeria</option>
-            <option>Kenya</option>
-            <option>Other</option>
-          </select>
+          <label className="block text-[11px] font-bold uppercase tracking-wide text-[#666] mb-1">Téléphone</label>
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+225 …" className="w-full border border-[#DADAD9] focus:border-[#FF6A00] px-3 py-2 text-[13px] outline-none" />
         </div>
       </div>
 
@@ -472,8 +466,7 @@ function AccountTab({
       </div>
 
       <div className="mt-6 flex gap-3">
-        <button onClick={() => toast.success("Profile saved")} className="btn-benjamin-orange">Save changes</button>
-        <button onClick={() => toast.info("No changes")} className="btn-outline-grey">Cancel</button>
+        <button onClick={save} disabled={saving} className="btn-benjamin-orange disabled:opacity-60">{saving ? "Enregistrement…" : "Enregistrer"}</button>
       </div>
     </div>
   );

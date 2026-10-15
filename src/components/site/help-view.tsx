@@ -6,7 +6,7 @@ import {
   Rocket, Truck, CreditCard, ShieldAlert, UserCircle, FileText,
   Boxes, Phone,
 } from "lucide-react";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
@@ -73,7 +73,6 @@ export function HelpView() {
 
   return (
     <div className="bg-[#ECECEC] min-h-screen">
-      <Toaster position="top-center" richColors closeButton />
 
       <div className="benjamin-bar">Help Center</div>
 

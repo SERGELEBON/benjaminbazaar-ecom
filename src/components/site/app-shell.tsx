@@ -22,6 +22,9 @@ import { SupplierDashboard } from "./supplier-dashboard";
 import { AdminView } from "./admin-view";
 import { HelpView } from "./help-view";
 import { ChatView } from "./chat-view";
+import { AuthProvider } from "./auth-provider";
+import { RequireAuth } from "./require-auth";
+import { Toaster } from "sonner";
 
 export function AppShell({ categories }: { categories: CategoryNode[] }) {
   const view = useApp((s) => s.view);
@@ -38,21 +41,23 @@ export function AppShell({ categories }: { categories: CategoryNode[] }) {
           {view === "supplier" && <SupplierView />}
           {view === "manufacturers" && <ManufacturersView />}
           {view === "cart" && <CartView />}
-          {view === "checkout" && <CheckoutView />}
+          {view === "checkout" && <RequireAuth><CheckoutView /></RequireAuth>}
           {view === "rfq" && <RfqView />}
           {view === "ranking" && <RankingView categories={categories} />}
           {view === "dropshipping" && <DropshippingView />}
           {view === "auth" && <AuthView />}
-          {view === "buyer-dashboard" && <BuyerDashboard />}
-          {view === "supplier-dashboard" && <SupplierDashboard />}
-          {view === "admin" && <AdminView />}
+          {view === "buyer-dashboard" && <RequireAuth><BuyerDashboard /></RequireAuth>}
+          {view === "supplier-dashboard" && <RequireAuth roles={["SUPPLIER", "ADMIN"]} requireApprovedSupplier><SupplierDashboard /></RequireAuth>}
+          {view === "admin" && <RequireAuth roles={["ADMIN"]}><AdminView /></RequireAuth>}
           {view === "help" && <HelpView />}
-          {view === "chat" && <ChatView />}
+          {view === "chat" && <RequireAuth><ChatView /></RequireAuth>}
         </main>
 
         <Footer />
       </div>
 
+      <AuthProvider />
+      <Toaster position="top-center" richColors closeButton />
       <RightToolbar />
       <WhatsAppButton />
     </div>
