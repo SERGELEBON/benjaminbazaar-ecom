@@ -194,6 +194,7 @@ export async function getProductById(id: string) {
 
 export async function getSuppliers() {
   const suppliers = await db.supplier.findMany({
+    where: { status: "approved" }, // only approved merchants are public
     include: { _count: { select: { products: true } } },
     orderBy: { storeRating: "desc" },
   });

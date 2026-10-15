@@ -57,11 +57,33 @@ interface AppState {
   setFilter: (k: string, v: unknown) => void;
   resetFilters: () => void;
 
-  // auth (mocked client side)
-  user: { name: string; email: string; role: "BUYER" | "SUPPLIER" | "ADMIN" } | null;
-  signIn: (name: string, email: string, role: "BUYER" | "SUPPLIER" | "ADMIN") => void;
-  signOut: () => void;
+  // auth — source of truth is the server (/api/me, Supabase session cookie)
+  authStatus: "loading" | "guest" | "authenticated";
+  user: SessionUser | null;
+  setSession: (user: SessionUser | null) => void;
+  /** Re-reads the profile from the server */
+  refreshSession: () => Promise<SessionUser | null>;
+  signOut: () => Promise<void>;
+  /** Auth screen mode requested by navigation (e.g. "signup" from a CTA, "reset" from email link) */
+  authMode: "login" | "signup" | "forgot" | "reset";
+  setAuthMode: (m: "login" | "signup" | "forgot" | "reset") => void;
 }
+
+export type Role = "BUYER" | "SUPPLIER" | "ADMIN";
+export interface SessionUser {
+  id: string;
+  name: string | null;
+  email: string;
+  phone: string | null;
+  avatarUrl: string | null;
+  role: Role;
+  status: string;
+  supplier: { id: string; name: string; slug: string; status: "pending" | "approved" | "rejected" } | null;
+}
+
+/** Dashboard view for a role */
+export const homeViewForRole = (role: Role): ViewKey =>
+  role === "ADMIN" ? "admin" : role === "SUPPLIER" ? "supplier-dashboard" : "buyer-dashboard";
 
 export const useApp = create<AppState>((set) => ({
   view: "home",
@@ -135,7 +157,26 @@ export const useApp = create<AppState>((set) => ({
     set((s) => ({ filters: { ...s.filters, [k]: v } })),
   resetFilters: () => set({ filters: {} }),
 
+  authStatus: "loading",
   user: null,
-  signIn: (name, email, role) => set({ user: { name, email, role } }),
-  signOut: () => set({ user: null }),
+  setSession: (user) => set({ user, authStatus: user ? "authenticated" : "guest" }),
+  refreshSession: async () => {
+    try {
+      const r = await fetch("/api/me", { cache: "no-store", credentials: "same-origin" });
+      const d = (await r.json().catch(() => ({}))) as { user?: SessionUser | null };
+      const user = r.ok ? d.user ?? null : null;
+      set({ user, authStatus: user ? "authenticated" : "guest" });
+      return user;
+    } catch {
+      set({ user: null, authStatus: "guest" });
+      return null;
+    }
+  },
+  signOut: async () => {
+    const { getSupabaseBrowser } = await import("./supabase/client");
+    await getSupabaseBrowser().auth.signOut();
+    set({ user: null, authStatus: "guest", view: "home" });
+  },
+  authMode: "login",
+  setAuthMode: (m) => set({ authMode: m }),
 }));
