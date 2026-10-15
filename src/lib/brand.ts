@@ -17,6 +17,8 @@ export const BRAND = {
     fallback: "/brand/ijobsc-logo.png",
     alt: "Logo Ivoire Jobs Connexion (I.JOBS.C)",
   },
+  /** Public contact / privacy e-mail (used on legal pages) — update when a pro mailbox exists */
+  contactEmail: "guehipoegnansergej@gmail.com",
   /** Public contact e-mail domain — update when the real domain is live */
   emailDomain: "ijobsc.ci",
   /** Brand colours — primary blue + Ivorian harmony colours */
