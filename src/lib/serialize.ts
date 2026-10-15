@@ -133,8 +133,8 @@ export async function getProducts(opts?: {
   if (opts?.supplierId) where.supplierId = opts.supplierId;
   if (opts?.search) {
     where.OR = [
-      { title: { contains: opts.search } },
-      { description: { contains: opts.search } },
+      { title: { contains: opts.search, mode: "insensitive" } },
+      { description: { contains: opts.search, mode: "insensitive" } },
     ];
   }
   let orderBy: any = { popularity: "desc" };
