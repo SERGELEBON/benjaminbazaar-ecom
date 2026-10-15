@@ -1,4 +1,4 @@
-// AELF Bazaar — Prisma schema (SQLite)
+// Ivoire Jobs Connexion (I.JOBS.C) — Prisma schema (PostgreSQL / Supabase)
 // Models mirror the Alibaba structure: User, Supplier, Category (tree),
 // Product, PriceTier, Variant, Attribute, Certification, Cart, Order,
 // OrderItem, RFQ, Quote, Conversation, Message, Review, Payout, Banner.
@@ -8,8 +8,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // Pooled connection (Supabase pgbouncer) used at runtime by the app
+  url       = env("POSTGRES_PRISMA_URL")
+  // Direct connection used by `prisma migrate deploy`
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
