@@ -10,6 +10,8 @@ import type { CategoryNode } from "@/lib/format";
 import { TR } from "@/lib/format";
 import { CatIcon } from "./cat-icon";
 import { BrandLogo } from "./brand-logo";
+import { AccountMenu, Avatar } from "./account-menu";
+import { homeViewForRole } from "@/lib/store";
 import { BRAND } from "@/lib/brand";
 
 const SUGGESTIONS = {
@@ -42,7 +44,7 @@ const SUGGESTIONS = {
 export function Header({ categories }: { categories: CategoryNode[] }) {
   const {
     setView, view, searchQuery, setSearchQuery, categoryId, setCategoryId,
-    currency, setCurrency, lang, setLang, cart,
+    currency, setCurrency, lang, setLang, cart, user, signOut, setAuthMode,
   } = useApp();
   const t = TR[lang];
   const suggestions = SUGGESTIONS[lang];
@@ -120,14 +122,10 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
             </button>
           </div>
 
-          {/* account icon mobile */}
-          <button
-            className="md:hidden ml-auto p-1.5"
-            onClick={() => setView("auth")}
-            aria-label={t.sign_in}
-          >
-            <User className="w-6 h-6" strokeWidth={1.6} />
-          </button>
+          {/* account (mobile) */}
+          <div className="md:hidden ml-auto">
+            <AccountMenu compact />
+          </div>
 
           {/* deliver to */}
           <div className="hidden lg:flex items-center gap-1.5 px-2 cursor-pointer hover:text-[#FF6A00]">
@@ -195,22 +193,10 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
             <span className="hidden lg:inline text-[12px] font-semibold">{lang === "fr" ? "Panier" : "Cart"}</span>
           </button>
 
-          {/* account */}
-          <button
-            onClick={() => setView("auth")}
-            className="hidden md:flex items-center gap-1 px-2 hover:text-[#FF6A00]"
-          >
-            <User className="w-5 h-5" strokeWidth={1.6} />
-            <span className="text-[12px] font-semibold hidden xl:inline whitespace-nowrap">{t.sign_in}</span>
-          </button>
-
-          {/* create account */}
-          <button
-            onClick={() => setView("auth")}
-            className="btn-square-black hidden md:inline-flex whitespace-nowrap"
-          >
-            {t.create_account}
-          </button>
+          {/* account (desktop) */}
+          <div className="hidden md:block">
+            <AccountMenu />
+          </div>
         </div>
 
         {/* mobile search bar (always visible) */}
@@ -357,14 +343,27 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
               <BrandLogo size={36} />
               <button onClick={() => setMobileMenu(false)}><X className="w-5 h-5" /></button>
             </div>
-            {/* quick links */}
-            <div className="p-3 grid grid-cols-2 gap-2 border-b border-[#ECECEC]">
-              <button onClick={() => { setView("auth"); setMobileMenu(false); }} className="btn-square-black !px-2 text-[11px]">
-                {t.sign_in}
-              </button>
-              <button onClick={() => { setView("supplier-dashboard"); setMobileMenu(false); }} className="btn-benjamin-orange !px-2 text-[11px]">
-                {lang === "fr" ? "Vendre" : "Sell"}
-              </button>
+            {/* account quick links */}
+            <div className="p-3 border-b border-[#ECECEC]">
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <Avatar size={36} />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[13px] font-bold truncate">{user.name ?? user.email}</div>
+                    <button onClick={() => { setView(homeViewForRole(user.role)); setMobileMenu(false); }} className="benjamin-link text-[12px]">Mon espace</button>
+                  </div>
+                  <button onClick={async () => { setMobileMenu(false); await signOut(); }} className="text-[11px] font-bold uppercase text-[#B91C1C]">Déconnexion</button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  <button onClick={() => { setAuthMode("login"); setView("auth"); setMobileMenu(false); }} className="btn-square-black !px-2 text-[11px]">
+                    Se connecter
+                  </button>
+                  <button onClick={() => { setAuthMode("signup"); setView("auth"); setMobileMenu(false); }} className="btn-benjamin-orange !px-2 text-[11px]">
+                    Créer un compte
+                  </button>
+                </div>
+              )}
             </div>
             {[
               { label: t.verified_manufacturers, v: "manufacturers" },

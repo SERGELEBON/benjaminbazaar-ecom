@@ -123,10 +123,9 @@ export function Footer() {
             © {new Date().getFullYear()} {BRAND.name} ({BRAND.shortName}). Tous droits réservés. Marché de gros B2B — Côte d'Ivoire.
           </div>
           <div className="flex flex-wrap gap-4 text-[11px]">
-            <a href="#" className="text-[#a8c4b4] hover:text-white hover:underline">Politique de confidentialité</a>
-            <a href="#" className="text-[#a8c4b4] hover:text-white hover:underline">Conditions d'utilisation</a>
-            <a href="#" className="text-[#a8c4b4] hover:text-white hover:underline">Cookies</a>
-            <a href="#" className="text-[#a8c4b4] hover:text-white hover:underline">Mentions légales</a>
+            <a href="/confidentialite" className="text-[#CFD6F5] hover:text-white hover:underline">Politique de confidentialité</a>
+            <a href="/conditions" className="text-[#CFD6F5] hover:text-white hover:underline">Conditions d'utilisation</a>
+            <a href="/confidentialite#cookies" className="text-[#CFD6F5] hover:text-white hover:underline">Cookies</a>
           </div>
         </div>
       </div>

@@ -5,24 +5,15 @@ import {
   Users, BadgeCheck, FolderTree, Image as ImageIcon, Percent,
   ShieldAlert, BarChart3, LogOut, Plus, Check, X, ChevronRight,
 } from "lucide-react";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { useApp } from "@/lib/store";
-import { formatPrice, type SupplierT, type CategoryNode } from "@/lib/format";
-import { BRAND, brandEmail } from "@/lib/brand";
+import { formatPrice, type CategoryNode } from "@/lib/format";
+import { BRAND } from "@/lib/brand";
 
 type Tab =
   | "users" | "suppliers" | "categories" | "banners"
   | "commissions" | "disputes" | "reports";
 
-const MOCK_USERS = [
-  { id: "u1", name: "Kwame Mensah", email: "kwame@example.com", role: "BUYER", status: "active", joined: "Sep 14, 2024" },
-  { id: "u2", name: "Wei Zhang", email: "wei@lumelec.cn", role: "SUPPLIER", status: "active", joined: "Aug 02, 2024" },
-  { id: "u3", name: "Aya Kouassi", email: "aya@abidjan.ci", role: "BUYER", status: "active", joined: "Oct 21, 2024" },
-  { id: "u4", name: "Priya Nair", email: "priya@indtex.in", role: "SUPPLIER", status: "pending", joined: "Oct 28, 2024" },
-  { id: "u5", name: "Admin", email: brandEmail("admin"), role: "ADMIN", status: "active", joined: "Jan 01, 2024" },
-  { id: "u6", name: "Mehmet Yilmaz", email: "mehmet@istapp.tr", role: "SUPPLIER", status: "suspended", joined: "Mar 19, 2024" },
-  { id: "u7", name: "John Owusu", email: "john@owusu.gh", role: "BUYER", status: "active", joined: "Jul 11, 2024" },
-];
 
 const MOCK_BANNERS = [
   { id: "b1", title: "Source for Christmas", placement: "Home hero", active: true, image: "https://picsum.photos/seed/benjamin-b1/120/60" },
@@ -45,20 +36,23 @@ const MOCK_DISPUTES = [
 ];
 
 export function AdminView() {
-  const { user, signIn, signOut, setView, currency } = useApp();
+  const { user, signOut, currency } = useApp();
   const [tab, setTab] = useState<Tab>("users");
   const [supplierCount, setSupplierCount] = useState<number | null>(null);
   const [productTotal, setProductTotal] = useState<number | null>(null);
+  const [userTotal, setUserTotal] = useState<number | null>(null);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
-        const [s, p] = await Promise.all([
+        const [s, p, u] = await Promise.all([
           fetch("/api/suppliers").then((r) => r.json()),
           fetch("/api/products?take=1&skip=0").then((r) => r.json()),
+          fetch("/api/admin/users", { cache: "no-store" }).then((r) => r.json()),
         ]);
         if (mounted) {
+          setUserTotal((u as { total?: number }).total ?? 0);
           setSupplierCount(Array.isArray(s) ? s.length : 0);
           setProductTotal((p as { total?: number }).total ?? 0);
         }
@@ -69,32 +63,12 @@ export function AdminView() {
     return () => { mounted = false; };
   }, []);
 
-  if (!user || user.role !== "ADMIN") {
-    return (
-      <div className="bg-[#ECECEC] min-h-screen flex items-center justify-center px-4">
-        <div className="bg-white border border-[#DADAD9] max-w-md w-full p-8 text-center">
-          <ShieldAlert className="w-10 h-10 mx-auto text-[#FF6A00]" />
-          <h2 className="text-[18px] font-bold mt-3">Admin access required</h2>
-          <p className="text-[12px] text-[#666] mt-1.5">
-            This area is restricted to {BRAND.name} administrators.
-          </p>
-          <button
-            onClick={() => { signIn("Admin", brandEmail("admin"), "ADMIN"); toast.success("Welcome, Admin"); }}
-            className="btn-benjamin-orange mt-5 w-full"
-          >
-            Sign in as admin
-          </button>
-          <button onClick={() => setView("home")} className="benjamin-link text-[12px] mt-4 inline-block">
-            ← Back to home
-          </button>
-        </div>
-      </div>
-    );
-  }
+  if (!user) return null; // guarded by <RequireAuth roles={["ADMIN"]}>
+
 
   const tabs: { key: Tab; label: string; icon: typeof Users }[] = [
-    { key: "users", label: "Users", icon: Users },
-    { key: "suppliers", label: "Supplier Verification", icon: BadgeCheck },
+    { key: "users", label: "Utilisateurs", icon: Users },
+    { key: "suppliers", label: "Validation marchands", icon: BadgeCheck },
     { key: "categories", label: "Categories", icon: FolderTree },
     { key: "banners", label: "Banners", icon: ImageIcon },
     { key: "commissions", label: "Commissions", icon: Percent },
@@ -103,7 +77,7 @@ export function AdminView() {
   ];
 
   const KPI = [
-    { label: "Users", value: "1,284", accent: "#FF6A00" },
+    { label: "Utilisateurs", value: userTotal === null ? "…" : userTotal.toString(), accent: "#FF6A00" },
     { label: "Suppliers", value: supplierCount === null ? "…" : supplierCount.toString(), accent: "#FF6A00" },
     { label: "Products", value: productTotal === null ? "…" : productTotal.toString(), accent: "#FF6A00" },
     { label: "GMV (30d)", value: formatPrice(1_240_000, currency), accent: "#0A0F4D" },
@@ -113,7 +87,6 @@ export function AdminView() {
 
   return (
     <div className="bg-[#ECECEC] min-h-screen">
-      <Toaster position="top-center" richColors closeButton />
 
       <div className="benjamin-bar">Admin Console</div>
 
@@ -122,10 +95,10 @@ export function AdminView() {
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
             <div className="text-[11px] uppercase tracking-wide text-[#666]">{BRAND.shortName} · Control panel</div>
-            <div className="text-[20px] font-extrabold">Hello, {user.name}</div>
+            <div className="text-[20px] font-extrabold">Bonjour, {user.name ?? user.email}</div>
           </div>
           <button
-            onClick={() => { signOut(); setView("home"); toast.success("Signed out"); }}
+            onClick={async () => { await signOut(); toast.success("Vous êtes déconnecté."); }}
             className="btn-outline-grey flex items-center gap-1.5"
           >
             <LogOut className="w-3.5 h-3.5" /> Sign out
@@ -187,6 +160,8 @@ function StatusPill({ status }: { status: string }) {
   const map: Record<string, string> = {
     active: "bg-[#16A34A]",
     pending: "bg-[#FF6A00]",
+    approved: "bg-[#16A34A]",
+    rejected: "bg-[#DC2626]",
     suspended: "bg-[#333]",
     open: "bg-[#FF6A00]",
     investigating: "bg-[#337AB7]",
@@ -227,82 +202,184 @@ function SkeletonRow() {
   );
 }
 
+type AdminUser = {
+  id: string; name: string | null; email: string; role: "BUYER" | "SUPPLIER" | "ADMIN"; status: string;
+  createdAt: string; lastLoginAt: string | null; supplier: { id: string; name: string; status: string } | null;
+};
+
+const fmtDate = (d: string | null) => (d ? new Date(d).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" }) : "—");
+const ROLE_LABEL: Record<string, string> = { BUYER: "Client", SUPPLIER: "Marchand", ADMIN: "Admin" };
+
 function UsersTab() {
+  const me = useApp((s) => s.user);
+  const [users, setUsers] = useState<AdminUser[] | null>(null);
+  const [total, setTotal] = useState(0);
+  const [q, setQ] = useState("");
+  const [role, setRole] = useState("");
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  async function load() {
+    const params = new URLSearchParams();
+    if (q.trim()) params.set("q", q.trim());
+    if (role) params.set("role", role);
+    const r = await fetch(`/api/admin/users?${params}`, { cache: "no-store" });
+    const d = await r.json();
+    if (!r.ok) { toast.error(d.error ?? "Erreur"); setUsers([]); return; }
+    setUsers(d.users); setTotal(d.total);
+  }
+  useEffect(() => { const t = setTimeout(load, 250); return () => clearTimeout(t); }, [q, role]);
+
+  async function update(u: AdminUser, data: { role?: string; status?: string }, okMsg: string) {
+    setBusyId(u.id);
+    const r = await fetch(`/api/admin/users/${u.id}`, {
+      method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data),
+    });
+    const d = await r.json();
+    setBusyId(null);
+    if (!r.ok) return toast.error(d.error ?? "Action impossible");
+    toast.success(okMsg);
+    setUsers((list) => list?.map((x) => (x.id === u.id ? { ...x, ...d.user } : x)) ?? null);
+  }
+
   return (
     <div>
-      <div className="p-4 border-b border-[#ECECEC] flex items-center justify-between">
+      <div className="p-4 border-b border-[#ECECEC] flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="benjamin-section-title">Users</h3>
-          <p className="text-[11px] text-[#888] mt-0.5">{MOCK_USERS.length} shown · 1,284 total</p>
+          <h3 className="benjamin-section-title">Utilisateurs</h3>
+          <p className="text-[11px] text-[#888] mt-0.5">{total} compte{total > 1 ? "s" : ""}</p>
         </div>
-        <button onClick={() => toast.info("Opening user form")} className="btn-outline-grey text-[11px] flex items-center gap-1.5">
-          <Plus className="w-3.5 h-3.5" /> Add user
-        </button>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher nom ou email" className="flex-1 sm:w-56 border border-[#DADAD9] px-3 py-1.5 text-[12px] outline-none focus:border-[#1A1F8A]" />
+          <select value={role} onChange={(e) => setRole(e.target.value)} className="border border-[#DADAD9] px-2 py-1.5 text-[12px] bg-white">
+            <option value="">Tous les rôles</option>
+            <option value="BUYER">Clients</option>
+            <option value="SUPPLIER">Marchands</option>
+            <option value="ADMIN">Admins</option>
+          </select>
+        </div>
       </div>
-      <div className="overflow-x-auto benjamin-scroll">
-        <table className="w-full text-[12px] min-w-[720px]">
-          <thead className="bg-[#ECECEC] text-[#666] uppercase text-[10px] tracking-wider">
-            <tr>
-              <th className="text-left px-4 py-2.5 font-bold">User</th>
-              <th className="text-left px-4 py-2.5 font-bold">Role</th>
-              <th className="text-center px-4 py-2.5 font-bold">Status</th>
-              <th className="text-left px-4 py-2.5 font-bold">Joined</th>
-              <th className="text-right px-4 py-2.5 font-bold">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {MOCK_USERS.map((u) => (
-              <tr key={u.id} className="border-b border-[#ECECEC] hover:bg-[#FAFAFA]">
-                <td className="px-4 py-3">
-                  <div className="font-semibold">{u.name}</div>
-                  <div className="text-[10px] text-[#888]">{u.email}</div>
-                </td>
-                <td className="px-4 py-3"><RoleBadge role={u.role} /></td>
-                <td className="px-4 py-3 text-center"><StatusPill status={u.status} /></td>
-                <td className="px-4 py-3 text-[#666]">{u.joined}</td>
-                <td className="px-4 py-3 text-right space-x-2">
-                  <button onClick={() => toast.info("Edit user")} className="benjamin-link text-[12px]">Edit</button>
-                  <button
-                    onClick={() => toast.success(u.status === "suspended" ? "User activated" : "User suspended")}
-                    className="benjamin-link text-[12px]"
-                  >
-                    {u.status === "suspended" ? "Activate" : "Suspend"}
-                  </button>
-                </td>
+      {users === null ? (
+        <div className="p-4 space-y-2">{[...Array(5)].map((_, i) => <SkeletonRow key={i} />)}</div>
+      ) : users.length === 0 ? (
+        <p className="p-6 text-[13px] text-[#666] text-center">Aucun utilisateur pour le moment.</p>
+      ) : (
+        <div className="overflow-x-auto benjamin-scroll">
+          <table className="w-full text-[12px] min-w-[760px]">
+            <thead className="bg-[#ECECEC] text-[#666] uppercase text-[10px] tracking-wider">
+              <tr>
+                <th className="text-left px-4 py-2.5 font-bold">Utilisateur</th>
+                <th className="text-left px-4 py-2.5 font-bold">Rôle</th>
+                <th className="text-center px-4 py-2.5 font-bold">Statut</th>
+                <th className="text-left px-4 py-2.5 font-bold">Inscrit le</th>
+                <th className="text-left px-4 py-2.5 font-bold">Dernière connexion</th>
+                <th className="text-right px-4 py-2.5 font-bold">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {users.map((u) => {
+                const self = u.id === me?.id;
+                return (
+                  <tr key={u.id} className="border-b border-[#ECECEC] hover:bg-[#FAFAFA]">
+                    <td className="px-4 py-3">
+                      <div className="font-semibold">{u.name ?? "—"} {self && <span className="text-[10px] text-[#888]">(vous)</span>}</div>
+                      <div className="text-[10px] text-[#888]">{u.email}</div>
+                      {u.supplier && <div className="text-[10px] text-[#FF6A00]">{u.supplier.name}</div>}
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={u.role}
+                        disabled={self || busyId === u.id}
+                        onChange={(e) => update(u, { role: e.target.value }, "Rôle mis à jour")}
+                        className="border border-[#DADAD9] px-2 py-1 text-[11px] bg-white disabled:opacity-60"
+                        aria-label={`Rôle de ${u.email}`}
+                      >
+                        <option value="BUYER">{ROLE_LABEL.BUYER}</option>
+                        <option value="SUPPLIER" disabled={!u.supplier}>{ROLE_LABEL.SUPPLIER}</option>
+                        <option value="ADMIN">{ROLE_LABEL.ADMIN}</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3 text-center"><StatusPill status={u.status} /></td>
+                    <td className="px-4 py-3 text-[#666]">{fmtDate(u.createdAt)}</td>
+                    <td className="px-4 py-3 text-[#666]">{fmtDate(u.lastLoginAt)}</td>
+                    <td className="px-4 py-3 text-right">
+                      {!self && (
+                        <button
+                          disabled={busyId === u.id}
+                          onClick={() =>
+                            update(u, { status: u.status === "suspended" ? "active" : "suspended" },
+                              u.status === "suspended" ? "Compte réactivé" : "Compte suspendu")
+                          }
+                          className="benjamin-link text-[12px] disabled:opacity-60"
+                        >
+                          {u.status === "suspended" ? "Réactiver" : "Suspendre"}
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
 
+type AdminSupplier = {
+  id: string; name: string; city: string; country: string; phone: string | null; status: string; createdAt: string;
+  user: { name: string | null; email: string }; _count: { products: number };
+};
+
 function SuppliersTab() {
-  const [suppliers, setSuppliers] = useState<SupplierT[] | null>(null);
+  const [status, setStatus] = useState<"pending" | "approved" | "rejected">("pending");
+  const [suppliers, setSuppliers] = useState<AdminSupplier[] | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
-    (async () => {
-      try {
-        const r = await fetch("/api/suppliers");
-        const d = (await r.json()) as SupplierT[];
-        if (mounted) setSuppliers(d);
-      } catch {
-        if (mounted) setSuppliers([]);
-      }
-    })();
+    fetch(`/api/admin/suppliers?status=${status}`, { cache: "no-store" })
+      .then(async (r) => {
+        const d = await r.json();
+        if (!mounted) return;
+        if (!r.ok) { toast.error(d.error ?? "Erreur"); setSuppliers([]); } else setSuppliers(d.suppliers);
+      })
+      .catch(() => mounted && setSuppliers([]));
     return () => { mounted = false; };
-  }, []);
+  }, [status]);
+
+  async function decide(s: AdminSupplier, next: "approved" | "rejected") {
+    setBusyId(s.id);
+    const r = await fetch(`/api/admin/suppliers/${s.id}`, {
+      method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: next }),
+    });
+    const d = await r.json();
+    setBusyId(null);
+    if (!r.ok) return toast.error(d.error ?? "Action impossible");
+    toast.success(next === "approved" ? `${s.name} approuvé` : `${s.name} refusé`);
+    setSuppliers((list) => list?.filter((x) => x.id !== s.id) ?? null);
+  }
 
   return (
     <div>
-      <div className="p-4 border-b border-[#ECECEC]">
-        <h3 className="benjamin-section-title">Supplier Verification</h3>
-        <p className="text-[11px] text-[#888] mt-0.5">Approve or reject supplier applications</p>
+      <div className="p-4 border-b border-[#ECECEC] flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 className="benjamin-section-title">Validation des marchands</h3>
+          <p className="text-[11px] text-[#888] mt-0.5">Approuvez ou refusez les demandes de comptes marchands</p>
+        </div>
+        <div className="flex">
+          {([["pending", "En attente"], ["approved", "Approuvés"], ["rejected", "Refusés"]] as const).map(([k, label]) => (
+            <button key={k} onClick={() => { if (k !== status) { setSuppliers(null); setStatus(k); } }}
+              className={`px-3 py-1.5 text-[11px] font-bold uppercase border ${status === k ? "bg-[#0A0F4D] text-white border-[#0A0F4D]" : "bg-white text-[#666] border-[#DADAD9]"}`}>
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
       {suppliers === null ? (
-        <div className="p-4 space-y-2">{[...Array(5)].map((_, i) => <SkeletonRow key={i} />)}</div>
+        <div className="p-4 space-y-2">{[...Array(4)].map((_, i) => <SkeletonRow key={i} />)}</div>
+      ) : suppliers.length === 0 ? (
+        <p className="p-6 text-[13px] text-[#666] text-center">Aucun marchand dans cette liste.</p>
       ) : (
         <ul className="divide-y divide-[#ECECEC]">
           {suppliers.map((s) => (
@@ -313,29 +390,29 @@ function SuppliersTab() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-bold text-[13px] truncate">{s.name}</span>
-                  <StatusPill status={s.verified ? "verified" : "unverified"} />
+                  <StatusPill status={s.status} />
                 </div>
                 <div className="text-[11px] text-[#888] mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5">
+                  <span>{s.user.name ?? "—"} · {s.user.email}</span>
+                  {s.phone && <span>{s.phone}</span>}
                   <span>{s.city}, {s.country}</span>
-                  <span>{s.years} yrs</span>
-                  <span>★ {s.storeRating.toFixed(1)}</span>
-                  <span>Certs: {s.certifications.length}</span>
-                  <span>{s.productCount ?? 0} products</span>
+                  <span>{s._count.products} produits</span>
+                  <span>Demande du {fmtDate(s.createdAt)}</span>
                 </div>
               </div>
               <div className="flex gap-2">
-                <button
-                  onClick={() => toast.success(`${s.name} verified`)}
-                  className="inline-flex items-center gap-1 bg-[#16A34A] text-white text-[11px] font-bold uppercase px-3 py-2 hover:opacity-85"
-                >
-                  <Check className="w-3.5 h-3.5" /> Verify
-                </button>
-                <button
-                  onClick={() => toast.error(`${s.name} rejected`)}
-                  className="inline-flex items-center gap-1 bg-[#FF6A00] text-white text-[11px] font-bold uppercase px-3 py-2 hover:opacity-85"
-                >
-                  <X className="w-3.5 h-3.5" /> Reject
-                </button>
+                {s.status !== "approved" && (
+                  <button disabled={busyId === s.id} onClick={() => decide(s, "approved")}
+                    className="inline-flex items-center gap-1 bg-[#16A34A] text-white text-[11px] font-bold uppercase px-3 py-2 hover:opacity-85 disabled:opacity-60">
+                    <Check className="w-3.5 h-3.5" /> Approuver
+                  </button>
+                )}
+                {s.status !== "rejected" && (
+                  <button disabled={busyId === s.id} onClick={() => decide(s, "rejected")}
+                    className="inline-flex items-center gap-1 bg-[#DC2626] text-white text-[11px] font-bold uppercase px-3 py-2 hover:opacity-85 disabled:opacity-60">
+                    <X className="w-3.5 h-3.5" /> Refuser
+                  </button>
+                )}
               </div>
             </li>
           ))}

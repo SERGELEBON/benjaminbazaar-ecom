@@ -5,7 +5,7 @@ import {
   Package, Tags, Boxes, ShoppingCart, FileText, Store, Wallet,
   BadgeCheck, LogOut, Plus, Eye, Upload, ChevronRight, Star,
 } from "lucide-react";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { useApp } from "@/lib/store";
 import { formatPrice, type ProductT, type Currency } from "@/lib/format";
 
@@ -53,22 +53,8 @@ export function SupplierDashboard() {
     return () => { mounted = false; };
   }, []);
 
-  if (!user) {
-    return (
-      <div className="bg-[#ECECEC] min-h-screen flex items-center justify-center px-4">
-        <div className="bg-white border border-[#DADAD9] max-w-md w-full p-8 text-center">
-          <Store className="w-10 h-10 mx-auto text-[#FF6A00]" />
-          <h2 className="text-[18px] font-bold mt-3">Supplier sign in required</h2>
-          <p className="text-[12px] text-[#666] mt-1.5">
-            Access your storefront, orders, payouts and verification tools.
-          </p>
-          <button onClick={() => setView("auth")} className="btn-benjamin-orange mt-5 w-full">
-            Sign in
-          </button>
-        </div>
-      </div>
-    );
-  }
+  if (!user) return null; // guarded by <RequireAuth>
+
 
   const tabs: { key: Tab; label: string; icon: typeof Package }[] = [
     { key: "products", label: "Products", icon: Package },
@@ -90,7 +76,6 @@ export function SupplierDashboard() {
 
   return (
     <div className="bg-[#ECECEC] min-h-screen">
-      <Toaster position="top-center" richColors closeButton />
 
       <div className="benjamin-bar">Supplier Dashboard</div>
 
@@ -99,10 +84,11 @@ export function SupplierDashboard() {
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
             <div className="text-[11px] uppercase tracking-wide text-[#666]">Supplier portal</div>
-            <div className="text-[20px] font-extrabold">Hello, {user.name}</div>
+            <div className="text-[20px] font-extrabold">Bonjour, {user.name ?? user.email}</div>
+            {user.supplier && <div className="text-[12px] text-[#666]">{user.supplier.name}</div>}
           </div>
           <button
-            onClick={() => { signOut(); setView("home"); toast.success("Signed out"); }}
+            onClick={async () => { await signOut(); toast.success("Vous êtes déconnecté."); }}
             className="btn-outline-grey flex items-center gap-1.5"
           >
             <LogOut className="w-3.5 h-3.5" /> Sign out

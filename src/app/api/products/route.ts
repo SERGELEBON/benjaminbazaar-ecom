@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const where: any = {};
   if (categoryId) where.categoryId = categoryId;
   if (supplierId) where.supplierId = supplierId;
-  if (search) where.OR = [{ title: { contains: search } }, { description: { contains: search } }];
+  if (search) where.OR = [{ title: { contains: search, mode: "insensitive" } }, { description: { contains: search, mode: "insensitive" } }];
   const total = await db.product.count({ where });
 
   return NextResponse.json({ products, total });

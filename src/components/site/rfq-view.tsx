@@ -81,6 +81,11 @@ export function RfqView() {
           attachments: files.map((f) => f.name),
         }),
       });
+      if (res.status === 401) {
+        toast.error("Connectez-vous pour envoyer une demande de devis.");
+        useApp.getState().setView("auth");
+        return;
+      }
       if (!res.ok) throw new Error("rfq failed");
       const rfq = await res.json();
       const ref =

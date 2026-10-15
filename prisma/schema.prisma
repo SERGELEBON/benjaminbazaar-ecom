@@ -1,4 +1,4 @@
-// AELF Bazaar — Prisma schema (SQLite)
+// Ivoire Jobs Connexion (I.JOBS.C) — Prisma schema (PostgreSQL / Supabase)
 // Models mirror the Alibaba structure: User, Supplier, Category (tree),
 // Product, PriceTier, Variant, Attribute, Certification, Cart, Order,
 // OrderItem, RFQ, Quote, Conversation, Message, Review, Payout, Banner.
@@ -8,20 +8,28 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // Pooled connection (Supabase pgbouncer) used at runtime by the app
+  url       = env("POSTGRES_PRISMA_URL")
+  // Direct connection used by `prisma migrate deploy`
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  phone     String?
-  name      String?
-  password  String?
-  role      String   @default("BUYER") // BUYER | SUPPLIER | ADMIN
-  country   String   @default("Ghana")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String    @id @default(cuid())
+  /// Supabase Auth user id (auth.users.id). Null for internal catalogue accounts.
+  authId      String?   @unique
+  email       String    @unique
+  phone       String?
+  name        String?
+  avatarUrl   String?
+  /// Passwords are never stored here: authentication is handled by Supabase Auth.
+  role        String    @default("BUYER") // BUYER | SUPPLIER | ADMIN
+  status      String    @default("active") // active | suspended | system
+  country     String    @default("Côte d'Ivoire")
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   cart      Cart?
   orders    Order[]
@@ -44,6 +52,9 @@ model Supplier {
   years          Int      @default(3)
   type           String   @default("Manufacturer") // Manufacturer | Trading Company
   verified       Boolean  @default(true)
+  /// Merchant onboarding: pending -> approved | rejected (set by an admin)
+  status         String   @default("approved")
+  phone          String?
   storeRating    Float    @default(4.5)
   responseTime   String   @default("<=2h")
   onTimeDispatch Float    @default(98.0)

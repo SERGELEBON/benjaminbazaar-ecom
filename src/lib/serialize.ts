@@ -133,8 +133,8 @@ export async function getProducts(opts?: {
   if (opts?.supplierId) where.supplierId = opts.supplierId;
   if (opts?.search) {
     where.OR = [
-      { title: { contains: opts.search } },
-      { description: { contains: opts.search } },
+      { title: { contains: opts.search, mode: "insensitive" } },
+      { description: { contains: opts.search, mode: "insensitive" } },
     ];
   }
   let orderBy: any = { popularity: "desc" };
@@ -194,6 +194,7 @@ export async function getProductById(id: string) {
 
 export async function getSuppliers() {
   const suppliers = await db.supplier.findMany({
+    where: { status: "approved" }, // only approved merchants are public
     include: { _count: { select: { products: true } } },
     orderBy: { storeRating: "desc" },
   });
