@@ -30,6 +30,11 @@ interface AppState {
   setChatSupplierId: (id: string | null) => void;
   chatProductId: string | null;
   setChatProductId: (id: string | null) => void;
+  /** Total unread chat messages (header badge) */
+  chatUnread: number;
+  refreshChatUnread: () => Promise<void>;
+  /** Opens the chat with a supplier, optionally about a product */
+  openChat: (supplierId?: string | null, productId?: string | null) => void;
 
   searchQuery: string;
   setSearchQuery: (q: string) => void;
@@ -77,8 +82,26 @@ export interface SessionUser {
   phone: string | null;
   avatarUrl: string | null;
   role: Role;
+  /** Super admins manage other admins and every role */
+  isSuperAdmin: boolean;
   status: string;
-  supplier: { id: string; name: string; slug: string; status: "pending" | "approved" | "rejected" } | null;
+  supplier: MerchantShop | null;
+}
+
+export type MerchantStatus = "pending" | "approved" | "rejected" | "suspended";
+export interface MerchantShop {
+  id: string;
+  name: string;
+  slug: string;
+  status: MerchantStatus;
+  statusReason: string | null;
+  phone: string | null;
+  city: string;
+  country: string;
+  mainCategory: string | null;
+  description: string | null;
+  createdAt: string;
+  reviewedAt: string | null;
 }
 
 /** Dashboard view for a role */
@@ -102,6 +125,20 @@ export const useApp = create<AppState>((set) => ({
   setChatSupplierId: (id) => set({ chatSupplierId: id }),
   chatProductId: null,
   setChatProductId: (id) => set({ chatProductId: id }),
+  chatUnread: 0,
+  refreshChatUnread: async () => {
+    try {
+      const r = await fetch("/api/chat/unread", { cache: "no-store", credentials: "same-origin" });
+      const d = (await r.json().catch(() => ({}))) as { unread?: number };
+      if (r.ok) set({ chatUnread: Math.max(0, Number(d.unread) || 0) });
+    } catch {
+      /* offline: keep the last value */
+    }
+  },
+  openChat: (supplierId, productId) => {
+    set({ chatSupplierId: supplierId ?? null, chatProductId: productId ?? null, view: "chat" });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  },
 
   searchQuery: "",
   setSearchQuery: (q) => set({ searchQuery: q }),
@@ -175,7 +212,7 @@ export const useApp = create<AppState>((set) => ({
   signOut: async () => {
     const { getSupabaseBrowser } = await import("./supabase/client");
     await getSupabaseBrowser().auth.signOut();
-    set({ user: null, authStatus: "guest", view: "home" });
+    set({ user: null, authStatus: "guest", view: "home", chatUnread: 0 });
   },
   authMode: "login",
   setAuthMode: (m) => set({ authMode: m }),

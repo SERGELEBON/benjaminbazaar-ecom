@@ -16,6 +16,7 @@ const TOOLS = [
 export function RightToolbar() {
   const [showTop, setShowTop] = useState(false);
   const setView = useApp((s) => s.setView);
+  const chatUnread = useApp((s) => s.chatUnread);
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 600);
@@ -36,7 +37,14 @@ export function RightToolbar() {
             className="group flex flex-col items-center justify-center w-12 py-3 border-b border-[#1a1a1a] hover:bg-[#FF6A00] transition-colors"
             title={t.label}
           >
-            <t.icon className="w-4 h-4" style={{ color: t.color }} strokeWidth={1.8} />
+            <span className="relative">
+              <t.icon className="w-4 h-4" style={{ color: t.color }} strokeWidth={1.8} />
+              {t.label === "MESSAGES" && chatUnread > 0 && (
+                <span className="absolute -top-1.5 -right-2.5 bg-[#16A34A] text-white text-[8px] font-bold min-w-[14px] h-[14px] px-0.5 flex items-center justify-center">
+                  {chatUnread > 99 ? "99+" : chatUnread}
+                </span>
+              )}
+            </span>
             <span className="text-[8px] text-white font-bold uppercase tracking-tight mt-1 group-hover:text-white">
               {t.label}
             </span>

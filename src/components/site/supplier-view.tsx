@@ -10,6 +10,7 @@ import { formatPrice, type ProductT, type SupplierT } from "@/lib/format";
 import { ProductCard } from "./product-card";
 import { toast } from "sonner";
 import { BRAND } from "@/lib/brand";
+import { sendInquiry } from "@/lib/chat-client";
 
 type SupplierFull = SupplierT & { products: ProductT[] };
 
@@ -61,7 +62,8 @@ function SkeletonSupplier() {
 }
 
 export function SupplierView() {
-  const { supplierId, setSupplierId, setView, setProductId, setChatSupplierId, currency } = useApp();
+  const { supplierId, setSupplierId, setView, setProductId, setChatSupplierId, currency, authStatus, setAuthMode, openChat } = useApp();
+  const [sending, setSending] = useState(false);
   const [supplier, setSupplier] = useState<SupplierFull | null>(null);
   const [fallbackId, setFallbackId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -216,7 +218,7 @@ export function SupplierView() {
                     <MessageCircle className="w-4 h-4" /> Chat now
                   </button>
                   <button
-                    onClick={() => toast.success("Inquiry sent", { description: "Supplier will respond shortly." })}
+                    onClick={() => setTab("Contact")}
                     className="btn-benjamin-orange flex items-center gap-1.5"
                   >
                     <FileText className="w-4 h-4" /> Send inquiry
@@ -517,15 +519,41 @@ export function SupplierView() {
                 <div className="benjamin-bar-red">Send inquiry</div>
                 <form
                   className="p-5 space-y-3"
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault();
-                    toast.success("Inquiry sent", { description: `${supplier.name} will respond shortly.` });
+                    const form = e.currentTarget;
+                    if (authStatus !== "authenticated") {
+                      toast.message("Connectez-vous pour contacter ce fournisseur.");
+                      setAuthMode("login");
+                      setView("auth");
+                      return;
+                    }
+                    const f = new FormData(form);
+                    const content = [
+                      `Demande : ${String(f.get("subject") ?? "").trim()}`,
+                      `Quantité : ${String(f.get("quantity") ?? "")} ${String(f.get("unit") ?? "")}`,
+                      "",
+                      String(f.get("details") ?? "").trim(),
+                    ].join("\n");
+                    setSending(true);
+                    try {
+                      await sendInquiry(supplier.id, content);
+                      toast.success("Demande envoyée", { description: `Retrouvez la conversation avec ${supplier.name} dans vos messages.` });
+                      form.reset();
+                      openChat(supplier.id);
+                    } catch (err) {
+                      toast.error("Demande non envoyée", { description: (err as Error).message });
+                    } finally {
+                      setSending(false);
+                    }
                   }}
                 >
                   <div>
                     <label className="block text-[11px] font-bold uppercase text-[#555] mb-1">Subject</label>
                     <input
                       required
+                      name="subject"
+                      maxLength={200}
                       className="w-full h-9 border border-[#DADAD9] px-2 text-[12px] outline-none focus:border-[#FF6A00]"
                       defaultValue={`Inquiry about ${supplier.mainCategory ?? "products"}`}
                     />
@@ -533,11 +561,11 @@ export function SupplierView() {
                   <div className="grid grid-cols-2 gap-2">
                     <div>
                       <label className="block text-[11px] font-bold uppercase text-[#555] mb-1">Quantity</label>
-                      <input required type="number" min={1} defaultValue={100} className="w-full h-9 border border-[#DADAD9] px-2 text-[12px] outline-none focus:border-[#FF6A00]" />
+                      <input required name="quantity" type="number" min={1} defaultValue={100} className="w-full h-9 border border-[#DADAD9] px-2 text-[12px] outline-none focus:border-[#FF6A00]" />
                     </div>
                     <div>
                       <label className="block text-[11px] font-bold uppercase text-[#555] mb-1">Unit</label>
-                      <select className="w-full h-9 border border-[#DADAD9] px-2 text-[12px] bg-white outline-none focus:border-[#FF6A00]">
+                      <select name="unit" className="w-full h-9 border border-[#DADAD9] px-2 text-[12px] bg-white outline-none focus:border-[#FF6A00]">
                         <option>pieces</option>
                         <option>cartons</option>
                         <option>kg</option>
@@ -549,12 +577,14 @@ export function SupplierView() {
                     <textarea
                       rows={4}
                       required
+                      name="details"
+                      maxLength={3500}
                       placeholder="Describe what you need, target price, delivery date, customization…"
                       className="w-full border border-[#DADAD9] px-2 py-1.5 text-[12px] outline-none focus:border-[#FF6A00] resize-none"
                     />
                   </div>
-                  <button type="submit" className="btn-benjamin-orange w-full flex items-center justify-center gap-1.5 py-2.5">
-                    <FileText className="w-4 h-4" /> Send inquiry
+                  <button type="submit" disabled={sending} className="btn-benjamin-orange w-full flex items-center justify-center gap-1.5 py-2.5 disabled:opacity-60">
+                    <FileText className="w-4 h-4" /> {sending ? "Envoi…" : "Send inquiry"}
                   </button>
                   <p className="text-[10px] text-[#888] text-center">
                     Your inquiry will be sent via {BRAND.name} secure messaging. By sending, you agree to our terms.

@@ -38,6 +38,9 @@ export function WhatsAppButton() {
 
   const href = `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`;
 
+  // The chat has its own composer at the bottom of the screen: avoid covering it.
+  if (view === "chat") return null;
+
   return (
     <a
       href={href}

@@ -93,13 +93,30 @@ export function AccountMenu({ compact = false }: { compact?: boolean }) {
             <div className="text-[11px] text-[#888] truncate">{user.email}</div>
             <div className="text-[10px] uppercase font-bold text-[#1A1F8A] mt-1">
               {ROLE_LABEL[user.role]}
-              {user.role === "SUPPLIER" && user.supplier?.status === "pending" && <span className="text-[#FF6A00]"> · en validation</span>}
+              {user.role === "ADMIN" && user.isSuperAdmin && <span className="text-[#16A34A]"> · super admin</span>}
+              {user.role === "SUPPLIER" && user.supplier && user.supplier.status !== "approved" && (
+                <span className={user.supplier.status === "pending" ? "text-[#FF6A00]" : "text-[#DC2626]"}>
+                  {" · "}{{ pending: "en validation", rejected: "demande à corriger", suspended: "boutique suspendue", approved: "" }[user.supplier.status]}
+                </span>
+              )}
             </div>
           </div>
           <button role="menuitem" onClick={() => { setOpen(false); setView(homeViewForRole(user.role)); }}
             className="w-full flex items-center gap-2 px-4 py-2.5 text-[13px] hover:bg-[#F5F5F5] text-left">
             <LayoutDashboard className="w-4 h-4 text-[#1A1F8A]" /> Mon espace
           </button>
+          {user.role === "BUYER" && (
+            <button role="menuitem" onClick={() => { setOpen(false); setView("supplier-dashboard"); }}
+              className="w-full flex items-center gap-2 px-4 py-2.5 text-[13px] hover:bg-[#F5F5F5] text-left">
+              <LayoutDashboard className="w-4 h-4 text-[#FF6A00]" /> Devenir vendeur
+            </button>
+          )}
+          {user.role === "SUPPLIER" && (
+            <button role="menuitem" onClick={() => { setOpen(false); setView("buyer-dashboard"); }}
+              className="w-full flex items-center gap-2 px-4 py-2.5 text-[13px] hover:bg-[#F5F5F5] text-left">
+              <User className="w-4 h-4 text-[#1A1F8A]" /> Mes achats
+            </button>
+          )}
           {user.role === "ADMIN" && (
             <button role="menuitem" onClick={() => { setOpen(false); setView("buyer-dashboard"); }}
               className="w-full flex items-center gap-2 px-4 py-2.5 text-[13px] hover:bg-[#F5F5F5] text-left">
