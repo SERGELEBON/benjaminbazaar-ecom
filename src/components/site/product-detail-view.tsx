@@ -608,7 +608,14 @@ export function ProductDetailView() {
                 {/* Buttons */}
                 <div className="space-y-2 pt-1">
                   <button
-                    onClick={() => toast.success("Inquiry sent", { description: "Supplier will respond shortly." })}
+                    onClick={() => {
+                      const p = data?.product;
+                      if (p) {
+                        setChatSupplierId(p.supplierId);
+                        setChatProductId(p.id);
+                      }
+                      setView("chat");
+                    }}
                     className="btn-benjamin-orange w-full flex items-center justify-center gap-1.5 py-2.5"
                   >
                     <MessageCircle className="w-4 h-4" /> Send inquiry

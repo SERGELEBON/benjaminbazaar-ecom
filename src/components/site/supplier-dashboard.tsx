@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   Package, Tags, Boxes, ShoppingCart, FileText, Store, Wallet,
-  BadgeCheck, LogOut, Plus, Eye, Upload, ChevronRight, Star,
+  BadgeCheck, LogOut, Plus, Eye, Upload, ChevronRight, Star, MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/store";
@@ -35,7 +35,7 @@ const MOCK_PAYOUTS = [
 ];
 
 export function SupplierDashboard() {
-  const { user, signOut, setView, currency } = useApp();
+  const { user, signOut, setView, currency, chatUnread } = useApp();
   const [tab, setTab] = useState<Tab>("products");
   const [productCount, setProductCount] = useState<number | null>(null);
 
@@ -127,6 +127,19 @@ export function SupplierDashboard() {
                   </button>
                 );
               })}
+              <button
+                onClick={() => setView("chat")}
+                className="benjamin-tile whitespace-nowrap shrink-0 lg:w-full"
+              >
+                <MessageCircle className="w-4 h-4 shrink-0" />
+                <span className="flex-1 text-left">Messages</span>
+                {chatUnread > 0 && (
+                  <span className="bg-[#FF6A00] text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 flex items-center justify-center">
+                    {chatUnread > 99 ? "99+" : chatUnread}
+                  </span>
+                )}
+                <ChevronRight className="w-3.5 h-3.5 hidden lg:block" />
+              </button>
             </div>
           </aside>
 

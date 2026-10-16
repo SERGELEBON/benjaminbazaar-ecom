@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   Search, Camera, FileUp, Menu, ShoppingCart, User, Globe, ChevronDown,
-  X, MapPin, Bot,
+  X, MapPin, Bot, MessageCircle,
 } from "lucide-react";
 import { useApp } from "@/lib/store";
 import type { CategoryNode } from "@/lib/format";
@@ -44,7 +44,7 @@ const SUGGESTIONS = {
 export function Header({ categories }: { categories: CategoryNode[] }) {
   const {
     setView, view, searchQuery, setSearchQuery, categoryId, setCategoryId,
-    currency, setCurrency, lang, setLang, cart, user, signOut, setAuthMode,
+    currency, setCurrency, lang, setLang, cart, user, signOut, setAuthMode, chatUnread,
   } = useApp();
   const t = TR[lang];
   const suggestions = SUGGESTIONS[lang];
@@ -179,6 +179,25 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
               </div>
             )}
           </div>
+
+          {/* messages (signed-in users) */}
+          {user && (
+            <button
+              onClick={() => setView("chat")}
+              className="relative flex items-center gap-1 px-2 hover:text-[#FF6A00]"
+              aria-label={chatUnread ? `Messages (${chatUnread} non lus)` : "Messages"}
+            >
+              <div className="relative">
+                <MessageCircle className="w-6 h-6" strokeWidth={1.6} />
+                {chatUnread > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-[#FF6A00] text-white text-[10px] font-bold min-w-4 h-4 px-0.5 flex items-center justify-center">
+                    {chatUnread > 99 ? "99+" : chatUnread}
+                  </span>
+                )}
+              </div>
+              <span className="hidden lg:inline text-[12px] font-semibold">Messages</span>
+            </button>
+          )}
 
           {/* cart */}
           <button onClick={() => setView("cart")} className="relative flex items-center gap-1 px-2 hover:text-[#FF6A00]">

@@ -24,6 +24,7 @@ import { HelpView } from "./help-view";
 import { ChatView } from "./chat-view";
 import { AuthProvider } from "./auth-provider";
 import { RequireAuth } from "./require-auth";
+import { ChatUnreadWatcher } from "./chat/chat-unread-watcher";
 import { Toaster } from "sonner";
 
 export function AppShell({ categories }: { categories: CategoryNode[] }) {
@@ -57,6 +58,7 @@ export function AppShell({ categories }: { categories: CategoryNode[] }) {
       </div>
 
       <AuthProvider />
+      <ChatUnreadWatcher />
       <Toaster position="top-center" richColors closeButton />
       <RightToolbar />
       <WhatsAppButton />
