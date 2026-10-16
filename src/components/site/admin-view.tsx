@@ -1,17 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Users, BadgeCheck, FolderTree, Image as ImageIcon, Percent,
-  ShieldAlert, BarChart3, LogOut, Plus, Check, X, ChevronRight,
+  ShieldAlert, BarChart3, LogOut, Plus, ChevronRight, Crown, History,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/store";
 import { formatPrice, type CategoryNode } from "@/lib/format";
 import { BRAND } from "@/lib/brand";
+import { MerchantsTab } from "./admin/merchants-tab";
+import { UsersTab } from "./admin/users-tab";
+import { TeamTab } from "./admin/team-tab";
+import { AuditTab } from "./admin/audit-tab";
+import { useAutoRefresh } from "./admin/shared";
 
 type Tab =
-  | "users" | "suppliers" | "categories" | "banners"
+  | "users" | "suppliers" | "team" | "audit" | "categories" | "banners"
   | "commissions" | "disputes" | "reports";
 
 
@@ -36,91 +41,90 @@ const MOCK_DISPUTES = [
 ];
 
 export function AdminView() {
-  const { user, signOut, currency } = useApp();
-  const [tab, setTab] = useState<Tab>("users");
-  const [supplierCount, setSupplierCount] = useState<number | null>(null);
-  const [productTotal, setProductTotal] = useState<number | null>(null);
-  const [userTotal, setUserTotal] = useState<number | null>(null);
+  const { user, signOut } = useApp();
+  const [tab, setTab] = useState<Tab>("suppliers");
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [pending, setPending] = useState<number | null>(null);
 
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const [s, p, u] = await Promise.all([
-          fetch("/api/suppliers").then((r) => r.json()),
-          fetch("/api/products?take=1&skip=0").then((r) => r.json()),
-          fetch("/api/admin/users", { cache: "no-store" }).then((r) => r.json()),
-        ]);
-        if (mounted) {
-          setUserTotal((u as { total?: number }).total ?? 0);
-          setSupplierCount(Array.isArray(s) ? s.length : 0);
-          setProductTotal((p as { total?: number }).total ?? 0);
-        }
-      } catch {
-        if (mounted) { setSupplierCount(0); setProductTotal(0); }
-      }
-    })();
-    return () => { mounted = false; };
+  const loadStats = useCallback(async () => {
+    try {
+      const r = await fetch("/api/admin/stats", { cache: "no-store" });
+      if (!r.ok) return;
+      const d = (await r.json()) as Stats;
+      setStats(d);
+      setPending(d.pendingMerchants);
+    } catch {
+      /* keep last values */
+    }
   }, []);
+  useEffect(() => {
+    const t = setTimeout(() => void loadStats(), 0);
+    return () => clearTimeout(t);
+  }, [loadStats]);
+  useAutoRefresh(() => void loadStats(), 30_000);
 
   if (!user) return null; // guarded by <RequireAuth roles={["ADMIN"]}>
+  const isSuper = user.isSuperAdmin;
 
-
-  const tabs: { key: Tab; label: string; icon: typeof Users }[] = [
+  type TabDef = { key: Tab; label: string; icon: typeof Users; badge?: number | null; superOnly?: boolean };
+  const allTabs: TabDef[] = [
+    { key: "suppliers", label: "Validation marchands", icon: BadgeCheck, badge: pending },
     { key: "users", label: "Utilisateurs", icon: Users },
-    { key: "suppliers", label: "Validation marchands", icon: BadgeCheck },
-    { key: "categories", label: "Categories", icon: FolderTree },
-    { key: "banners", label: "Banners", icon: ImageIcon },
-    { key: "commissions", label: "Commissions", icon: Percent },
-    { key: "disputes", label: "Disputes", icon: ShieldAlert },
-    { key: "reports", label: "Reports", icon: BarChart3 },
+    { key: "team", label: "Administrateurs", icon: Crown, superOnly: true },
+    { key: "audit", label: "Journal", icon: History, superOnly: true },
+    { key: "categories", label: "Catégories", icon: FolderTree },
+    { key: "banners", label: "Bannières (démo)", icon: ImageIcon },
+    { key: "commissions", label: "Commissions (démo)", icon: Percent },
+    { key: "disputes", label: "Litiges (démo)", icon: ShieldAlert },
+    { key: "reports", label: "Rapports (démo)", icon: BarChart3 },
   ];
+  const tabs = allTabs.filter((t) => !t.superOnly || isSuper);
 
+  const v = (n: number | undefined) => (stats ? String(n ?? 0) : "…");
   const KPI = [
-    { label: "Utilisateurs", value: userTotal === null ? "…" : userTotal.toString(), accent: "#FF6A00" },
-    { label: "Suppliers", value: supplierCount === null ? "…" : supplierCount.toString(), accent: "#FF6A00" },
-    { label: "Products", value: productTotal === null ? "…" : productTotal.toString(), accent: "#FF6A00" },
-    { label: "GMV (30d)", value: formatPrice(1_240_000, currency), accent: "#0A0F4D" },
-    { label: "Pending disputes", value: "12", accent: "#FF6A00" },
-    { label: "Commissions", value: formatPrice(38_400, currency), accent: "#16A34A" },
+    { label: "Comptes", value: v(stats?.users), accent: "#1A1F8A", go: "users" as Tab },
+    { label: "Clients", value: v(stats?.buyers), accent: "#337AB7", go: "users" as Tab },
+    { label: "Marchands", value: v(stats?.merchants), accent: "#FF6A00", go: "users" as Tab },
+    { label: "En attente de validation", value: v(stats?.pendingMerchants), accent: stats?.pendingMerchants ? "#DC2626" : "#16A34A", go: "suppliers" as Tab },
+    { label: "Boutiques en ligne", value: v(stats?.publicShops), accent: "#16A34A", go: "suppliers" as Tab },
+    { label: "Produits en ligne", value: v(stats?.products), accent: "#0A0F4D", go: null },
   ];
 
   return (
     <div className="bg-[#ECECEC] min-h-screen">
-
-      <div className="benjamin-bar">Admin Console</div>
+      <div className="benjamin-bar">Console d&apos;administration</div>
 
       <div className="max-w-[1280px] mx-auto px-3 lg:px-6 py-5">
-        {/* greeting */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
-            <div className="text-[11px] uppercase tracking-wide text-[#666]">{BRAND.shortName} · Control panel</div>
+            <div className="text-[11px] uppercase tracking-wide text-[#666]">
+              {BRAND.shortName} · {isSuper ? "Super administrateur" : "Administrateur"}
+            </div>
             <div className="text-[20px] font-extrabold">Bonjour, {user.name ?? user.email}</div>
           </div>
           <button
             onClick={async () => { await signOut(); toast.success("Vous êtes déconnecté."); }}
             className="btn-outline-grey flex items-center gap-1.5"
           >
-            <LogOut className="w-3.5 h-3.5" /> Sign out
+            <LogOut className="w-3.5 h-3.5" /> Déconnexion
           </button>
         </div>
 
-        {/* KPI row */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
           {KPI.map((k) => (
-            <div key={k.label} className="bg-white border border-[#DADAD9] p-4">
-              <div className="text-[18px] lg:text-[22px] font-extrabold leading-none" style={{ color: k.accent }}>
-                {k.value}
-              </div>
-              <div className="text-[10px] uppercase tracking-wide text-[#666] font-bold mt-2">
-                {k.label}
-              </div>
-            </div>
+            <button
+              key={k.label}
+              onClick={() => k.go && setTab(k.go)}
+              disabled={!k.go}
+              className="bg-white border border-[#DADAD9] p-4 text-left hover:border-[#1A1F8A] disabled:hover:border-[#DADAD9] disabled:cursor-default"
+            >
+              <div className="text-[20px] lg:text-[24px] font-extrabold leading-none" style={{ color: k.accent }}>{k.value}</div>
+              <div className="text-[10px] uppercase tracking-wide text-[#666] font-bold mt-2">{k.label}</div>
+            </button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-5">
-          {/* sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-5">
           <aside>
             <div className="flex lg:flex-col gap-0 overflow-x-auto benjamin-scroll -mx-3 px-3 lg:mx-0 lg:px-0">
               {tabs.map((t) => {
@@ -133,17 +137,22 @@ export function AdminView() {
                   >
                     <Icon className="w-4 h-4 shrink-0" />
                     <span className="flex-1 text-left">{t.label}</span>
-                    <ChevronRight className="w-3.5 h-3.5 hidden lg:block" />
+                    {t.badge ? (
+                      <span className="bg-[#FF6A00] text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 flex items-center justify-center">{t.badge}</span>
+                    ) : (
+                      <ChevronRight className="w-3.5 h-3.5 hidden lg:block" />
+                    )}
                   </button>
                 );
               })}
             </div>
           </aside>
 
-          {/* content */}
-          <section className="bg-white border border-[#DADAD9] min-h-[400px]">
+          <section className="bg-white border border-[#DADAD9] min-h-[400px] min-w-0">
+            {tab === "suppliers" && <MerchantsTab onCountsChange={setPending} />}
             {tab === "users" && <UsersTab />}
-            {tab === "suppliers" && <SuppliersTab />}
+            {tab === "team" && isSuper && <TeamTab />}
+            {tab === "audit" && isSuper && <AuditTab />}
             {tab === "categories" && <CategoriesTab />}
             {tab === "banners" && <BannersTab />}
             {tab === "commissions" && <CommissionsTab />}
@@ -155,6 +164,11 @@ export function AdminView() {
     </div>
   );
 }
+
+type Stats = {
+  users: number; buyers: number; merchants: number; admins: number;
+  pendingMerchants: number; publicShops: number; products: number;
+};
 
 function StatusPill({ status }: { status: string }) {
   const map: Record<string, string> = {
@@ -177,19 +191,6 @@ function StatusPill({ status }: { status: string }) {
   );
 }
 
-function RoleBadge({ role }: { role: string }) {
-  const map: Record<string, string> = {
-    BUYER: "bg-[#337AB7]",
-    SUPPLIER: "bg-[#FF6A00]",
-    ADMIN: "bg-[#0A0F4D]",
-  };
-  return (
-    <span className={`${map[role] || "bg-[#999]"} text-white text-[10px] font-bold uppercase px-2 py-0.5 tracking-wide`}>
-      {role}
-    </span>
-  );
-}
-
 function SkeletonRow() {
   return (
     <div className="flex items-center gap-3 p-3 border-b border-[#ECECEC]">
@@ -198,226 +199,6 @@ function SkeletonRow() {
         <div className="h-3 bg-[#ECECEC] animate-pulse w-1/2" />
         <div className="h-2.5 bg-[#ECECEC] animate-pulse w-1/3" />
       </div>
-    </div>
-  );
-}
-
-type AdminUser = {
-  id: string; name: string | null; email: string; role: "BUYER" | "SUPPLIER" | "ADMIN"; status: string;
-  createdAt: string; lastLoginAt: string | null; supplier: { id: string; name: string; status: string } | null;
-};
-
-const fmtDate = (d: string | null) => (d ? new Date(d).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" }) : "—");
-const ROLE_LABEL: Record<string, string> = { BUYER: "Client", SUPPLIER: "Marchand", ADMIN: "Admin" };
-
-function UsersTab() {
-  const me = useApp((s) => s.user);
-  const [users, setUsers] = useState<AdminUser[] | null>(null);
-  const [total, setTotal] = useState(0);
-  const [q, setQ] = useState("");
-  const [role, setRole] = useState("");
-  const [busyId, setBusyId] = useState<string | null>(null);
-
-  async function load() {
-    const params = new URLSearchParams();
-    if (q.trim()) params.set("q", q.trim());
-    if (role) params.set("role", role);
-    const r = await fetch(`/api/admin/users?${params}`, { cache: "no-store" });
-    const d = await r.json();
-    if (!r.ok) { toast.error(d.error ?? "Erreur"); setUsers([]); return; }
-    setUsers(d.users); setTotal(d.total);
-  }
-  useEffect(() => { const t = setTimeout(load, 250); return () => clearTimeout(t); }, [q, role]);
-
-  async function update(u: AdminUser, data: { role?: string; status?: string }, okMsg: string) {
-    setBusyId(u.id);
-    const r = await fetch(`/api/admin/users/${u.id}`, {
-      method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data),
-    });
-    const d = await r.json();
-    setBusyId(null);
-    if (!r.ok) return toast.error(d.error ?? "Action impossible");
-    toast.success(okMsg);
-    setUsers((list) => list?.map((x) => (x.id === u.id ? { ...x, ...d.user } : x)) ?? null);
-  }
-
-  return (
-    <div>
-      <div className="p-4 border-b border-[#ECECEC] flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h3 className="benjamin-section-title">Utilisateurs</h3>
-          <p className="text-[11px] text-[#888] mt-0.5">{total} compte{total > 1 ? "s" : ""}</p>
-        </div>
-        <div className="flex gap-2 w-full sm:w-auto">
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher nom ou email" className="flex-1 sm:w-56 border border-[#DADAD9] px-3 py-1.5 text-[12px] outline-none focus:border-[#1A1F8A]" />
-          <select value={role} onChange={(e) => setRole(e.target.value)} className="border border-[#DADAD9] px-2 py-1.5 text-[12px] bg-white">
-            <option value="">Tous les rôles</option>
-            <option value="BUYER">Clients</option>
-            <option value="SUPPLIER">Marchands</option>
-            <option value="ADMIN">Admins</option>
-          </select>
-        </div>
-      </div>
-      {users === null ? (
-        <div className="p-4 space-y-2">{[...Array(5)].map((_, i) => <SkeletonRow key={i} />)}</div>
-      ) : users.length === 0 ? (
-        <p className="p-6 text-[13px] text-[#666] text-center">Aucun utilisateur pour le moment.</p>
-      ) : (
-        <div className="overflow-x-auto benjamin-scroll">
-          <table className="w-full text-[12px] min-w-[760px]">
-            <thead className="bg-[#ECECEC] text-[#666] uppercase text-[10px] tracking-wider">
-              <tr>
-                <th className="text-left px-4 py-2.5 font-bold">Utilisateur</th>
-                <th className="text-left px-4 py-2.5 font-bold">Rôle</th>
-                <th className="text-center px-4 py-2.5 font-bold">Statut</th>
-                <th className="text-left px-4 py-2.5 font-bold">Inscrit le</th>
-                <th className="text-left px-4 py-2.5 font-bold">Dernière connexion</th>
-                <th className="text-right px-4 py-2.5 font-bold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => {
-                const self = u.id === me?.id;
-                return (
-                  <tr key={u.id} className="border-b border-[#ECECEC] hover:bg-[#FAFAFA]">
-                    <td className="px-4 py-3">
-                      <div className="font-semibold">{u.name ?? "—"} {self && <span className="text-[10px] text-[#888]">(vous)</span>}</div>
-                      <div className="text-[10px] text-[#888]">{u.email}</div>
-                      {u.supplier && <div className="text-[10px] text-[#FF6A00]">{u.supplier.name}</div>}
-                    </td>
-                    <td className="px-4 py-3">
-                      <select
-                        value={u.role}
-                        disabled={self || busyId === u.id}
-                        onChange={(e) => update(u, { role: e.target.value }, "Rôle mis à jour")}
-                        className="border border-[#DADAD9] px-2 py-1 text-[11px] bg-white disabled:opacity-60"
-                        aria-label={`Rôle de ${u.email}`}
-                      >
-                        <option value="BUYER">{ROLE_LABEL.BUYER}</option>
-                        <option value="SUPPLIER" disabled={!u.supplier}>{ROLE_LABEL.SUPPLIER}</option>
-                        <option value="ADMIN">{ROLE_LABEL.ADMIN}</option>
-                      </select>
-                    </td>
-                    <td className="px-4 py-3 text-center"><StatusPill status={u.status} /></td>
-                    <td className="px-4 py-3 text-[#666]">{fmtDate(u.createdAt)}</td>
-                    <td className="px-4 py-3 text-[#666]">{fmtDate(u.lastLoginAt)}</td>
-                    <td className="px-4 py-3 text-right">
-                      {!self && (
-                        <button
-                          disabled={busyId === u.id}
-                          onClick={() =>
-                            update(u, { status: u.status === "suspended" ? "active" : "suspended" },
-                              u.status === "suspended" ? "Compte réactivé" : "Compte suspendu")
-                          }
-                          className="benjamin-link text-[12px] disabled:opacity-60"
-                        >
-                          {u.status === "suspended" ? "Réactiver" : "Suspendre"}
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
-
-type AdminSupplier = {
-  id: string; name: string; city: string; country: string; phone: string | null; status: string; createdAt: string;
-  user: { name: string | null; email: string }; _count: { products: number };
-};
-
-function SuppliersTab() {
-  const [status, setStatus] = useState<"pending" | "approved" | "rejected">("pending");
-  const [suppliers, setSuppliers] = useState<AdminSupplier[] | null>(null);
-  const [busyId, setBusyId] = useState<string | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-    fetch(`/api/admin/suppliers?status=${status}`, { cache: "no-store" })
-      .then(async (r) => {
-        const d = await r.json();
-        if (!mounted) return;
-        if (!r.ok) { toast.error(d.error ?? "Erreur"); setSuppliers([]); } else setSuppliers(d.suppliers);
-      })
-      .catch(() => mounted && setSuppliers([]));
-    return () => { mounted = false; };
-  }, [status]);
-
-  async function decide(s: AdminSupplier, next: "approved" | "rejected") {
-    setBusyId(s.id);
-    const r = await fetch(`/api/admin/suppliers/${s.id}`, {
-      method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: next }),
-    });
-    const d = await r.json();
-    setBusyId(null);
-    if (!r.ok) return toast.error(d.error ?? "Action impossible");
-    toast.success(next === "approved" ? `${s.name} approuvé` : `${s.name} refusé`);
-    setSuppliers((list) => list?.filter((x) => x.id !== s.id) ?? null);
-  }
-
-  return (
-    <div>
-      <div className="p-4 border-b border-[#ECECEC] flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h3 className="benjamin-section-title">Validation des marchands</h3>
-          <p className="text-[11px] text-[#888] mt-0.5">Approuvez ou refusez les demandes de comptes marchands</p>
-        </div>
-        <div className="flex">
-          {([["pending", "En attente"], ["approved", "Approuvés"], ["rejected", "Refusés"]] as const).map(([k, label]) => (
-            <button key={k} onClick={() => { if (k !== status) { setSuppliers(null); setStatus(k); } }}
-              className={`px-3 py-1.5 text-[11px] font-bold uppercase border ${status === k ? "bg-[#0A0F4D] text-white border-[#0A0F4D]" : "bg-white text-[#666] border-[#DADAD9]"}`}>
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-      {suppliers === null ? (
-        <div className="p-4 space-y-2">{[...Array(4)].map((_, i) => <SkeletonRow key={i} />)}</div>
-      ) : suppliers.length === 0 ? (
-        <p className="p-6 text-[13px] text-[#666] text-center">Aucun marchand dans cette liste.</p>
-      ) : (
-        <ul className="divide-y divide-[#ECECEC]">
-          {suppliers.map((s) => (
-            <li key={s.id} className="p-4 flex flex-col md:flex-row md:items-center gap-3">
-              <div className="w-10 h-10 bg-[#ECECEC] flex items-center justify-center font-bold text-[13px] text-[#FF6A00] shrink-0">
-                {s.name.slice(0, 2).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-bold text-[13px] truncate">{s.name}</span>
-                  <StatusPill status={s.status} />
-                </div>
-                <div className="text-[11px] text-[#888] mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5">
-                  <span>{s.user.name ?? "—"} · {s.user.email}</span>
-                  {s.phone && <span>{s.phone}</span>}
-                  <span>{s.city}, {s.country}</span>
-                  <span>{s._count.products} produits</span>
-                  <span>Demande du {fmtDate(s.createdAt)}</span>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                {s.status !== "approved" && (
-                  <button disabled={busyId === s.id} onClick={() => decide(s, "approved")}
-                    className="inline-flex items-center gap-1 bg-[#16A34A] text-white text-[11px] font-bold uppercase px-3 py-2 hover:opacity-85 disabled:opacity-60">
-                    <Check className="w-3.5 h-3.5" /> Approuver
-                  </button>
-                )}
-                {s.status !== "rejected" && (
-                  <button disabled={busyId === s.id} onClick={() => decide(s, "rejected")}
-                    className="inline-flex items-center gap-1 bg-[#DC2626] text-white text-[11px] font-bold uppercase px-3 py-2 hover:opacity-85 disabled:opacity-60">
-                    <X className="w-3.5 h-3.5" /> Refuser
-                  </button>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }

@@ -49,7 +49,22 @@ export function AuthProvider() {
       if (event === "SIGNED_OUT") setSession(null);
       else if (event === "SIGNED_IN" || event === "USER_UPDATED") void refreshSession();
     });
-    return () => data.subscription.unsubscribe();
+    // Role / merchant status / suspension can change on the server (admin action):
+    // re-read the profile when the user comes back to the tab (throttled).
+    let last = Date.now();
+    const onReturn = () => {
+      if (document.visibilityState !== "visible" || Date.now() - last < 15_000) return;
+      last = Date.now();
+      if (useApp.getState().authStatus === "authenticated") void refreshSession();
+    };
+    window.addEventListener("focus", onReturn);
+    document.addEventListener("visibilitychange", onReturn);
+
+    return () => {
+      data.subscription.unsubscribe();
+      window.removeEventListener("focus", onReturn);
+      document.removeEventListener("visibilitychange", onReturn);
+    };
   }, [refreshSession, setSession]);
 
   return null;

@@ -1,13 +1,15 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Loader2, Lock, ShieldAlert, Clock, XCircle } from "lucide-react";
+import { Loader2, Lock, ShieldAlert } from "lucide-react";
 import { homeViewForRole, useApp, type Role } from "@/lib/store";
+import { BecomeMerchant, MerchantStatusPanel } from "./merchant/merchant-onboarding";
 
 /** UI guard for protected views. The server enforces the same rules on every API call. */
 export function RequireAuth({ roles, children, requireApprovedSupplier = false }: {
   roles?: Role[];
   children: ReactNode;
+  /** Merchant space: clients get the "Devenir vendeur" form, non-approved merchants their status page. */
   requireApprovedSupplier?: boolean;
 }) {
   const { authStatus, user, setView, setAuthMode } = useApp();
@@ -35,6 +37,11 @@ export function RequireAuth({ roles, children, requireApprovedSupplier = false }
     );
   }
 
+  if (requireApprovedSupplier && user.role !== "ADMIN") {
+    if (user.role === "BUYER" || !user.supplier) return <BecomeMerchant />;
+    if (user.supplier.status !== "approved") return <MerchantStatusPanel user={user} />;
+  }
+
   if (roles && !roles.includes(user.role)) {
     return (
       <Shell>
@@ -44,22 +51,6 @@ export function RequireAuth({ roles, children, requireApprovedSupplier = false }
         <button onClick={() => setView(homeViewForRole(user.role))} className="btn-square-black mt-5 w-full">
           Aller à mon espace
         </button>
-      </Shell>
-    );
-  }
-
-  if (requireApprovedSupplier && user.role === "SUPPLIER" && user.supplier?.status !== "approved") {
-    const rejected = user.supplier?.status === "rejected";
-    return (
-      <Shell>
-        {rejected ? <XCircle className="w-10 h-10 mx-auto text-[#DC2626]" /> : <Clock className="w-10 h-10 mx-auto text-[#FF6A00]" />}
-        <h2 className="text-[18px] font-bold mt-3">{rejected ? "Demande refusée" : "Compte marchand en cours de validation"}</h2>
-        <p className="text-[13px] text-[#666] mt-1.5">
-          {rejected
-            ? "Votre demande de compte marchand n'a pas été acceptée. Contactez le support pour plus d'informations."
-            : `Merci ${user.name ?? ""} ! Notre équipe vérifie votre boutique « ${user.supplier?.name ?? ""} ». Vous pourrez publier vos produits dès sa validation.`}
-        </p>
-        <button onClick={() => setView("home")} className="btn-square-black mt-5 w-full">Retour à l&apos;accueil</button>
       </Shell>
     );
   }
