@@ -18,6 +18,7 @@ import { NextResponse } from "next/server";
 import type { Conversation, Message, Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { getSupabaseServer } from "@/lib/supabase/server";
+import { PUBLIC_SUPPLIER_WHERE } from "@/lib/merchant";
 import { authErrorResponse, type requireUser } from "@/lib/auth";
 
 export type ChatUser = Awaited<ReturnType<typeof requireUser>>;
@@ -90,8 +91,11 @@ export async function listConversations(user: ChatUser) {
 
 /** Get or create the buyer's thread with a supplier (optionally about a product). */
 export async function openConversation(user: ChatUser, supplierId: string, productId?: string | null) {
-  const supplier = await db.supplier.findUnique({ where: { id: supplierId }, select: { id: true, userId: true, status: true } });
-  if (!supplier || supplier.status !== "approved") throw new ChatError(404, "Fournisseur introuvable");
+  const supplier = await db.supplier.findFirst({
+    where: { id: supplierId, ...PUBLIC_SUPPLIER_WHERE },
+    select: { id: true, userId: true, status: true },
+  });
+  if (!supplier) throw new ChatError(404, "Fournisseur introuvable");
   if (supplier.userId === user.id) throw new ChatError(400, "Vous ne pouvez pas vous écrire à vous-même.");
 
   let product: { id: string } | null = null;

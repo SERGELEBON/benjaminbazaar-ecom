@@ -11,12 +11,13 @@ import { NextResponse } from "next/server";
 import type { User as AuthUser } from "@supabase/supabase-js";
 import { db } from "@/lib/db";
 import { getSupabaseServer } from "@/lib/supabase/server";
+import { slugify } from "@/lib/merchant";
 
 export type Role = "BUYER" | "SUPPLIER" | "ADMIN";
 export const SELF_SIGNUP_ROLES: Role[] = ["BUYER", "SUPPLIER"]; // ADMIN can never be self-assigned
 
-/** Emails promoted to ADMIN on login (comma separated env var). */
-function adminEmails(): string[] {
+/** Emails that are always SUPER admins (comma separated env var, bootstrap / break-glass). */
+export function adminEmails(): string[] {
   return (process.env.ADMIN_EMAILS ?? "")
     .split(",")
     .map((e) => e.trim().toLowerCase())
@@ -43,16 +44,6 @@ export async function getAuthUser(): Promise<AuthUser | null> {
   return data.user;
 }
 
-function slugify(s: string) {
-  return s
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "")
-    .slice(0, 50) || "boutique";
-}
-
 type SignupMeta = {
   name?: string;
   full_name?: string;
@@ -75,6 +66,15 @@ export async function ensureProfile(authUser: AuthUser, intent?: string | null) 
   const meta = (authUser.user_metadata ?? {}) as SignupMeta;
   const emailConfirmed = Boolean(authUser.email_confirmed_at);
   const isAdminEmail = emailConfirmed && adminEmails().includes(email);
+  // Admin access granted by a super admin (only honoured for a verified email).
+  const invite = emailConfirmed
+    ? await db.adminInvite.findUnique({ where: { email } })
+    : null;
+  const grantedLevel: "super" | "standard" | null = isAdminEmail
+    ? "super"
+    : invite && !invite.acceptedAt
+      ? (invite.level === "super" ? "super" : "standard")
+      : null;
 
   let user = await db.user.findUnique({ where: { authId: authUser.id }, include: { supplier: true } });
 
@@ -91,7 +91,7 @@ export async function ensureProfile(authUser: AuthUser, intent?: string | null) 
 
   if (!user) {
     const requested = (intent ?? meta.intent ?? "BUYER").toUpperCase() as Role;
-    const role: Role = isAdminEmail ? "ADMIN" : SELF_SIGNUP_ROLES.includes(requested) ? requested : "BUYER";
+    const role: Role = grantedLevel ? "ADMIN" : SELF_SIGNUP_ROLES.includes(requested) ? requested : "BUYER";
     const name = (meta.name ?? meta.full_name ?? email.split("@")[0]).slice(0, 80);
 
     user = await db.$transaction(async (tx) => {
@@ -103,6 +103,7 @@ export async function ensureProfile(authUser: AuthUser, intent?: string | null) 
           phone: meta.phone?.slice(0, 30) ?? null,
           avatarUrl: meta.avatar_url ?? meta.picture ?? null,
           role,
+          adminLevel: grantedLevel,
           country: meta.country?.slice(0, 60) || "Côte d'Ivoire",
         },
       });
@@ -129,8 +130,16 @@ export async function ensureProfile(authUser: AuthUser, intent?: string | null) 
       }
       return tx.user.findUniqueOrThrow({ where: { id: created.id }, include: { supplier: true } });
     });
-  } else if (isAdminEmail && user.role !== "ADMIN") {
-    user = await db.user.update({ where: { id: user.id }, data: { role: "ADMIN" }, include: { supplier: true } });
+  } else if (grantedLevel && (user.role !== "ADMIN" || (grantedLevel === "super" && user.adminLevel !== "super"))) {
+    user = await db.user.update({
+      where: { id: user.id },
+      data: { role: "ADMIN", adminLevel: grantedLevel },
+      include: { supplier: true },
+    });
+  }
+  if (invite && !invite.acceptedAt && grantedLevel && !isAdminEmail) {
+    await db.adminInvite.update({ where: { id: invite.id }, data: { acceptedAt: new Date() } });
+    await audit(user.id, "admin.invite.accepted", "user", user.id, { level: grantedLevel });
   }
 
   if (user.status === "suspended") throw new AuthError(403, "Compte suspendu. Contactez le support.");
@@ -158,6 +167,41 @@ export async function requireRole(...roles: Role[]) {
   return user;
 }
 
+type ProfileLike = { role: string; email: string; adminLevel: string | null };
+
+/** Super admins manage other admins and every role. ADMIN_EMAILS are always super admins. */
+export function isSuperAdmin(user: ProfileLike) {
+  return user.role === "ADMIN" && (user.adminLevel === "super" || adminEmails().includes(user.email.toLowerCase()));
+}
+
+/** Admin accounts defined by ADMIN_EMAILS cannot be demoted or suspended from the UI. */
+export function isProtectedAdmin(user: { email: string }) {
+  return adminEmails().includes(user.email.toLowerCase());
+}
+
+export async function requireSuperAdmin() {
+  const user = await requireRole("ADMIN");
+  if (!isSuperAdmin(user)) throw new AuthError(403, "Réservé aux super administrateurs");
+  return user;
+}
+
+/** Append-only audit trail for sensitive admin actions (never throws). */
+export async function audit(
+  actorId: string | null,
+  action: string,
+  targetType: "user" | "supplier" | "invite",
+  targetId: string,
+  details?: Record<string, unknown>,
+) {
+  try {
+    await db.auditLog.create({
+      data: { actorId, action, targetType, targetId, details: details ? JSON.stringify(details) : null },
+    });
+  } catch (e) {
+    console.error("[audit] failed", e);
+  }
+}
+
 /** Public shape returned to the browser (no internal fields). */
 export function publicProfile(user: Awaited<ReturnType<typeof requireUser>>) {
   return {
@@ -167,9 +211,23 @@ export function publicProfile(user: Awaited<ReturnType<typeof requireUser>>) {
     phone: user.phone,
     avatarUrl: user.avatarUrl,
     role: user.role as Role,
+    isSuperAdmin: isSuperAdmin(user),
     status: user.status,
     supplier: user.supplier
-      ? { id: user.supplier.id, name: user.supplier.name, slug: user.supplier.slug, status: user.supplier.status }
+      ? {
+          id: user.supplier.id,
+          name: user.supplier.name,
+          slug: user.supplier.slug,
+          status: user.supplier.status,
+          statusReason: user.supplier.statusReason,
+          phone: user.supplier.phone,
+          city: user.supplier.city,
+          country: user.supplier.country,
+          mainCategory: user.supplier.mainCategory,
+          description: user.supplier.description,
+          createdAt: user.supplier.createdAt.toISOString(),
+          reviewedAt: user.supplier.reviewedAt?.toISOString() ?? null,
+        }
       : null,
   };
 }

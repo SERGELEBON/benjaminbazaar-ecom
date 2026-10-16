@@ -82,8 +82,26 @@ export interface SessionUser {
   phone: string | null;
   avatarUrl: string | null;
   role: Role;
+  /** Super admins manage other admins and every role */
+  isSuperAdmin: boolean;
   status: string;
-  supplier: { id: string; name: string; slug: string; status: "pending" | "approved" | "rejected" } | null;
+  supplier: MerchantShop | null;
+}
+
+export type MerchantStatus = "pending" | "approved" | "rejected" | "suspended";
+export interface MerchantShop {
+  id: string;
+  name: string;
+  slug: string;
+  status: MerchantStatus;
+  statusReason: string | null;
+  phone: string | null;
+  city: string;
+  country: string;
+  mainCategory: string | null;
+  description: string | null;
+  createdAt: string;
+  reviewedAt: string | null;
 }
 
 /** Dashboard view for a role */

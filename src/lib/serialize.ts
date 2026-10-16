@@ -1,4 +1,5 @@
 import { db } from "./db";
+import { PUBLIC_SUPPLIER_WHERE } from "@/lib/merchant";
 import type {
   CategoryNode,
   PriceTierT,
@@ -128,7 +129,8 @@ export async function getProducts(opts?: {
   minPrice?: number;
   maxPrice?: number;
 }) {
-  const where: any = {};
+  // Only products of approved merchants are public (pending / rejected / suspended shops are hidden).
+  const where: any = { supplier: PUBLIC_SUPPLIER_WHERE };
   if (opts?.categoryId) where.categoryId = opts.categoryId;
   if (opts?.supplierId) where.supplierId = opts.supplierId;
   if (opts?.search) {
@@ -158,6 +160,7 @@ export async function getProducts(opts?: {
   // so the search results page always has content to show.
   if (opts?.search && items.length === 0 && (opts.skip ?? 0) === 0) {
     items = await db.product.findMany({
+      where: { supplier: PUBLIC_SUPPLIER_WHERE },
       orderBy: { popularity: "desc" },
       take: opts?.take ?? 24,
       skip: 0,
@@ -169,8 +172,8 @@ export async function getProducts(opts?: {
 }
 
 export async function getProductById(id: string) {
-  const p = await db.product.findUnique({
-    where: { id },
+  const p = await db.product.findFirst({
+    where: { id, supplier: PUBLIC_SUPPLIER_WHERE },
     include: {
       supplier: true,
       category: true,
@@ -194,7 +197,7 @@ export async function getProductById(id: string) {
 
 export async function getSuppliers() {
   const suppliers = await db.supplier.findMany({
-    where: { status: "approved" }, // only approved merchants are public
+    where: PUBLIC_SUPPLIER_WHERE, // only approved merchants are public
     include: { _count: { select: { products: true } } },
     orderBy: { storeRating: "desc" },
   });
@@ -202,8 +205,8 @@ export async function getSuppliers() {
 }
 
 export async function getSupplierById(id: string) {
-  const s = await db.supplier.findUnique({
-    where: { id },
+  const s = await db.supplier.findFirst({
+    where: { id, ...PUBLIC_SUPPLIER_WHERE },
     include: {
       products: {
         take: 24,
