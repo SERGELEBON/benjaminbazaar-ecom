@@ -38,6 +38,9 @@ model User {
   favorites Favorite[]
   addresses Address[]
   supplier  Supplier?
+
+  conversations Conversation[] @relation("BuyerConversations")
+  messages      Message[]      @relation("SentMessages")
 }
 
 model Supplier {
@@ -73,6 +76,7 @@ model Supplier {
   quotes   Quote[]
   reviews  Review[]
   payouts  Payout[]
+  conversations Conversation[]
 }
 
 model Category {
@@ -124,6 +128,7 @@ model Product {
   orderItems OrderItem[]
   reviews    Review[]
   favorites  Favorite[]
+  conversations Conversation[]
 }
 
 model PriceTier {
@@ -220,22 +225,50 @@ model Quote {
   createdAt DateTime @default(now())
 }
 
+/// One private thread per (buyer, supplier) pair. The product the buyer is asking
+/// about is kept as context and can change over time.
 model Conversation {
-  id        String    @id @default(cuid())
-  userId    String
-  supplierId String
-  productId String?
-  createdAt DateTime  @default(now())
-  messages  Message[]
+  id                 String    @id @default(cuid())
+  buyerId            String
+  buyer              User      @relation("BuyerConversations", fields: [buyerId], references: [id], onDelete: Cascade)
+  supplierId         String
+  supplier           Supplier  @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  productId          String?
+  product            Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+  lastMessageAt      DateTime?
+  lastMessagePreview String?
+  lastSenderRole     String? // buyer | supplier
+  buyerUnread        Int       @default(0)
+  supplierUnread     Int       @default(0)
+  buyerLastReadAt    DateTime?
+  supplierLastReadAt DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  messages           Message[]
+
+  @@unique([buyerId, supplierId])
+  @@index([buyerId, lastMessageAt])
+  @@index([supplierId, lastMessageAt])
 }
 
 model Message {
-  id              String      @id @default(cuid())
-  conversationId  String
-  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  fromRole        String // buyer | supplier
-  content         String
-  createdAt       DateTime    @default(now())
+  id               String       @id @default(cuid())
+  conversationId   String
+  conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId         String
+  sender           User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  senderRole       String // buyer | supplier
+  /// Text body (null for an image-only message).
+  content          String?
+  /// Private Supabase Storage object path (bucket chat-attachments), served via short-lived signed URLs.
+  attachmentPath   String?
+  attachmentType   String?
+  attachmentSize   Int?
+  attachmentWidth  Int?
+  attachmentHeight Int?
+  createdAt        DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
 }
 
 model Review {
