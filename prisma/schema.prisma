@@ -25,6 +25,9 @@ model User {
   avatarUrl   String?
   /// Passwords are never stored here: authentication is handled by Supabase Auth.
   role        String    @default("BUYER") // BUYER | SUPPLIER | ADMIN
+  /// Only for ADMIN: "super" (manages admins & roles) | "standard" (moderation only).
+  /// Emails listed in the ADMIN_EMAILS env var are always super admins.
+  adminLevel  String?
   status      String    @default("active") // active | suspended | system
   country     String    @default("Côte d'Ivoire")
   lastLoginAt DateTime?
@@ -41,6 +44,9 @@ model User {
 
   conversations Conversation[] @relation("BuyerConversations")
   messages      Message[]      @relation("SentMessages")
+  reviewedSuppliers Supplier[] @relation("SupplierReviewer")
+  adminInvites  AdminInvite[]
+  auditLogs     AuditLog[]
 }
 
 model Supplier {
@@ -55,8 +61,14 @@ model Supplier {
   years          Int      @default(3)
   type           String   @default("Manufacturer") // Manufacturer | Trading Company
   verified       Boolean  @default(true)
-  /// Merchant onboarding: pending -> approved | rejected (set by an admin)
+  /// Merchant onboarding: pending -> approved | rejected, approved -> suspended (set by an admin)
   status         String   @default("approved")
+  /// Shown to the merchant when the application is rejected or the shop suspended.
+  statusReason   String?
+  reviewedAt     DateTime?
+  reviewedById   String?
+  reviewedBy     User?    @relation("SupplierReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  description    String?
   phone          String?
   storeRating    Float    @default(4.5)
   responseTime   String   @default("<=2h")
@@ -77,6 +89,8 @@ model Supplier {
   reviews  Review[]
   payouts  Payout[]
   conversations Conversation[]
+
+  @@index([status, createdAt])
 }
 
 model Category {
@@ -331,4 +345,31 @@ model Address {
   zip       String?
   isDefault Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+/// Admin access granted by a super admin to an email (applied when that person signs in,
+/// or immediately if the account already exists).
+model AdminInvite {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  level       String    @default("standard") // super | standard
+  invitedById String?
+  invitedBy   User?     @relation(fields: [invitedById], references: [id], onDelete: SetNull)
+  acceptedAt  DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+/// Append-only trail of sensitive admin actions (roles, suspensions, merchant reviews).
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actor      User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action     String // e.g. supplier.approve, user.role, admin.invite
+  targetType String // user | supplier | invite
+  targetId   String
+  details    String? // JSON
+  createdAt  DateTime @default(now())
+
+  @@index([targetType, targetId])
+  @@index([createdAt])
 }
