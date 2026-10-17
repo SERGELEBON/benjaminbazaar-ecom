@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { apiFetch as api, jsonInit } from "@/lib/api-client";
 import {
   Plus, Search, RefreshCw, Package, Pencil, Eye, EyeOff, Archive, ArchiveRestore, Trash2, ExternalLink, AlertTriangle, MoreVertical,
 } from "lucide-react";
@@ -30,12 +31,6 @@ const FILTERS: { key: Filter; label: string }[] = [
   { key: "blocked", label: "Bloqués" },
 ];
 
-async function api<T>(url: string, init?: RequestInit): Promise<T> {
-  const r = await fetch(url, { credentials: "same-origin", cache: "no-store", ...init });
-  const d = (await r.json().catch(() => ({}))) as T & { error?: string };
-  if (!r.ok) throw new Error(d.error ?? `Erreur ${r.status}`);
-  return d;
-}
 
 function StatusPill({ p }: { p: Row }) {
   if (p.moderation === "blocked") return <span className="bg-[#DC2626] text-white text-[10px] font-bold uppercase px-2 py-0.5">Bloqué</span>;
