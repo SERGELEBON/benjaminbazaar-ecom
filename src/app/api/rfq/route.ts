@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { errorResponse } from "@/lib/http";
 import { db } from "@/lib/db";
-import { authErrorResponse, requireUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,7 @@ export async function GET() {
     });
     return NextResponse.json(rfqs);
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
 
@@ -46,6 +47,6 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json(rfq, { status: 201 });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
