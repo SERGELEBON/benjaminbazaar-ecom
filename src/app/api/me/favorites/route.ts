@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { authErrorResponse, requireUser } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { PUBLIC_PRODUCT_WHERE } from "@/lib/merchant";
 import { serializeProduct } from "@/lib/serialize";
@@ -28,7 +29,7 @@ export async function GET() {
     products.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
     return NextResponse.json({ ids, products: products.map(serializeProduct) }, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
 
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
 
@@ -63,6 +64,6 @@ export async function DELETE(req: NextRequest) {
     await db.favorite.deleteMany({ where: { userId: user.id, productId } });
     return NextResponse.json({ ok: true });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
