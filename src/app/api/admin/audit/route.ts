@@ -9,6 +9,7 @@ export async function GET() {
   try {
     await requireSuperAdmin();
     const rows = await db.auditLog.findMany({
+      where: { action: { not: "product.image.upload" } }, // technical rate-limit entries
       orderBy: { createdAt: "desc" },
       take: 100,
       select: {
