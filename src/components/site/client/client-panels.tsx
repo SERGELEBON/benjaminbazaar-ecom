@@ -1,23 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { Heart, MapPin, Plus, Pencil, Trash2, Star, Loader2, Package } from "lucide-react";
+import { apiFetch as api, jsonInit } from "@/lib/api-client";
+import { Heart, MapPin, Plus, Pencil, Trash2, Star, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/store";
 import type { ProductT } from "@/lib/format";
 import { ProductCard } from "../product-card";
 
-async function api<T>(url: string, init?: RequestInit): Promise<T> {
-  const r = await fetch(url, { credentials: "same-origin", cache: "no-store", ...init });
-  const d = (await r.json().catch(() => ({}))) as T & { error?: string };
-  if (!r.ok) throw new Error(d.error ?? `Erreur ${r.status}`);
-  return d;
-}
-const json = (method: string, body: unknown): RequestInit => ({
-  method,
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(body),
-});
+const json = jsonInit;
 
 function Header({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
   return (
@@ -79,13 +70,13 @@ export function FavoritesPanel() {
 }
 
 // ------------------------------------------------------------------ addresses
-type Address = {
+export type Address = {
   id: string; name: string; phone: string; country: string; city: string; line: string; zip: string | null; isDefault: boolean;
 };
-type AddressForm = Omit<Address, "id" | "zip"> & { zip: string };
-const empty = (name = "", phone = ""): AddressForm => ({ name, phone, country: "Côte d'Ivoire", city: "", line: "", zip: "", isDefault: false });
+export type AddressForm = Omit<Address, "id" | "zip"> & { zip: string };
+export const emptyAddress = (name = "", phone = ""): AddressForm => ({ name, phone, country: "Côte d'Ivoire", city: "", line: "", zip: "", isDefault: false });
 
-function AddressEditor({ initial, onSave, onCancel }: { initial: AddressForm; onSave: (v: AddressForm) => Promise<void>; onCancel: () => void }) {
+export function AddressEditor({ initial, onSave, onCancel }: { initial: AddressForm; onSave: (v: AddressForm) => Promise<void>; onCancel: () => void }) {
   const [v, setV] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -130,7 +121,7 @@ function AddressEditor({ initial, onSave, onCancel }: { initial: AddressForm; on
   );
 }
 
-/** Delivery addresses (CRUD), used later by checkout. */
+/** Delivery addresses (CRUD), also used by checkout. */
 export function AddressesPanel() {
   const user = useApp((s) => s.user);
   const [items, setItems] = useState<Address[] | null>(null);
@@ -193,7 +184,7 @@ export function AddressesPanel() {
       />
       {editing !== null && (
         <AddressEditor
-          initial={editing === "new" ? empty(user?.name ?? "", user?.phone ?? "") : { ...editing, zip: editing.zip ?? "" }}
+          initial={editing === "new" ? emptyAddress(user?.name ?? "", user?.phone ?? "") : { ...editing, zip: editing.zip ?? "" }}
           onSave={save}
           onCancel={() => setEditing(null)}
         />
@@ -232,20 +223,3 @@ export function AddressesPanel() {
     </div>
   );
 }
-
-/** Orders arrive with checkout + payment (next integration). */
-export function OrdersPlaceholder() {
-  const setView = useApp((s) => s.setView);
-  return (
-    <div>
-      <Header title="Mes commandes" />
-      <div className="p-10 text-center text-[13px] text-[#666] max-w-md mx-auto">
-        <Package className="w-9 h-9 mx-auto text-[#DADAD9] mb-3" />
-        <p className="font-semibold text-[#333]">Aucune commande pour le moment</p>
-        <p className="mt-1">Le paiement en ligne (Mobile Money) et le suivi de commande arrivent prochainement. En attendant, contactez les fournisseurs par messagerie.</p>
-        <button onClick={() => setView("chat")} className="btn-benjamin-orange mt-4">Mes messages</button>
-      </div>
-    </div>
-  );
-}
-
