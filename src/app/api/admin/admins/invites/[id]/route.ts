@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { audit, authErrorResponse, requireSuperAdmin } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { audit, requireSuperAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 /** SUPER ADMIN: revoke a pending admin invitation. */
@@ -13,6 +14,6 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     await audit(actor.id, "admin.invite.revoke", "invite", id, { email: invite.email });
     return NextResponse.json({ ok: true });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
