@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { authErrorResponse, requireUser } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { AddressError, parseAddress } from "@/lib/addresses";
+import { parseAddress } from "@/lib/addresses";
 
 type Ctx = { params: Promise<{ id: string }> };
 const select = { id: true, name: true, phone: true, country: true, city: true, line: true, zip: true, isDefault: true, createdAt: true } as const;
@@ -24,8 +25,7 @@ export async function PATCH(req: Request, { params }: Ctx) {
     });
     return NextResponse.json({ address });
   } catch (e) {
-    if (e instanceof AddressError) return NextResponse.json({ error: e.message }, { status: 400 });
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
 
@@ -45,6 +45,6 @@ export async function DELETE(_req: Request, { params }: Ctx) {
     });
     return NextResponse.json({ ok: true });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
