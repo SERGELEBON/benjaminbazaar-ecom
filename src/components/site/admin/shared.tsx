@@ -16,16 +16,8 @@ export const SHOP_STATUS_LABEL: Record<string, string> = {
   suspended: "Suspendue",
 };
 
-export async function adminFetch<T>(url: string, init?: RequestInit): Promise<T> {
-  const r = await fetch(url, { credentials: "same-origin", cache: "no-store", ...init });
-  const d = (await r.json().catch(() => ({}))) as T & { error?: string };
-  if (!r.ok) throw new Error(d.error ?? `Erreur ${r.status}`);
-  return d;
-}
+export { apiFetch as adminFetch, jsonInit } from "@/lib/api-client";
 
-export function jsonInit(method: string, body: unknown): RequestInit {
-  return { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) };
-}
 
 /** Re-runs `load` when the admin comes back to the tab and every `ms` while visible. */
 export function useAutoRefresh(load: () => void, ms = 30_000) {
@@ -119,7 +111,7 @@ export function ReasonDialog({
           <button onClick={onClose} disabled={busy} aria-label="Fermer" className="p-1 text-[#666]"><X className="w-4 h-4" /></button>
         </div>
         {description && <p className="text-[13px] text-[#555] mt-1.5">{description}</p>}
-        {requireReason && (
+        {(requireReason || placeholder) && (
           <textarea
             autoFocus
             rows={4}
