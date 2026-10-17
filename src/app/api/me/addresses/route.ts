@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { authErrorResponse, requireUser } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { AddressError, MAX_ADDRESSES, parseAddress } from "@/lib/addresses";
+import { MAX_ADDRESSES, parseAddress } from "@/lib/addresses";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,7 @@ export async function GET() {
     });
     return NextResponse.json({ addresses }, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
 
@@ -36,7 +37,6 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ address }, { status: 201 });
   } catch (e) {
-    if (e instanceof AddressError) return NextResponse.json({ error: e.message }, { status: 400 });
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
