@@ -24,12 +24,22 @@ const LABEL: Record<string, string> = {
   "admin.invite.revoke": "a annulé une invitation",
   "admin.invite.accepted": "a accepté une invitation admin",
   "admin.grant": "a nommé un administrateur",
+  "product.create": "a créé un brouillon de produit",
+  "product.publish": "a publié un produit",
+  "product.unpublish": "a dépublié un produit",
+  "product.update": "a modifié un produit",
+  "product.archive": "a archivé un produit",
+  "product.restore": "a restauré un produit",
+  "product.delete": "a supprimé un produit",
+  "product.block": "a bloqué un produit",
+  "product.unblock": "a débloqué un produit",
 };
 
 function summary(d: Record<string, unknown> | null) {
   if (!d) return "";
   const parts: string[] = [];
   if (d.shop) parts.push(`« ${d.shop} »`);
+  if (d.title) parts.push(`« ${d.title} »`);
   if (d.email) parts.push(String(d.email));
   if (d.from !== undefined && d.to !== undefined) parts.push(`${d.from ?? "—"} → ${d.to ?? "—"}`);
   if (d.level) parts.push(`niveau ${d.level}`);
