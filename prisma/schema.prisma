@@ -134,6 +134,15 @@ model Product {
   readyToShip    Boolean      @default(false)
   customizable   Boolean      @default(true)
   rank           Int         @default(0)
+  /// Merchant lifecycle: draft (private) -> published (public) -> archived (hidden, kept for order history)
+  status           String    @default("published")
+  /// Platform moderation: ok | blocked (hidden by an admin, reason shown to the merchant)
+  moderation       String    @default("ok")
+  moderationReason String?
+  /// Units available; null = on demand / not tracked
+  stock          Int?
+  sku            String?
+  publishedAt    DateTime?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
@@ -143,6 +152,9 @@ model Product {
   reviews    Review[]
   favorites  Favorite[]
   conversations Conversation[]
+
+  @@index([supplierId, status])
+  @@index([status, moderation])
 }
 
 model PriceTier {
