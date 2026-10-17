@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { audit } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { parseJsonArray } from "@/lib/sanitize";
 import {
   CatalogError, assertImagesAllowed, catalogErrorResponse, merchantProductView, parseProductInput, productData,
   removeProductImages, requireMerchant, tierRows,
@@ -10,14 +11,7 @@ export const dynamic = "force-dynamic";
 
 type Ctx = { params: Promise<{ id: string }> };
 const include = { priceTiers: true, category: { select: { name: true } } } as const;
-const parseImages = (s: string) => {
-  try {
-    const v = JSON.parse(s);
-    return Array.isArray(v) ? (v as string[]) : [];
-  } catch {
-    return [];
-  }
-};
+const parseImages = (s: string) => parseJsonArray<string>(s);
 
 /** Only the owner shop can see / change a product (404 otherwise: no enumeration). */
 async function ownProduct(id: string, shopId: string) {
