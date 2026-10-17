@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { audit, authErrorResponse, requireRole } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { audit, requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 type Decision = "approved" | "rejected" | "suspended" | "pending";
@@ -59,6 +60,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     });
     return NextResponse.json({ supplier });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
