@@ -200,7 +200,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
           )}
 
           {/* cart */}
-          <button onClick={() => setView("cart")} className="relative flex items-center gap-1 px-2 hover:text-[#FF6A00]">
+          <button onClick={() => setView("cart")} aria-label="Panier" className="relative flex items-center gap-1 px-2 hover:text-[#FF6A00]">
             <div className="relative">
               <ShoppingCart className="w-6 h-6" strokeWidth={1.6} />
               {cartCount > 0 && (

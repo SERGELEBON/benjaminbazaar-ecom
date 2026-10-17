@@ -97,7 +97,7 @@ export function ProductDetailView() {
         if (!cancelled) {
           setData(d);
           setActiveImg(0);
-          setQty(1);
+          setQty(Math.max(1, Number.parseInt(d?.product?.minOrder, 10) || 1));
           setVariants({});
           setShowAllAttrs(false);
           setShipQty(1);

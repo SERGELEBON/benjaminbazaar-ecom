@@ -6,11 +6,13 @@ import {
   Trash2, Pencil, Star, ChevronRight, Truck, ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useApp } from "@/lib/store";
+import { useApp, useDashboardTab } from "@/lib/store";
 import { formatPrice, type ProductT, type Currency } from "@/lib/format";
-import { AddressesPanel, FavoritesPanel, OrdersPlaceholder } from "./client/client-panels";
+import { AddressesPanel, FavoritesPanel } from "./client/client-panels";
+import { OrdersPanel } from "./orders/orders-panel";
 
 type Tab = "orders" | "rfqs" | "favorites" | "addresses" | "account";
+const TABS: readonly Tab[] = ["orders", "rfqs", "favorites", "addresses", "account"];
 
 interface Rfq {
   id: string;
@@ -27,7 +29,7 @@ interface Rfq {
 
 export function BuyerDashboard() {
   const { user, signOut, currency, setCurrency } = useApp();
-  const [tab, setTab] = useState<Tab>("orders");
+  const [tab, setTab] = useDashboardTab<Tab>("orders", TABS);
 
   if (!user) return null; // guarded by <RequireAuth>
 
@@ -84,7 +86,7 @@ export function BuyerDashboard() {
 
           {/* content */}
           <section className="bg-white border border-[#DADAD9] min-h-[400px]">
-            {tab === "orders" && <OrdersPlaceholder />}
+            {tab === "orders" && <OrdersPanel scope="buyer" />}
             {tab === "rfqs" && <RfqsTab />}
             {tab === "favorites" && <FavoritesPanel />}
             {tab === "addresses" && <AddressesPanel />}

@@ -3,10 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   Users, BadgeCheck, FolderTree, Image as ImageIcon, Percent,
-  ShieldAlert, BarChart3, LogOut, Plus, ChevronRight, Crown, History, Package,
+  ShieldAlert, BarChart3, LogOut, Plus, ChevronRight, Crown, History, Package, ShoppingCart,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useApp } from "@/lib/store";
+import { useApp, useDashboardTab } from "@/lib/store";
+import { OrdersPanel } from "./orders/orders-panel";
 import { formatPrice, type CategoryNode } from "@/lib/format";
 import { BRAND } from "@/lib/brand";
 import { MerchantsTab } from "./admin/merchants-tab";
@@ -17,8 +18,9 @@ import { AuditTab } from "./admin/audit-tab";
 import { useAutoRefresh } from "./admin/shared";
 
 type Tab =
-  | "users" | "suppliers" | "products" | "team" | "audit" | "categories" | "banners"
+  | "users" | "suppliers" | "products" | "orders" | "team" | "audit" | "categories" | "banners"
   | "commissions" | "disputes" | "reports";
+const TABS: readonly Tab[] = ["users", "suppliers", "products", "orders", "team", "audit", "categories", "banners", "commissions", "disputes", "reports"];
 
 
 const MOCK_BANNERS = [
@@ -43,7 +45,7 @@ const MOCK_DISPUTES = [
 
 export function AdminView() {
   const { user, signOut } = useApp();
-  const [tab, setTab] = useState<Tab>("suppliers");
+  const [tab, setTab] = useDashboardTab<Tab>("suppliers", TABS);
   const [stats, setStats] = useState<Stats | null>(null);
   const [pending, setPending] = useState<number | null>(null);
 
@@ -71,6 +73,7 @@ export function AdminView() {
   const allTabs: TabDef[] = [
     { key: "suppliers", label: "Validation marchands", icon: BadgeCheck, badge: pending },
     { key: "products", label: "Produits", icon: Package },
+    { key: "orders", label: "Commandes", icon: ShoppingCart },
     { key: "users", label: "Utilisateurs", icon: Users },
     { key: "team", label: "Administrateurs", icon: Crown, superOnly: true },
     { key: "audit", label: "Journal", icon: History, superOnly: true },
@@ -153,6 +156,7 @@ export function AdminView() {
           <section className="bg-white border border-[#DADAD9] min-h-[400px] min-w-0">
             {tab === "suppliers" && <MerchantsTab onCountsChange={setPending} />}
             {tab === "products" && <ProductsTab />}
+            {tab === "orders" && <OrdersPanel scope="admin" />}
             {tab === "users" && <UsersTab />}
             {tab === "team" && isSuper && <TeamTab />}
             {tab === "audit" && isSuper && <AuditTab />}

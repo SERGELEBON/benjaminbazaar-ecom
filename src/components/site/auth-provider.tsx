@@ -23,6 +23,15 @@ export function AuthProvider() {
     return () => clearTimeout(t);
   }, [userId]);
 
+  // Restore the saved cart once on the client (localStorage may be unavailable).
+  useEffect(() => {
+    try {
+      void useApp.persist.rehydrate();
+    } catch {
+      /* private mode: cart stays in memory */
+    }
+  }, []);
+
   useEffect(() => {
     const url = new URL(window.location.href);
     const authParam = url.searchParams.get("auth");

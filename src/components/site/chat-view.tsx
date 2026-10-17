@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { apiFetch as api, jsonInit } from "@/lib/api-client";
 import {
   MessageCircle, Search, Paperclip, Send, ArrowLeft, BadgeCheck, Star, ChevronRight,
   Loader2, AlertCircle, ImageIcon, X, Check, CheckCheck, RotateCcw, Trash2, Store,
@@ -36,12 +37,6 @@ const SUPPLIER_QUICK_REPLIES = [
 ];
 
 // ---------------------------------------------------------------- Helpers
-async function api<T>(url: string, init?: RequestInit): Promise<T> {
-  const r = await fetch(url, { credentials: "same-origin", cache: "no-store", ...init });
-  const d = (await r.json().catch(() => ({}))) as T & { error?: string };
-  if (!r.ok) throw new Error(d.error || `Erreur ${r.status}`);
-  return d;
-}
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });

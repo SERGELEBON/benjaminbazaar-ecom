@@ -6,11 +6,13 @@ import {
   ExternalLink, Clock, Construction,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useApp } from "@/lib/store";
+import { useApp, useDashboardTab } from "@/lib/store";
+import { OrdersPanel } from "./orders/orders-panel";
 import { ShopSettings } from "./merchant/merchant-onboarding";
 import { ProductManager } from "./merchant/product-manager";
 
 type Tab = "products" | "store" | "orders" | "quotes" | "payouts" | "verification";
+const TABS: readonly Tab[] = ["products", "store", "orders", "quotes", "payouts", "verification"];
 
 /**
  * Merchant space (approved shops only — see <RequireAuth requireApprovedSupplier>).
@@ -19,7 +21,8 @@ type Tab = "products" | "store" | "orders" | "quotes" | "payouts" | "verificatio
  */
 export function SupplierDashboard() {
   const { user, signOut, setView, setSupplierId, chatUnread } = useApp();
-  const [tab, setTab] = useState<Tab>("products");
+  const [tab, setTab] = useDashboardTab<Tab>("products", TABS);
+  const [toConfirm, setToConfirm] = useState<number | null>(null);
   const [total, setTotal] = useState<number | null>(null);
   const [reload, setReload] = useState(0);
   const shopId = user?.supplier?.id;
@@ -37,6 +40,19 @@ export function SupplierDashboard() {
     };
   }, [shopId, shopApproved, reload]);
 
+  // Orders waiting for the shop's answer (KPI + tab badge).
+  useEffect(() => {
+    if (!shopId || !shopApproved) return;
+    let mounted = true;
+    fetch("/api/orders?scope=supplier&status=pending", { cache: "no-store", credentials: "same-origin" })
+      .then((r) => r.json())
+      .then((d) => mounted && setToConfirm(d.counts?.pending ?? 0))
+      .catch(() => mounted && setToConfirm(0));
+    return () => {
+      mounted = false;
+    };
+  }, [shopId, shopApproved, tab]);
+
   if (!user) return null; // guarded by <RequireAuth>
   const shop = user.supplier;
   if (!shop) {
@@ -52,11 +68,11 @@ export function SupplierDashboard() {
     );
   }
 
-  const tabs: { key: Tab; label: string; icon: typeof Package; soon?: boolean }[] = [
+  const tabs: { key: Tab; label: string; icon: typeof Package; soon?: boolean; badge?: number | null }[] = [
     { key: "products", label: "Mes produits", icon: Package },
     { key: "store", label: "Ma boutique", icon: Store },
     { key: "verification", label: "Vérification", icon: BadgeCheck },
-    { key: "orders", label: "Commandes", icon: ShoppingCart, soon: true },
+    { key: "orders", label: "Commandes", icon: ShoppingCart, badge: toConfirm },
     { key: "quotes", label: "Devis (RFQ)", icon: FileText, soon: true },
     { key: "payouts", label: "Paiements", icon: Wallet, soon: true },
   ];
@@ -64,7 +80,7 @@ export function SupplierDashboard() {
   const KPI = [
     { label: "Produits en ligne", value: total === null ? "…" : String(total) },
     { label: "Messages non lus", value: String(chatUnread), onClick: () => setView("chat") },
-    { label: "Statut boutique", value: "En ligne" },
+    { label: "Commandes à confirmer", value: toConfirm === null ? "…" : String(toConfirm), onClick: () => setTab("orders") },
     { label: "Membre depuis", value: new Date(shop.createdAt).toLocaleDateString("fr-FR", { month: "short", year: "numeric" }) },
   ];
 
@@ -121,7 +137,13 @@ export function SupplierDashboard() {
                   >
                     <Icon className="w-4 h-4 shrink-0" />
                     <span className="flex-1 text-left">{t.label}</span>
-                    {t.soon ? <span className="text-[9px] uppercase font-bold opacity-70">bientôt</span> : <ChevronRight className="w-3.5 h-3.5 hidden lg:block" />}
+                    {t.soon ? (
+                      <span className="text-[9px] uppercase font-bold opacity-70">bientôt</span>
+                    ) : t.badge ? (
+                      <span className="bg-[#FF6A00] text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 flex items-center justify-center">{t.badge > 99 ? "99+" : t.badge}</span>
+                    ) : (
+                      <ChevronRight className="w-3.5 h-3.5 hidden lg:block" />
+                    )}
                   </button>
                 );
               })}
@@ -158,11 +180,11 @@ export function SupplierDashboard() {
                 </div>
               </div>
             )}
-            {(tab === "orders" || tab === "quotes" || tab === "payouts") && (
+            {tab === "orders" && <OrdersPanel scope="supplier" />}
+            {(tab === "quotes" || tab === "payouts") && (
               <ComingSoon
-                title={{ orders: "Commandes", quotes: "Devis (RFQ)", payouts: "Paiements" }[tab]}
+                title={{ quotes: "Devis (RFQ)", payouts: "Paiements" }[tab]}
                 text={{
-                  orders: "Les commandes passées sur vos produits apparaîtront ici avec leur statut de livraison.",
                   quotes: "Vous pourrez répondre aux demandes de devis des acheteurs depuis cet onglet.",
                   payouts: "Le suivi de vos encaissements (Mobile Money, virement) arrivera avec le paiement en ligne.",
                 }[tab]}
