@@ -44,6 +44,7 @@ model User {
 
   conversations Conversation[] @relation("BuyerConversations")
   messages      Message[]      @relation("SentMessages")
+  payments      Payment[]
   reviewedSuppliers Supplier[] @relation("SupplierReviewer")
   adminInvites  AdminInvite[]
   auditLogs     AuditLog[]
@@ -188,23 +189,88 @@ model CartItem {
   createdAt DateTime @default(now())
 }
 
+/// One order per shop. A checkout with products from several shops creates several
+/// orders sharing one Payment. Amounts are whole FCFA (XOF).
 model Order {
-  id           String      @id @default(cuid())
-  ref          String      @unique
-  userId       String
-  user         User        @relation(fields: [userId], references: [id])
-  supplierId   String
-  supplier     Supplier    @relation(fields: [supplierId], references: [id])
-  status       String      @default("pending") // pending|paid|shipped|delivered|cancelled
-  paymentMethod String     @default("mtn_momo")
-  currency     String      @default("GHS")
-  subtotal     Float
-  shipping     Float       @default(0)
-  total        Float
-  addressId    String?
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  items        OrderItem[]
+  id            String      @id @default(cuid())
+  ref           String      @unique
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  supplierId    String
+  supplier      Supplier    @relation(fields: [supplierId], references: [id])
+  /// pending -> confirmed -> shipped -> delivered ; pending|confirmed -> cancelled
+  status        String      @default("pending")
+  paymentMethod String      @default("cod") // cod | cinetpay
+  /// unpaid | paid | refund_due | refunded
+  paymentStatus String      @default("unpaid")
+  paymentId     String?
+  payment       Payment?    @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+  currency      String      @default("XOF")
+  subtotal      Float
+  shipping      Float       @default(0)
+  total         Float
+  addressId     String?
+  // Delivery snapshot (the address book can change after ordering)
+  shippingName    String?
+  shippingPhone   String?
+  shippingCountry String?
+  shippingCity    String?
+  shippingLine    String?
+  buyerNote     String?
+  trackingInfo  String?
+  cancelReason  String?
+  cancelledBy   String? // buyer | supplier | admin | system
+  confirmedAt   DateTime?
+  shippedAt     DateTime?
+  deliveredAt   DateTime?
+  cancelledAt   DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  items         OrderItem[]
+  events        OrderEvent[]
+
+  @@index([userId, createdAt])
+  @@index([supplierId, status, createdAt])
+  @@index([paymentId])
+}
+
+/// Order timeline (visible to the buyer, the shop and admins).
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    String
+  note      String?
+  actorId   String?
+  actorRole String // buyer | supplier | admin | system
+  createdAt DateTime @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+/// One payment per checkout (idempotent per user + key).
+model Payment {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  idempotencyKey String
+  provider       String // cod | cinetpay
+  /// cod (paid to the courier) | pending | paid | failed | cancelled
+  status         String    @default("pending")
+  amount         Int
+  currency       String    @default("XOF")
+  /// Our reference sent to the provider (unique)
+  transactionId  String    @unique
+  paymentUrl     String?
+  providerStatus String?
+  providerData   String?
+  paidAt         DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  orders         Order[]
+
+  @@unique([userId, idempotencyKey])
+  @@index([status, createdAt])
 }
 
 model OrderItem {
