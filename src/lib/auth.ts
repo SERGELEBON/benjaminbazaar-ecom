@@ -189,7 +189,7 @@ export async function requireSuperAdmin() {
 export async function audit(
   actorId: string | null,
   action: string,
-  targetType: "user" | "supplier" | "invite",
+  targetType: "user" | "supplier" | "invite" | "product",
   targetId: string,
   details?: Record<string, unknown>,
 ) {

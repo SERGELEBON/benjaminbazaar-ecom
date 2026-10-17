@@ -55,3 +55,10 @@ export function slugify(s: string) {
 
 /** Prisma filter for shops visible to the public. */
 export const PUBLIC_SUPPLIER_WHERE = { status: "approved", user: { status: { not: "suspended" } } } as const;
+
+/** Prisma filter for products visible to the public (published, not blocked, public shop). */
+export const PUBLIC_PRODUCT_WHERE = {
+  status: "published",
+  moderation: "ok",
+  supplier: PUBLIC_SUPPLIER_WHERE,
+} as const;

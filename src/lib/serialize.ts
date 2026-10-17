@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { PUBLIC_SUPPLIER_WHERE } from "@/lib/merchant";
+import { PUBLIC_PRODUCT_WHERE, PUBLIC_SUPPLIER_WHERE } from "@/lib/merchant";
 import type {
   CategoryNode,
   PriceTierT,
@@ -45,6 +45,7 @@ export function serializeProduct(p: any): ProductT {
     readyToShip: p.readyToShip,
     customizable: p.customizable,
     rank: p.rank,
+    stock: p.stock ?? null,
     priceTiers: (p.priceTiers ?? [])
       .map((t: any) => ({
         minQty: t.minQty,
@@ -130,7 +131,7 @@ export async function getProducts(opts?: {
   maxPrice?: number;
 }) {
   // Only products of approved merchants are public (pending / rejected / suspended shops are hidden).
-  const where: any = { supplier: PUBLIC_SUPPLIER_WHERE };
+  const where: any = { ...PUBLIC_PRODUCT_WHERE };
   if (opts?.categoryId) where.categoryId = opts.categoryId;
   if (opts?.supplierId) where.supplierId = opts.supplierId;
   if (opts?.search) {
@@ -160,7 +161,7 @@ export async function getProducts(opts?: {
   // so the search results page always has content to show.
   if (opts?.search && items.length === 0 && (opts.skip ?? 0) === 0) {
     items = await db.product.findMany({
-      where: { supplier: PUBLIC_SUPPLIER_WHERE },
+      where: { ...PUBLIC_PRODUCT_WHERE },
       orderBy: { popularity: "desc" },
       take: opts?.take ?? 24,
       skip: 0,
@@ -173,7 +174,7 @@ export async function getProducts(opts?: {
 
 export async function getProductById(id: string) {
   const p = await db.product.findFirst({
-    where: { id, supplier: PUBLIC_SUPPLIER_WHERE },
+    where: { id, ...PUBLIC_PRODUCT_WHERE },
     include: {
       supplier: true,
       category: true,
@@ -198,7 +199,7 @@ export async function getProductById(id: string) {
 export async function getSuppliers() {
   const suppliers = await db.supplier.findMany({
     where: PUBLIC_SUPPLIER_WHERE, // only approved merchants are public
-    include: { _count: { select: { products: true } } },
+    include: { _count: { select: { products: { where: { status: "published", moderation: "ok" } } } } },
     orderBy: { storeRating: "desc" },
   });
   return suppliers.map(serializeSupplier);
@@ -209,11 +210,12 @@ export async function getSupplierById(id: string) {
     where: { id, ...PUBLIC_SUPPLIER_WHERE },
     include: {
       products: {
+        where: { status: "published", moderation: "ok" },
         take: 24,
         include: { priceTiers: true, category: true },
         orderBy: { popularity: "desc" },
       },
-      _count: { select: { products: true } },
+      _count: { select: { products: { where: { status: "published", moderation: "ok" } } } },
     },
   });
   if (!s) return null;
