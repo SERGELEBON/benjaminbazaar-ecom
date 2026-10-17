@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import type { Currency, Lang, ViewKey } from "./format";
 
 export interface CartLine {
@@ -53,6 +55,11 @@ interface AppState {
   removeFromCart: (productId: string, variant?: string) => void;
   updateQty: (productId: string, qty: number, variant?: string) => void;
   clearCart: () => void;
+  /** Removes the lines that were just ordered (by product + option). */
+  removeOrdered: (lines: { productId: string; variant?: string | null }[]) => void;
+  /** Tab to open next time a dashboard mounts (e.g. "orders" after checkout). */
+  dashboardTab: string | null;
+  openDashboard: (view: ViewKey, tab: string) => void;
 
   /** Saved product ids (stored on the account) */
   favorites: string[];
@@ -111,7 +118,9 @@ export interface MerchantShop {
 export const homeViewForRole = (role: Role): ViewKey =>
   role === "ADMIN" ? "admin" : role === "SUPPLIER" ? "supplier-dashboard" : "buyer-dashboard";
 
-export const useApp = create<AppState>((set, get) => ({
+export const useApp = create<AppState>()(
+  persist(
+  (set, get) => ({
   view: "home",
   setView: (v) => {
     set({ view: v });
@@ -183,6 +192,15 @@ export const useApp = create<AppState>((set, get) => ({
       ),
     })),
   clearCart: () => set({ cart: [] }),
+  removeOrdered: (lines) =>
+    set((s) => ({
+      cart: s.cart.filter((c) => !lines.some((l) => l.productId === c.productId && (l.variant ?? undefined) === (c.variant ?? undefined))),
+    })),
+  dashboardTab: null,
+  openDashboard: (view, tab) => {
+    set({ view, dashboardTab: tab });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  },
 
   favorites: [],
   loadFavorites: async () => {
@@ -248,4 +266,35 @@ export const useApp = create<AppState>((set, get) => ({
   },
   authMode: "login",
   setAuthMode: (m) => set({ authMode: m }),
-}));
+  }),
+  {
+    // Only the cart survives a reload (per browser). Rehydrated after mount to avoid SSR mismatch.
+    name: "ijobsc-cart",
+    version: 1,
+    storage: createJSONStorage(() => localStorage),
+    partialize: (s) => ({ cart: s.cart }),
+    skipHydration: true,
+  },
+  ),
+);
+
+/**
+ * Dashboard tab state that honours `openDashboard(view, tab)` requests — on mount
+ * and while the dashboard is already open (e.g. after a payment return).
+ */
+export function useDashboardTab<T extends string>(initial: T, allowed: readonly T[]) {
+  const [tab, setTab] = useState<T>(() => {
+    const t = useApp.getState().dashboardTab as T | null;
+    return t && allowed.includes(t) ? t : initial;
+  });
+  const requested = useApp((s) => s.dashboardTab) as T | null;
+  useEffect(() => {
+    if (!requested) return;
+    const t = setTimeout(() => {
+      if (allowed.includes(requested)) setTab(requested);
+      useApp.setState({ dashboardTab: null });
+    }, 0);
+    return () => clearTimeout(t);
+  }, [requested, allowed]);
+  return [tab, setTab] as const;
+}

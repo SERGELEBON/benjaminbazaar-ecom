@@ -1,3 +1,6 @@
+import { ValidationError } from "@/lib/errors";
+import { cleanText, isPhone } from "@/lib/sanitize";
+
 /**
  * Merchant (supplier) lifecycle shared by the API routes.
  *
@@ -13,7 +16,7 @@
 export const SUPPLIER_STATUSES = ["pending", "approved", "rejected", "suspended"] as const;
 export type SupplierStatus = (typeof SUPPLIER_STATUSES)[number];
 
-export class ValidationError extends Error {}
+export { ValidationError };
 
 export type ShopInput = {
   name: string;
@@ -24,7 +27,7 @@ export type ShopInput = {
   description: string | null;
 };
 
-const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().replace(/\s+/g, " ").slice(0, max) : "");
+const str = cleanText;
 
 /** Validates the merchant shop form (sign-up completion, "Devenir vendeur", edits). */
 export function parseShopInput(body: Record<string, unknown>): ShopInput {
@@ -36,7 +39,7 @@ export function parseShopInput(body: Record<string, unknown>): ShopInput {
   const description =
     typeof body.description === "string" ? body.description.trim().slice(0, 1000) || null : null;
   if (name.length < 2) throw new ValidationError("Entrez le nom de votre entreprise.");
-  if (!/^[+()\d\s.-]{8,30}$/.test(phone)) throw new ValidationError("Entrez un numéro de téléphone valide.");
+  if (!isPhone(phone)) throw new ValidationError("Entrez un numéro de téléphone valide.");
   if (city.length < 2) throw new ValidationError("Entrez votre ville.");
   return { name, phone, city, country, mainCategory, description };
 }

@@ -14,12 +14,14 @@
  *   signed URLs. Uploads use the caller's own Supabase session, so Storage RLS
  *   (app_private.chat_can_access) checks the participant a second time.
  */
-import { NextResponse } from "next/server";
 import type { Conversation, Message, Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { PUBLIC_SUPPLIER_WHERE } from "@/lib/merchant";
-import { authErrorResponse, type requireUser } from "@/lib/auth";
+import type { requireUser } from "@/lib/auth";
+import { ApiError } from "@/lib/errors";
+import { errorResponse } from "@/lib/http";
+import { sniffImage } from "@/lib/sanitize";
 
 export type ChatUser = Awaited<ReturnType<typeof requireUser>>;
 export type ChatSide = "buyer" | "supplier";
@@ -31,11 +33,7 @@ export const PAGE_SIZE = 30;
 const SIGNED_URL_TTL = 60 * 60; // 1 h
 const RATE_LIMIT_PER_MINUTE = 30;
 
-export class ChatError extends Error {
-  constructor(public status: 400 | 403 | 404 | 409 | 413 | 415 | 429 | 503, message: string) {
-    super(message);
-  }
-}
+export class ChatError extends ApiError {}
 
 const conversationInclude = {
   buyer: { select: { id: true, name: true, avatarUrl: true, country: true } },
@@ -213,20 +211,6 @@ export function cleanContent(raw: unknown): string | null {
   return text || null;
 }
 
-/** Detects the real image type from its first bytes (never trust the client's MIME type). */
-export function sniffImage(buf: Uint8Array): { mime: "image/jpeg" | "image/png" | "image/webp"; ext: string } | null {
-  if (buf.length >= 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return { mime: "image/jpeg", ext: "jpg" };
-  if (buf.length >= 8 && [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a].every((b, i) => buf[i] === b))
-    return { mime: "image/png", ext: "png" };
-  if (
-    buf.length >= 12 &&
-    String.fromCharCode(...buf.slice(0, 4)) === "RIFF" &&
-    String.fromCharCode(...buf.slice(8, 12)) === "WEBP"
-  )
-    return { mime: "image/webp", ext: "webp" };
-  return null;
-}
-
 export async function assertRateLimit(userId: string) {
   const recent = await db.message.count({
     where: { senderId: userId, createdAt: { gt: new Date(Date.now() - 60_000) } },
@@ -265,8 +249,5 @@ export async function removeAttachment(path: string) {
   }
 }
 
-/** Maps auth/chat errors to JSON responses; anything else is logged and hidden. */
-export function chatErrorResponse(e: unknown) {
-  if (e instanceof ChatError) return NextResponse.json({ error: e.message }, { status: e.status });
-  return authErrorResponse(e);
-}
+/** Kept for the chat routes: same mapping as every API route. */
+export const chatErrorResponse = errorResponse;

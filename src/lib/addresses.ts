@@ -1,5 +1,9 @@
 /** Delivery address validation (client accounts). */
-export class AddressError extends Error {}
+import { ValidationError } from "@/lib/errors";
+import { cleanText, isPhone } from "@/lib/sanitize";
+
+/** Kept as an alias: address validation errors are plain validation errors. */
+export const AddressError = ValidationError;
 
 export type AddressInput = {
   name: string;
@@ -11,7 +15,7 @@ export type AddressInput = {
   isDefault: boolean;
 };
 
-const s = (v: unknown, max: number) => (typeof v === "string" ? v.trim().replace(/\s+/g, " ").slice(0, max) : "");
+const s = cleanText;
 
 export function parseAddress(body: Record<string, unknown>): AddressInput {
   const a = {
@@ -24,7 +28,7 @@ export function parseAddress(body: Record<string, unknown>): AddressInput {
     isDefault: body.isDefault === true,
   };
   if (a.name.length < 2) throw new AddressError("Indiquez le nom du destinataire.");
-  if (!/^[+()\d\s.-]{8,30}$/.test(a.phone)) throw new AddressError("Numéro de téléphone invalide.");
+  if (!isPhone(a.phone)) throw new AddressError("Numéro de téléphone invalide.");
   if (a.city.length < 2) throw new AddressError("Indiquez la ville.");
   if (a.line.length < 4) throw new AddressError("Indiquez l'adresse (quartier, rue, repère).");
   return a;

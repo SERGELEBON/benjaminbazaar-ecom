@@ -9,13 +9,14 @@
  * (historical choice of the catalogue), so we convert on write and the UI converts
  * back for display. Conversions are exact enough to round-trip whole FCFA amounts.
  */
-import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { AuthError, authErrorResponse, requireUser } from "@/lib/auth";
+import { AuthError, requireUser } from "@/lib/auth";
+import { ApiError } from "@/lib/errors";
+import { errorResponse } from "@/lib/http";
+import { cleanText, parseJsonArray, sniffImage, toInt } from "@/lib/sanitize";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { CURRENCY_RATES } from "@/lib/format";
 import { slugify } from "@/lib/merchant";
-import { sniffImage } from "@/lib/chat";
 import { SUPABASE_URL } from "@/lib/supabase/env";
 
 export const PRODUCT_BUCKET = "product-images";
@@ -26,16 +27,9 @@ export const PRODUCT_UNITS = ["pièce", "carton", "lot", "paire", "kg", "tonne",
 export const PRODUCT_STATUSES = ["draft", "published", "archived"] as const;
 export type ProductStatus = (typeof PRODUCT_STATUSES)[number];
 
-export class CatalogError extends Error {
-  constructor(public status: 400 | 403 | 404 | 409 | 413 | 415 | 429 | 503, message: string) {
-    super(message);
-  }
-}
+export class CatalogError extends ApiError {}
 
-export function catalogErrorResponse(e: unknown) {
-  if (e instanceof CatalogError) return NextResponse.json({ error: e.message }, { status: e.status });
-  return authErrorResponse(e);
-}
+export const catalogErrorResponse = errorResponse;
 
 /** Signed-in owner of an approved shop (merchants in review cannot manage a catalogue yet). */
 export async function requireMerchant() {
@@ -72,11 +66,8 @@ export type ProductInput = {
   tiers: { minQty: number; maxQty: number | null; priceXof: number }[];
 };
 
-const text = (v: unknown, max: number) => (typeof v === "string" ? v.trim().replace(/[ \t]+/g, " ").slice(0, max) : "");
-const int = (v: unknown) => {
-  const n = typeof v === "string" && v.trim() !== "" ? Number(v) : typeof v === "number" ? v : NaN;
-  return Number.isFinite(n) ? Math.trunc(n) : NaN;
-};
+const text = cleanText;
+const int = toInt;
 
 /**
  * Validates the product form. Drafts may be incomplete; publishing requires a
@@ -213,13 +204,6 @@ export function merchantProductView(p: {
   priceTiers: { minQty: number; maxQty: number | null; price: number }[];
   category?: { name: string } | null;
 }) {
-  const parse = <T,>(s: string, d: T): T => {
-    try {
-      return JSON.parse(s) as T;
-    } catch {
-      return d;
-    }
-  };
   const tiers = [...p.priceTiers].sort((a, b) => a.minQty - b.minQty).map((t) => ({ minQty: t.minQty, maxQty: t.maxQty, price: baseToXof(t.price) }));
   return {
     id: p.id,
@@ -228,15 +212,15 @@ export function merchantProductView(p: {
     description: p.description,
     categoryId: p.categoryId,
     categoryName: p.category?.name ?? null,
-    images: parse<string[]>(p.images, []),
+    images: parseJsonArray<string>(p.images),
     unit: p.unit,
     minOrder: Number.parseInt(p.minOrder, 10) || 1,
     stock: p.stock,
     sku: p.sku,
     readyToShip: p.readyToShip,
     customizable: p.customizable,
-    keyAttributes: parse<{ k: string; v: string }[]>(p.keyAttributes, []),
-    variants: parse<{ name: string; options: string[] }[]>(p.variantsJson, []),
+    keyAttributes: parseJsonArray<{ k: string; v: string }>(p.keyAttributes),
+    variants: parseJsonArray<{ name: string; options: string[] }>(p.variantsJson),
     tiers,
     priceFrom: tiers.length ? Math.min(...tiers.map((t) => t.price)) : null,
     status: p.status as ProductStatus,
