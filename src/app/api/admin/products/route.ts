@@ -1,7 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { authErrorResponse, requireRole } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { baseToXof } from "@/lib/catalog";
+import { parseJsonArray } from "@/lib/sanitize";
 
 export const dynamic = "force-dynamic";
 
@@ -41,16 +43,11 @@ export async function GET(req: NextRequest) {
       db.product.count({ where: { ...base, status: "draft" } }),
     ]);
     const products = rows.map(({ images, priceTiers, ...p }) => {
-      let cover: string | null = null;
-      try {
-        cover = (JSON.parse(images) as string[])[0] ?? null;
-      } catch {
-        cover = null;
-      }
+      const cover = parseJsonArray<string>(images)[0] ?? null;
       return { ...p, cover, priceFrom: priceTiers[0] ? baseToXof(priceTiers[0].price) : null };
     });
     return NextResponse.json({ products, counts: { published, blocked, draft } }, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
