@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { audit, authErrorResponse, publicProfile, requireUser } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { audit, publicProfile, requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { ValidationError, parseShopInput, slugify } from "@/lib/merchant";
+import { parseShopInput, slugify } from "@/lib/merchant";
 
 export const dynamic = "force-dynamic";
 
@@ -44,8 +45,7 @@ export async function POST(req: Request) {
     await audit(user.id, "merchant.apply", "supplier", updated.supplier!.id, { shop: input.name });
     return NextResponse.json({ user: publicProfile(updated) }, { status: 201 });
   } catch (e) {
-    if (e instanceof ValidationError) return fail(400, e.message);
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
 
@@ -84,7 +84,6 @@ export async function PATCH(req: Request) {
     if (resubmit) await audit(user.id, "merchant.resubmit", "supplier", user.supplier.id, { shop: input.name });
     return NextResponse.json({ user: publicProfile(updated), resubmitted: resubmit });
   } catch (e) {
-    if (e instanceof ValidationError) return fail(400, e.message);
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
