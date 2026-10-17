@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { audit, authErrorResponse, requireRole } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { audit, requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 /** ADMIN: block (reason required, shown to the merchant) or unblock a product. */
@@ -31,6 +32,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     });
     return NextResponse.json({ product });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
