@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { authErrorResponse, getAuthUser, ensureProfile, publicProfile } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { getAuthUser, ensureProfile, publicProfile } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export async function GET() {
     const user = await ensureProfile(authUser);
     return NextResponse.json({ user: publicProfile(user) }, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
 
@@ -29,6 +30,6 @@ export async function PATCH(req: Request) {
     const user = await db.user.update({ where: { id: me.id }, data, include: { supplier: true } });
     return NextResponse.json({ user: publicProfile(user) });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
