@@ -7,8 +7,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/store";
-import { formatPrice, type ProductT } from "@/lib/format";
 import { ShopSettings } from "./merchant/merchant-onboarding";
+import { ProductManager } from "./merchant/product-manager";
 
 type Tab = "products" | "store" | "orders" | "quotes" | "payouts" | "verification";
 
@@ -20,30 +20,22 @@ type Tab = "products" | "store" | "orders" | "quotes" | "payouts" | "verificatio
 export function SupplierDashboard() {
   const { user, signOut, setView, setSupplierId, chatUnread } = useApp();
   const [tab, setTab] = useState<Tab>("products");
-  const [products, setProducts] = useState<ProductT[] | null>(null);
   const [total, setTotal] = useState<number | null>(null);
+  const [reload, setReload] = useState(0);
   const shopId = user?.supplier?.id;
+  const shopApproved = user?.supplier?.status === "approved";
 
   useEffect(() => {
-    if (!shopId) return;
+    if (!shopId || !shopApproved) return;
     let mounted = true;
-    fetch(`/api/products?supplierId=${encodeURIComponent(shopId)}&take=50&skip=0&orderBy=newest`, { cache: "no-store" })
+    fetch("/api/merchant/products?status=published", { cache: "no-store", credentials: "same-origin" })
       .then((r) => r.json())
-      .then((d) => {
-        if (!mounted) return;
-        setProducts((d.products as ProductT[]) ?? []);
-        setTotal(d.total ?? 0);
-      })
-      .catch(() => {
-        if (mounted) {
-          setProducts([]);
-          setTotal(0);
-        }
-      });
+      .then((d) => mounted && setTotal(d.counts?.published ?? 0))
+      .catch(() => mounted && setTotal(0));
     return () => {
       mounted = false;
     };
-  }, [shopId]);
+  }, [shopId, shopApproved, reload]);
 
   if (!user) return null; // guarded by <RequireAuth>
   const shop = user.supplier;
@@ -147,7 +139,7 @@ export function SupplierDashboard() {
           </aside>
 
           <section className="bg-white border border-[#DADAD9] min-h-[400px] min-w-0">
-            {tab === "products" && <ProductsTab products={products} />}
+            {tab === "products" && <ProductManager onChanged={() => setReload((n) => n + 1)} />}
             {tab === "store" && (
               <div>
                 <Header title="Ma boutique" subtitle="Ces informations sont visibles par les acheteurs sur votre page boutique." />
@@ -201,50 +193,6 @@ function ComingSoon({ title, text }: { title: string; text: string }) {
         <p className="font-semibold text-[#333]">Module en préparation</p>
         <p className="mt-1">{text}</p>
       </div>
-    </div>
-  );
-}
-
-function ProductsTab({ products }: { products: ProductT[] | null }) {
-  const { currency, setProductId, setView } = useApp();
-  return (
-    <div>
-      <div className="p-4 border-b border-[#ECECEC] flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h3 className="benjamin-section-title">Mes produits</h3>
-          <p className="text-[11px] text-[#888] mt-0.5">{products ? `${products.length} produit${products.length > 1 ? "s" : ""} en ligne` : "…"}</p>
-        </div>
-        <span className="text-[11px] text-[#888] flex items-center gap-1.5">
-          <Construction className="w-3.5 h-3.5" /> Publication de produits : prochaine étape
-        </span>
-      </div>
-      {products === null ? (
-        <div className="p-4 space-y-2">
-          {[...Array(4)].map((_, i) => <div key={i} className="h-12 bg-[#F3F3F3] animate-pulse" />)}
-        </div>
-      ) : products.length === 0 ? (
-        <div className="p-10 text-center text-[13px] text-[#666] max-w-md mx-auto">
-          <Package className="w-9 h-9 mx-auto text-[#DADAD9] mb-3" />
-          <p className="font-semibold text-[#333]">Aucun produit pour le moment</p>
-          <p className="mt-1">L&apos;ajout de produits (photos, prix par quantité, stock) sera disponible très prochainement dans cet espace.</p>
-        </div>
-      ) : (
-        <ul className="divide-y divide-[#ECECEC]">
-          {products.map((p) => (
-            <li key={p.id}>
-              <button onClick={() => { setProductId(p.id); setView("product"); }} className="w-full p-3 flex gap-3 text-left hover:bg-[#FAFAFA]">
-                { }
-                <img src={p.images[0]} alt="" className="w-12 h-12 object-cover border border-[#ECECEC] bg-[#F3F3F3]" />
-                <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-[13px] truncate">{p.title}</div>
-                  <div className="text-[11px] text-[#FF6A00] font-bold">{formatPrice(p.priceTiers[0]?.price ?? 0, currency)}</div>
-                  <div className="text-[10px] text-[#888]">{p.sold} vendus</div>
-                </div>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }

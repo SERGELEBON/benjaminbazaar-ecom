@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   Users, BadgeCheck, FolderTree, Image as ImageIcon, Percent,
-  ShieldAlert, BarChart3, LogOut, Plus, ChevronRight, Crown, History,
+  ShieldAlert, BarChart3, LogOut, Plus, ChevronRight, Crown, History, Package,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/store";
@@ -11,12 +11,13 @@ import { formatPrice, type CategoryNode } from "@/lib/format";
 import { BRAND } from "@/lib/brand";
 import { MerchantsTab } from "./admin/merchants-tab";
 import { UsersTab } from "./admin/users-tab";
+import { ProductsTab } from "./admin/products-tab";
 import { TeamTab } from "./admin/team-tab";
 import { AuditTab } from "./admin/audit-tab";
 import { useAutoRefresh } from "./admin/shared";
 
 type Tab =
-  | "users" | "suppliers" | "team" | "audit" | "categories" | "banners"
+  | "users" | "suppliers" | "products" | "team" | "audit" | "categories" | "banners"
   | "commissions" | "disputes" | "reports";
 
 
@@ -69,6 +70,7 @@ export function AdminView() {
   type TabDef = { key: Tab; label: string; icon: typeof Users; badge?: number | null; superOnly?: boolean };
   const allTabs: TabDef[] = [
     { key: "suppliers", label: "Validation marchands", icon: BadgeCheck, badge: pending },
+    { key: "products", label: "Produits", icon: Package },
     { key: "users", label: "Utilisateurs", icon: Users },
     { key: "team", label: "Administrateurs", icon: Crown, superOnly: true },
     { key: "audit", label: "Journal", icon: History, superOnly: true },
@@ -87,7 +89,7 @@ export function AdminView() {
     { label: "Marchands", value: v(stats?.merchants), accent: "#FF6A00", go: "users" as Tab },
     { label: "En attente de validation", value: v(stats?.pendingMerchants), accent: stats?.pendingMerchants ? "#DC2626" : "#16A34A", go: "suppliers" as Tab },
     { label: "Boutiques en ligne", value: v(stats?.publicShops), accent: "#16A34A", go: "suppliers" as Tab },
-    { label: "Produits en ligne", value: v(stats?.products), accent: "#0A0F4D", go: null },
+    { label: "Produits en ligne", value: v(stats?.products), accent: "#0A0F4D", go: "products" as Tab },
   ];
 
   return (
@@ -150,6 +152,7 @@ export function AdminView() {
 
           <section className="bg-white border border-[#DADAD9] min-h-[400px] min-w-0">
             {tab === "suppliers" && <MerchantsTab onCountsChange={setPending} />}
+            {tab === "products" && <ProductsTab />}
             {tab === "users" && <UsersTab />}
             {tab === "team" && isSuper && <TeamTab />}
             {tab === "audit" && isSuper && <AuditTab />}

@@ -262,9 +262,16 @@ export function ProductDetailView() {
                       </div>
                     )}
                     <button
-                      onClick={() => toggleFavorite(product.id)}
+                      onClick={async () => {
+                        const r = await toggleFavorite(product.id);
+                        if (r === "added") toast.success("Ajouté à vos favoris");
+                        else if (r === "removed") toast.message("Retiré de vos favoris");
+                        else if (r === "login") toast.message("Connectez-vous pour enregistrer vos favoris.");
+                        else toast.error("Action impossible pour le moment.");
+                      }}
                       className="absolute top-2 right-2 bg-white/95 p-2 hover:bg-white"
-                      title="Save to favorites"
+                      title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+                      aria-pressed={isFav}
                     >
                       <Star className={`w-4 h-4 ${isFav ? "fill-[#FF6A00] text-[#FF6A00]" : "text-[#888]"}`} />
                     </button>
@@ -432,6 +439,11 @@ export function ProductDetailView() {
               </div>
               <div className="px-3 py-2 bg-[#fafafa] text-[11px] text-[#888] border-t border-[#ECECEC]">
                 Min. order: <span className="font-bold text-[#333]">{product.minOrder} {product.minOrderUnit}</span>
+                {product.stock != null && (
+                  <span className={`ml-3 font-bold ${product.stock === 0 ? "text-[#DC2626]" : "text-[#16A34A]"}`}>
+                    {product.stock === 0 ? "Rupture de stock" : `${product.stock.toLocaleString("fr-FR")} en stock`}
+                  </span>
+                )}
               </div>
             </div>
 
