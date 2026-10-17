@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { authErrorResponse, isProtectedAdmin, isSuperAdmin, requireRole } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { isProtectedAdmin, isSuperAdmin, requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -33,6 +34,6 @@ export async function GET(req: NextRequest) {
     }));
     return NextResponse.json({ users, total, viewer: { isSuperAdmin: isSuperAdmin(me) } }, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
