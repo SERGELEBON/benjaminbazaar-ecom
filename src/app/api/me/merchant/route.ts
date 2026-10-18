@@ -3,6 +3,8 @@ import { errorResponse } from "@/lib/http";
 import { audit, publicProfile, requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { parseShopInput, slugify } from "@/lib/merchant";
+import { afterResponse } from "@/lib/email";
+import { notifyMerchantApplied } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +45,7 @@ export async function POST(req: Request) {
       return tx.user.update({ where: { id: user.id }, data: { role: "SUPPLIER" }, include: { supplier: true } });
     });
     await audit(user.id, "merchant.apply", "supplier", updated.supplier!.id, { shop: input.name });
+    afterResponse(() => notifyMerchantApplied(updated.supplier!.id));
     return NextResponse.json({ user: publicProfile(updated) }, { status: 201 });
   } catch (e) {
     return errorResponse(e);
@@ -81,7 +84,11 @@ export async function PATCH(req: Request) {
       },
       include: { supplier: true },
     });
-    if (resubmit) await audit(user.id, "merchant.resubmit", "supplier", user.supplier.id, { shop: input.name });
+    if (resubmit) {
+      await audit(user.id, "merchant.resubmit", "supplier", user.supplier.id, { shop: input.name });
+      const shopId = user.supplier.id;
+      afterResponse(() => notifyMerchantApplied(shopId));
+    }
     return NextResponse.json({ user: publicProfile(updated), resubmitted: resubmit });
   } catch (e) {
     return errorResponse(e);
