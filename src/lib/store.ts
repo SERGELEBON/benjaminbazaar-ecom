@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import type { Currency, Lang, ViewKey } from "./format";
 
 export interface CartLine {
@@ -53,9 +55,17 @@ interface AppState {
   removeFromCart: (productId: string, variant?: string) => void;
   updateQty: (productId: string, qty: number, variant?: string) => void;
   clearCart: () => void;
+  /** Removes the lines that were just ordered (by product + option). */
+  removeOrdered: (lines: { productId: string; variant?: string | null }[]) => void;
+  /** Tab to open next time a dashboard mounts (e.g. "orders" after checkout). */
+  dashboardTab: string | null;
+  openDashboard: (view: ViewKey, tab: string) => void;
 
+  /** Saved product ids (stored on the account) */
   favorites: string[];
-  toggleFavorite: (id: string) => void;
+  loadFavorites: () => Promise<void>;
+  /** Adds / removes a favorite; visitors are sent to the login screen. */
+  toggleFavorite: (id: string) => Promise<"added" | "removed" | "login" | "error">;
 
   // filters for search
   filters: Record<string, unknown>;
@@ -108,7 +118,9 @@ export interface MerchantShop {
 export const homeViewForRole = (role: Role): ViewKey =>
   role === "ADMIN" ? "admin" : role === "SUPPLIER" ? "supplier-dashboard" : "buyer-dashboard";
 
-export const useApp = create<AppState>((set) => ({
+export const useApp = create<AppState>()(
+  persist(
+  (set, get) => ({
   view: "home",
   setView: (v) => {
     set({ view: v });
@@ -180,14 +192,52 @@ export const useApp = create<AppState>((set) => ({
       ),
     })),
   clearCart: () => set({ cart: [] }),
+  removeOrdered: (lines) =>
+    set((s) => ({
+      cart: s.cart.filter((c) => !lines.some((l) => l.productId === c.productId && (l.variant ?? undefined) === (c.variant ?? undefined))),
+    })),
+  dashboardTab: null,
+  openDashboard: (view, tab) => {
+    set({ view, dashboardTab: tab });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  },
 
   favorites: [],
-  toggleFavorite: (id) =>
-    set((s) => ({
-      favorites: s.favorites.includes(id)
-        ? s.favorites.filter((f) => f !== id)
-        : [...s.favorites, id],
-    })),
+  loadFavorites: async () => {
+    try {
+      const r = await fetch("/api/me/favorites", { cache: "no-store", credentials: "same-origin" });
+      if (!r.ok) return;
+      const d = (await r.json()) as { ids?: string[] };
+      set({ favorites: d.ids ?? [] });
+    } catch {
+      /* offline */
+    }
+  },
+  toggleFavorite: async (id) => {
+    // Favorites are saved on the account: a visitor is invited to sign in.
+    if (get().authStatus !== "authenticated") {
+      set({ authMode: "login", view: "auth" });
+      return "login";
+    }
+    const was = get().favorites.includes(id);
+    set((s) => ({ favorites: was ? s.favorites.filter((f) => f !== id) : [...s.favorites, id] }));
+    try {
+      const r = was
+        ? await fetch(`/api/me/favorites?productId=${encodeURIComponent(id)}`, { method: "DELETE", credentials: "same-origin" })
+        : await fetch("/api/me/favorites", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId: id }),
+          });
+      if (!r.ok) throw new Error();
+      return was ? "removed" : "added";
+    } catch {
+      // Roll back the optimistic change.
+      set((s) => ({ favorites: was ? [...s.favorites, id] : s.favorites.filter((f) => f !== id) }));
+      return "error";
+    }
+  },
 
   filters: {},
   setFilter: (k, v) =>
@@ -212,8 +262,39 @@ export const useApp = create<AppState>((set) => ({
   signOut: async () => {
     const { getSupabaseBrowser } = await import("./supabase/client");
     await getSupabaseBrowser().auth.signOut();
-    set({ user: null, authStatus: "guest", view: "home", chatUnread: 0 });
+    set({ user: null, authStatus: "guest", view: "home", chatUnread: 0, favorites: [] });
   },
   authMode: "login",
   setAuthMode: (m) => set({ authMode: m }),
-}));
+  }),
+  {
+    // Only the cart survives a reload (per browser). Rehydrated after mount to avoid SSR mismatch.
+    name: "ijobsc-cart",
+    version: 1,
+    storage: createJSONStorage(() => localStorage),
+    partialize: (s) => ({ cart: s.cart }),
+    skipHydration: true,
+  },
+  ),
+);
+
+/**
+ * Dashboard tab state that honours `openDashboard(view, tab)` requests — on mount
+ * and while the dashboard is already open (e.g. after a payment return).
+ */
+export function useDashboardTab<T extends string>(initial: T, allowed: readonly T[]) {
+  const [tab, setTab] = useState<T>(() => {
+    const t = useApp.getState().dashboardTab as T | null;
+    return t && allowed.includes(t) ? t : initial;
+  });
+  const requested = useApp((s) => s.dashboardTab) as T | null;
+  useEffect(() => {
+    if (!requested) return;
+    const t = setTimeout(() => {
+      if (allowed.includes(requested)) setTab(requested);
+      useApp.setState({ dashboardTab: null });
+    }, 0);
+    return () => clearTimeout(t);
+  }, [requested, allowed]);
+  return [tab, setTab] as const;
+}

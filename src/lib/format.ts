@@ -79,6 +79,8 @@ export interface ProductT {
   readyToShip: boolean;
   customizable: boolean;
   rank: number;
+  /** Units available; null = on demand */
+  stock?: number | null;
   priceTiers: PriceTierT[];
   storeRating?: number;
   responseTime?: string;

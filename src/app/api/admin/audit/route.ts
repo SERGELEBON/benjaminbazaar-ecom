@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { authErrorResponse, requireSuperAdmin } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { requireSuperAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +10,7 @@ export async function GET() {
   try {
     await requireSuperAdmin();
     const rows = await db.auditLog.findMany({
+      where: { action: { not: "product.image.upload" } }, // technical rate-limit entries
       orderBy: { createdAt: "desc" },
       take: 100,
       select: {
@@ -27,6 +29,6 @@ export async function GET() {
     });
     return NextResponse.json({ entries }, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }

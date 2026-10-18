@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { authErrorResponse, requireRole } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { SUPPLIER_STATUSES } from "@/lib/merchant";
 
@@ -41,6 +42,6 @@ export async function GET(req: NextRequest) {
     for (const g of grouped) counts[g.status] = g._count._all;
     return NextResponse.json({ suppliers, counts }, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }

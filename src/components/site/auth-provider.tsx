@@ -14,6 +14,23 @@ import { homeViewForRole, useApp } from "@/lib/store";
 export function AuthProvider() {
   const refreshSession = useApp((s) => s.refreshSession);
   const setSession = useApp((s) => s.setSession);
+  const userId = useApp((s) => s.user?.id ?? null);
+
+  // Account data (favorites) follows the signed-in user.
+  useEffect(() => {
+    if (!userId) return;
+    const t = setTimeout(() => void useApp.getState().loadFavorites(), 0);
+    return () => clearTimeout(t);
+  }, [userId]);
+
+  // Restore the saved cart once on the client (localStorage may be unavailable).
+  useEffect(() => {
+    try {
+      void useApp.persist.rehydrate();
+    } catch {
+      /* private mode: cart stays in memory */
+    }
+  }, []);
 
   useEffect(() => {
     const url = new URL(window.location.href);

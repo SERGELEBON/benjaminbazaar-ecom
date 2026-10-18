@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { adminEmails, audit, authErrorResponse, isProtectedAdmin, isSuperAdmin, requireRole, type Role } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { adminEmails, audit, isProtectedAdmin, isSuperAdmin, requireRole, type Role } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 const ROLES: Role[] = ["BUYER", "SUPPLIER", "ADMIN"];
@@ -89,6 +90,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     return NextResponse.json({ user: { ...user, isSuperAdmin: isSuperAdmin(user), protected: false } });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }

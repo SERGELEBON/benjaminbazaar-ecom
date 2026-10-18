@@ -21,6 +21,8 @@ export const BRAND = {
   contactEmail: "guehipoegnansergej@gmail.com",
   /** Public contact e-mail domain — update when the real domain is live */
   emailDomain: "ijobsc.ci",
+  /** WhatsApp business line (international format, digits only) — support + Mobile Money payments */
+  whatsapp: "2250707365136",
   /** Brand colours — primary blue + Ivorian harmony colours */
   colors: {
     primary: "#1A1F8A",
@@ -33,3 +35,11 @@ export const BRAND = {
 } as const;
 
 export const brandEmail = (user: string) => `${user}@${BRAND.emailDomain}`;
+
+/** Link that opens a WhatsApp chat with the business line, message pre-filled. */
+export const whatsappLink = (text: string) => `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(text)}`;
+
+/** Pre-filled message to pay orders in Mobile Money with the team. */
+export const whatsappPaymentText = (refs: string[], amountFcfa: number) =>
+  `Bonjour ${BRAND.name}, je viens de passer ${refs.length > 1 ? "les commandes" : "la commande"} ${refs.join(", ")} ` +
+  `d'un montant de ${Math.round(amountFcfa).toLocaleString("fr-FR")} FCFA. Je souhaite payer par Mobile Money.`;

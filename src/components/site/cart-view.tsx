@@ -58,29 +58,28 @@ export function CartView() {
   const counted = selected.size > 0 ? cart.filter((l) => selected.has(lineKey(l))) : cart;
   const itemCount = counted.reduce((s, l) => s + l.quantity, 0);
   const subtotal = counted.reduce((s, l) => s + l.price * l.quantity, 0);
-  const shippingEstimate = subtotal > 0 ? Math.max(15, subtotal * 0.05) : 0;
-  const total = subtotal + shippingEstimate;
+  // Shipping is agreed with each shop; the final price is recomputed at checkout.
+  const total = subtotal;
 
   // ---- Empty state ----
   if (cart.length === 0) {
     return (
       <div className="bg-[#f4f1ec] min-h-[60vh]">
         <div className="max-w-[1100px] mx-auto px-4 py-12">
-          <div className="benjamin-bar mb-6">Shopping Cart</div>
+          <div className="benjamin-bar mb-6">Panier</div>
           <div className="bg-white border border-[#DADAD9] flex flex-col items-center justify-center py-16 px-6 text-center">
             <div className="w-16 h-16 bg-[#ECECEC] flex items-center justify-center mb-4">
               <ShoppingCart className="w-8 h-8 text-[#999]" strokeWidth={1.4} />
             </div>
-            <h2 className="text-[18px] font-bold text-[#333]">Your cart is empty</h2>
+            <h2 className="text-[18px] font-bold text-[#333]">Votre panier est vide</h2>
             <p className="text-[12px] text-[#777] mt-1.5 max-w-sm">
-              Discover thousands of wholesale products from verified suppliers
-              across West Africa &amp; worldwide.
+              Découvrez les produits de nos boutiques vérifiées.
             </p>
             <button
               onClick={() => setView("home")}
               className="btn-benjamin-orange mt-5 flex items-center gap-2"
             >
-              Start sourcing <ChevronRight className="w-4 h-4" />
+              Parcourir les produits <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -93,12 +92,12 @@ export function CartView() {
       <div className="max-w-[1280px] mx-auto px-3 lg:px-6 py-5">
         {/* Title */}
         <div className="benjamin-bar mb-4 flex items-center justify-between">
-          <span>Shopping Cart ({cart.length})</span>
+          <span>Panier ({cart.length})</span>
           <button
             onClick={clearCart}
             className="text-[11px] font-normal normal-case tracking-normal text-white/80 hover:text-white underline"
           >
-            Clear all
+            Vider le panier
           </button>
         </div>
 
@@ -113,9 +112,9 @@ export function CartView() {
                 onChange={toggleAll}
                 className="accent-[#FF6A00] w-3.5 h-3.5"
               />
-              <span className="font-semibold">Select all items</span>
+              <span className="font-semibold">Tout sélectionner</span>
               <span className="text-[#999] ml-2">
-                ({cart.length} item{cart.length === 1 ? "" : "s"})
+                ({cart.length} article{cart.length === 1 ? "" : "s"})
               </span>
             </label>
 
@@ -127,21 +126,17 @@ export function CartView() {
                   <div className="bg-[#FAFAFA] border-b border-[#DADAD9] px-4 py-3 flex flex-wrap items-center gap-3">
                     <span className="inline-flex items-center gap-1.5 text-[#16A34A] font-semibold text-[12px]">
                       <BadgeCheck className="w-4 h-4" strokeWidth={2} />
-                      Verified
+                      Vérifiée
                     </span>
                     <button
-                      onClick={() => useApp.getState().setSupplierId(g.supplierId) || setView("supplier")}
+                      onClick={() => { useApp.getState().setSupplierId(g.supplierId); setView("supplier"); }}
                       className="text-[13px] font-bold text-[#333] hover:text-[#FF6A00] hover:underline truncate"
                     >
                       {g.supplierName}
                     </button>
-                    <span className="text-[#DADAD9]">|</span>
-                    <span className="text-[11px] text-[#888]">Trade Assurance</span>
+                    
                     <button
-                      onClick={() => {
-                        useApp.getState().setChatSupplierId(g.supplierId);
-                        useApp.getState().setView("chat");
-                      }}
+                      onClick={() => useApp.getState().openChat(g.supplierId)}
                       className="btn-outline-grey ml-auto flex items-center gap-1.5 !text-[11px] !py-1.5"
                     >
                       <MessageSquare className="w-3.5 h-3.5" /> Chat
@@ -181,18 +176,15 @@ export function CartView() {
                             </button>
                             {l.variant && (
                               <div className="text-[11px] text-[#888] mt-1">
-                                Variant: <span className="text-[#555] font-medium">{l.variant}</span>
+                                Option : <span className="text-[#555] font-medium">{l.variant}</span>
                               </div>
                             )}
-                            <div className="text-[11px] text-[#16A34A] mt-1 flex items-center gap-1">
-                              <ShieldCheck className="w-3 h-3" /> Trade Assurance
-                            </div>
                           </div>
                         </div>
 
                         {/* unit price */}
                         <div className="sm:w-[16%] text-[12px]">
-                          <div className="text-[10px] text-[#999] uppercase sm:hidden">Unit price</div>
+                          <div className="text-[10px] text-[#999] uppercase sm:hidden">Prix unitaire</div>
                           <span className="text-[#FF6A00] font-bold text-[14px]">
                             {formatPrice(l.price, currency)}
                           </span>
@@ -201,12 +193,12 @@ export function CartView() {
 
                         {/* quantity stepper */}
                         <div className="sm:w-[16%]">
-                          <div className="text-[10px] text-[#999] uppercase mb-1 sm:hidden">Quantity</div>
+                          <div className="text-[10px] text-[#999] uppercase mb-1 sm:hidden">Quantité</div>
                           <div className="inline-flex items-center border border-[#DADAD9]">
                             <button
                               onClick={() => updateQty(l.productId, l.quantity - 1, l.variant)}
                               className="w-8 h-8 flex items-center justify-center hover:bg-[#ECECEC] text-[#555]"
-                              aria-label="Decrease quantity"
+                              aria-label="Diminuer la quantité"
                             >
                               <Minus className="w-3.5 h-3.5" strokeWidth={2} />
                             </button>
@@ -222,7 +214,7 @@ export function CartView() {
                             <button
                               onClick={() => updateQty(l.productId, l.quantity + 1, l.variant)}
                               className="w-8 h-8 flex items-center justify-center hover:bg-[#ECECEC] text-[#555]"
-                              aria-label="Increase quantity"
+                              aria-label="Augmenter la quantité"
                             >
                               <Plus className="w-3.5 h-3.5" strokeWidth={2} />
                             </button>
@@ -231,7 +223,7 @@ export function CartView() {
 
                         {/* line subtotal */}
                         <div className="sm:w-[16%] text-right">
-                          <div className="text-[10px] text-[#999] uppercase mb-1 sm:hidden">Subtotal</div>
+                          <div className="text-[10px] text-[#999] uppercase mb-1 sm:hidden">Sous-total</div>
                           <div className="text-[14px] font-bold text-[#333]">
                             {formatPrice(lineTotal, currency)}
                           </div>
@@ -242,8 +234,8 @@ export function CartView() {
                           <button
                             onClick={() => removeFromCart(l.productId, l.variant)}
                             className="text-[#999] hover:text-[#FF6A00] p-1.5"
-                            aria-label="Remove item"
-                            title="Remove"
+                            aria-label="Retirer l'article"
+                            title="Retirer"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -255,13 +247,13 @@ export function CartView() {
                   {/* group subtotal */}
                   <div className="bg-[#FAFAFA] border-t border-[#ECECEC] px-4 py-2.5 flex items-center justify-between">
                     <span className="text-[11px] text-[#777]">
-                      Subtotal for {g.supplierName}:{" "}
+                      Sous-total {g.supplierName} :{" "}
                       <span className="text-[#333] font-bold">
                         {formatPrice(groupSubtotal, currency)}
                       </span>
                     </span>
                     <span className="text-[11px] text-[#888]">
-                      Shipping: <span className="text-[#16A34A] font-semibold">Calculated at checkout</span>
+                      Livraison : <span className="text-[#16A34A] font-semibold">à convenir avec la boutique</span>
                     </span>
                   </div>
                 </div>
@@ -273,11 +265,11 @@ export function CartView() {
           <aside className="hidden lg:block">
             <div className="sticky top-[140px]">
               <div className="bg-white border border-[#DADAD9]">
-                <div className="benjamin-bar">Order Summary</div>
+                <div className="benjamin-bar">Récapitulatif</div>
                 <div className="p-4 space-y-2.5 text-[12px]">
                   <div className="flex items-center justify-between">
                     <span className="text-[#666]">
-                      Items ({itemCount})
+                      Articles ({itemCount})
                     </span>
                     <span className="text-[#333] font-semibold">
                       {formatPrice(subtotal, currency)}
@@ -285,21 +277,21 @@ export function CartView() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-[#666] flex items-center gap-1">
-                      <Truck className="w-3.5 h-3.5" /> Shipping estimate
+                      <Truck className="w-3.5 h-3.5" /> Livraison
                     </span>
                     <span className="text-[#333] font-semibold">
-                      {formatPrice(shippingEstimate, currency)}
+                      À convenir
                     </span>
                   </div>
                   <div className="border-t border-[#ECECEC] pt-2.5 mt-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-[13px]">Total</span>
+                      <span className="font-bold text-[13px]">Total estimé</span>
                       <span className="font-extrabold text-[18px] text-[#FF6A00]">
                         {formatPrice(total, currency)}
                       </span>
                     </div>
                     <div className="text-[10px] text-[#999] mt-1">
-                      VAT included where applicable
+                      Prix et stock confirmés à l&apos;étape suivante
                     </div>
                   </div>
 
@@ -307,21 +299,18 @@ export function CartView() {
                     onClick={() => setView("checkout")}
                     className="btn-benjamin-orange w-full mt-2 flex items-center justify-center gap-2"
                   >
-                    Proceed to checkout <ChevronRight className="w-4 h-4" />
+                    Passer la commande <ChevronRight className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setView("home")}
                     className="btn-outline-grey w-full"
                   >
-                    Continue shopping
+                    Continuer mes achats
                   </button>
 
                   <div className="border-t border-[#ECECEC] pt-3 mt-1 space-y-1.5">
                     <div className="flex items-center gap-1.5 text-[11px] text-[#16A34A]">
-                      <ShieldCheck className="w-3.5 h-3.5" /> Trade Assurance protection
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[11px] text-[#666]">
-                      <Truck className="w-3.5 h-3.5" /> On-time dispatch guarantee
+                      <ShieldCheck className="w-3.5 h-3.5" /> Paiement à la livraison ou Mobile Money
                     </div>
                   </div>
                 </div>
@@ -334,7 +323,7 @@ export function CartView() {
       {/* ---- MOBILE sticky bottom bar ---- */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t-2 border-[#FF6A00] px-4 py-3 flex items-center justify-between">
         <div>
-          <div className="text-[10px] text-[#999] uppercase">Total ({itemCount} items)</div>
+          <div className="text-[10px] text-[#999] uppercase">Total estimé ({itemCount} art.)</div>
           <div className="text-[16px] font-extrabold text-[#FF6A00]">
             {formatPrice(total, currency)}
           </div>
@@ -343,7 +332,7 @@ export function CartView() {
           onClick={() => setView("checkout")}
           className="btn-benjamin-orange flex items-center gap-1.5"
         >
-          Checkout <ChevronRight className="w-4 h-4" />
+          Commander <ChevronRight className="w-4 h-4" />
         </button>
       </div>
     </div>

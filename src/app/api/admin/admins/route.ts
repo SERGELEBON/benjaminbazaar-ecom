@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { audit, authErrorResponse, isProtectedAdmin, isSuperAdmin, requireRole, requireSuperAdmin } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { audit, isProtectedAdmin, isSuperAdmin, requireRole, requireSuperAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -34,7 +35,7 @@ export async function GET() {
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
 
@@ -77,6 +78,6 @@ export async function POST(req: Request) {
     await audit(actor.id, "admin.invite", "invite", invite.id, { email, level });
     return NextResponse.json({ result: "invited", invite }, { status: 201 });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }

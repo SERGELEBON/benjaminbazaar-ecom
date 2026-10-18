@@ -6,11 +6,13 @@ import {
   Trash2, Pencil, Star, ChevronRight, Truck, ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useApp } from "@/lib/store";
+import { useApp, useDashboardTab } from "@/lib/store";
 import { formatPrice, type ProductT, type Currency } from "@/lib/format";
-import { ProductCard } from "./product-card";
+import { AddressesPanel, FavoritesPanel } from "./client/client-panels";
+import { OrdersPanel } from "./orders/orders-panel";
 
 type Tab = "orders" | "rfqs" | "favorites" | "addresses" | "account";
+const TABS: readonly Tab[] = ["orders", "rfqs", "favorites", "addresses", "account"];
 
 interface Rfq {
   id: string;
@@ -25,72 +27,39 @@ interface Rfq {
   quotes: unknown[];
 }
 
-const ORDERS = [
-  { ref: "AB-2410-0182", date: "Oct 18, 2025", supplier: "Shenzhen Lumelec Co.", total: 1240, status: "delivered", items: 3 },
-  { ref: "AB-2410-0145", date: "Oct 12, 2025", supplier: "Kumasi Textiles Ltd.", total: 540, status: "shipped", items: 1 },
-  { ref: "AB-2409-0312", date: "Sep 28, 2025", supplier: "Ivory Coast Cocoa", total: 2890, status: "paid", items: 12 },
-  { ref: "AB-2409-0288", date: "Sep 21, 2025", supplier: "Mumbai Garments", total: 880, status: "delivered", items: 2 },
-  { ref: "AB-2409-0140", date: "Sep 04, 2025", supplier: "Istanbul Apparel", total: 1620, status: "cancelled", items: 4 },
-];
-
-const ADDRESSES = [
-  {
-    id: "a1",
-    label: "Home",
-    name: "Kwame Mensah",
-    phone: "+233 50 123 4567",
-    country: "Ghana",
-    city: "Accra",
-    line: "12 Liberation Rd, Ridge",
-    zip: "GA-001",
-    isDefault: true,
-  },
-  {
-    id: "a2",
-    label: "Office",
-    name: "Kwame Mensah",
-    phone: "+233 50 987 6543",
-    country: "Ghana",
-    city: "Kumasi",
-    line: "Adum High Street, Block C",
-    zip: "AS-002",
-    isDefault: false,
-  },
-];
-
 export function BuyerDashboard() {
-  const { user, signOut, setView, currency, setCurrency, favorites } = useApp();
-  const [tab, setTab] = useState<Tab>("orders");
+  const { user, signOut, currency, setCurrency } = useApp();
+  const [tab, setTab] = useDashboardTab<Tab>("orders", TABS);
 
   if (!user) return null; // guarded by <RequireAuth>
 
 
   const tabs: { key: Tab; label: string; icon: typeof Package }[] = [
-    { key: "orders", label: "Orders", icon: Package },
-    { key: "rfqs", label: "Inquiries / RFQs", icon: FileText },
-    { key: "favorites", label: "Favorites", icon: Heart },
-    { key: "addresses", label: "Addresses", icon: MapPin },
-    { key: "account", label: "Account", icon: UserIcon },
+    { key: "orders", label: "Commandes", icon: Package },
+    { key: "rfqs", label: "Demandes de devis", icon: FileText },
+    { key: "favorites", label: "Favoris", icon: Heart },
+    { key: "addresses", label: "Adresses", icon: MapPin },
+    { key: "account", label: "Mon compte", icon: UserIcon },
   ];
 
   return (
     <div className="bg-[#ECECEC] min-h-screen">
 
       {/* top bar */}
-      <div className="benjamin-bar">Buyer Dashboard</div>
+      <div className="benjamin-bar">Mon espace client</div>
 
       <div className="max-w-[1280px] mx-auto px-3 lg:px-6 py-5">
         {/* greeting */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
-            <div className="text-[11px] uppercase tracking-wide text-[#666]">Welcome back</div>
+            <div className="text-[11px] uppercase tracking-wide text-[#666]">Espace client</div>
             <div className="text-[20px] font-extrabold">Bonjour, {user.name ?? user.email}</div>
           </div>
           <button
             onClick={async () => { await signOut(); toast.success("Vous êtes déconnecté."); }}
             className="btn-outline-grey flex items-center gap-1.5"
           >
-            <LogOut className="w-3.5 h-3.5" /> Sign out
+            <LogOut className="w-3.5 h-3.5" /> Déconnexion
           </button>
         </div>
 
@@ -117,10 +86,10 @@ export function BuyerDashboard() {
 
           {/* content */}
           <section className="bg-white border border-[#DADAD9] min-h-[400px]">
-            {tab === "orders" && <OrdersTab />}
+            {tab === "orders" && <OrdersPanel scope="buyer" />}
             {tab === "rfqs" && <RfqsTab />}
-            {tab === "favorites" && <FavoritesTab favorites={favorites} />}
-            {tab === "addresses" && <AddressesTab />}
+            {tab === "favorites" && <FavoritesPanel />}
+            {tab === "addresses" && <AddressesPanel />}
             {tab === "account" && <AccountTab currency={currency} setCurrency={setCurrency} />}
           </section>
         </div>
@@ -155,75 +124,6 @@ function SkeletonRow() {
       <div className="flex-1 space-y-1.5">
         <div className="h-3 bg-[#ECECEC] animate-pulse w-1/2" />
         <div className="h-2.5 bg-[#ECECEC] animate-pulse w-1/3" />
-      </div>
-    </div>
-  );
-}
-
-function OrdersTab() {
-  const currency = useApp((s) => s.currency);
-  return (
-    <div>
-      <div className="p-4 border-b border-[#ECECEC] flex items-center justify-between">
-        <div>
-          <h3 className="benjamin-section-title">My Orders</h3>
-          <p className="text-[11px] text-[#888] mt-0.5">5 orders in the last 90 days</p>
-        </div>
-        <button onClick={() => toast.success("Export started")} className="btn-outline-grey text-[11px]">
-          Export
-        </button>
-      </div>
-      {/* desktop table */}
-      <div className="hidden md:block">
-        <table className="w-full text-[12px]">
-          <thead className="bg-[#ECECEC] text-[#666] uppercase text-[10px] tracking-wider">
-            <tr>
-              <th className="text-left px-4 py-2.5 font-bold">Order ref</th>
-              <th className="text-left px-4 py-2.5 font-bold">Date</th>
-              <th className="text-left px-4 py-2.5 font-bold">Supplier</th>
-              <th className="text-right px-4 py-2.5 font-bold">Items</th>
-              <th className="text-right px-4 py-2.5 font-bold">Total</th>
-              <th className="text-center px-4 py-2.5 font-bold">Status</th>
-              <th className="text-right px-4 py-2.5 font-bold">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ORDERS.map((o) => (
-              <tr key={o.ref} className="border-b border-[#ECECEC] hover:bg-[#FAFAFA] cursor-pointer"
-                onClick={() => toast.info(`Opening order ${o.ref}`)}
-              >
-                <td className="px-4 py-3 font-semibold text-[#337AB7]">{o.ref}</td>
-                <td className="px-4 py-3 text-[#666]">{o.date}</td>
-                <td className="px-4 py-3">{o.supplier}</td>
-                <td className="px-4 py-3 text-right">{o.items}</td>
-                <td className="px-4 py-3 text-right font-bold text-[#FF6A00]">
-                  {formatPrice(o.total, currency)}
-                </td>
-                <td className="px-4 py-3 text-center"><StatusBadge status={o.status} /></td>
-                <td className="px-4 py-3 text-right">
-                  <button className="benjamin-link text-[12px]">View</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {/* mobile cards */}
-      <div className="md:hidden divide-y divide-[#ECECEC]">
-        {ORDERS.map((o) => (
-          <div key={o.ref} className="p-3" onClick={() => toast.info(`Opening order ${o.ref}`)}>
-            <div className="flex items-center justify-between">
-              <span className="font-semibold text-[#337AB7]">{o.ref}</span>
-              <StatusBadge status={o.status} />
-            </div>
-            <div className="text-[11px] text-[#888] mt-0.5">{o.date}</div>
-            <div className="text-[12px] mt-1">{o.supplier}</div>
-            <div className="flex justify-between mt-1.5">
-              <span className="text-[11px] text-[#666]">{o.items} items</span>
-              <span className="font-bold text-[#FF6A00]">{formatPrice(o.total, currency)}</span>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -299,98 +199,6 @@ function RfqsTab() {
   );
 }
 
-function FavoritesTab({ favorites }: { favorites: string[] }) {
-  const setView = useApp((s) => s.setView);
-  const [products, setProducts] = useState<ProductT[] | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      const r = await fetch("/api/products?take=24&skip=0");
-      const d = await r.json();
-      if (mounted) setProducts(d.products as ProductT[]);
-    })();
-    return () => { mounted = false; };
-  }, []);
-
-  const favs = (products || []).filter((p) => favorites.includes(p.id));
-
-  return (
-    <div>
-      <div className="p-4 border-b border-[#ECECEC]">
-        <h3 className="benjamin-section-title">Favorites</h3>
-        <p className="text-[11px] text-[#888] mt-0.5">
-          {favs.length} product{favs.length === 1 ? "" : "s"} saved
-        </p>
-      </div>
-
-      {products === null ? (
-        <div className="p-4 grid grid-cols-2 md:grid-cols-3 gap-3">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="aspect-[3/4] bg-[#ECECEC] animate-pulse" />
-          ))}
-        </div>
-      ) : favs.length === 0 ? (
-        <div className="p-8 text-center">
-          <Heart className="w-10 h-10 mx-auto text-[#DADAD9]" />
-          <p className="text-[13px] mt-2 text-[#666]">No favorites yet.</p>
-          <p className="text-[11px] text-[#888] mt-1">Tap the heart on any product to save it here.</p>
-          <button onClick={() => setView("home")} className="btn-benjamin-orange mt-4">Browse products</button>
-        </div>
-      ) : (
-        <div className="p-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-          {favs.map((p) => <ProductCard key={p.id} product={p} />)}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function AddressesTab() {
-  return (
-    <div>
-      <div className="p-4 border-b border-[#ECECEC] flex items-center justify-between">
-        <div>
-          <h3 className="benjamin-section-title">Shipping addresses</h3>
-          <p className="text-[11px] text-[#888] mt-0.5">Manage delivery destinations</p>
-        </div>
-        <button onClick={() => toast.info("Opening address form")} className="btn-benjamin-orange text-[11px] flex items-center gap-1.5">
-          <Plus className="w-3.5 h-3.5" /> Add address
-        </button>
-      </div>
-      <ul className="divide-y divide-[#ECECEC]">
-        {ADDRESSES.map((a) => (
-          <li key={a.id} className="p-4 flex flex-col md:flex-row md:items-start gap-3">
-            <div className="w-9 h-9 bg-[#ECECEC] flex items-center justify-center shrink-0">
-              <MapPin className="w-4 h-4 text-[#FF6A00]" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-bold text-[13px]">{a.label}</span>
-                {a.isDefault && (
-                  <span className="bg-[#16A34A] text-white text-[10px] font-bold uppercase px-1.5 py-0.5">Default</span>
-                )}
-              </div>
-              <div className="text-[12px] text-[#444] mt-1">{a.name} · {a.phone}</div>
-              <div className="text-[12px] text-[#666] mt-0.5">
-                {a.line}, {a.city}, {a.country} {a.zip}
-              </div>
-            </div>
-            <div className="flex gap-2 md:flex-col">
-              <button onClick={() => toast.info("Edit address")} className="btn-outline-grey text-[11px] flex items-center gap-1">
-                <Pencil className="w-3 h-3" /> Edit
-              </button>
-              <button onClick={() => toast.error("Address removed")} className="btn-outline-grey text-[11px] flex items-center gap-1 hover:!border-[#FF6A00] hover:!text-[#FF6A00]">
-                <Trash2 className="w-3 h-3" /> Delete
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
 function AccountTab({
   currency, setCurrency,
 }: {
@@ -441,12 +249,12 @@ function AccountTab({
       </div>
 
       <div className="mt-6 border-t border-[#ECECEC] pt-4">
-        <div className="benjamin-section-title mb-2">Currency preference</div>
+        <div className="benjamin-section-title mb-2">Devise d&apos;affichage</div>
         <div className="flex flex-wrap gap-2">
           {(["GHS", "XOF", "USD"] as Currency[]).map((c) => (
             <button
               key={c}
-              onClick={() => { setCurrency(c); toast.success(`Currency set to ${c}`); }}
+              onClick={() => { setCurrency(c); toast.success(`Devise : ${c}`); }}
               className={`px-4 py-2 text-[12px] font-bold border ${
                 currency === c
                   ? "bg-[#FF6A00] text-white border-[#FF6A00]"
@@ -459,26 +267,8 @@ function AccountTab({
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3 border-t border-[#ECECEC] pt-4">
-        <PromoCard icon={<ShieldCheck className="w-5 h-5 text-[#16A34A]" />} title="Trade Assurance" body="Active on all eligible orders" />
-        <PromoCard icon={<Star className="w-5 h-5 text-[#FF6A00]" />} title="Buyer level" body="Silver · 18 orders" />
-        <PromoCard icon={<Truck className="w-5 h-5 text-[#337AB7]" />} title="Default shipping" body="DHL Express · 3-5 days" />
-      </div>
-
       <div className="mt-6 flex gap-3">
         <button onClick={save} disabled={saving} className="btn-benjamin-orange disabled:opacity-60">{saving ? "Enregistrement…" : "Enregistrer"}</button>
-      </div>
-    </div>
-  );
-}
-
-function PromoCard({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
-  return (
-    <div className="border border-[#DADAD9] p-3 flex items-start gap-3">
-      <div className="w-9 h-9 bg-[#ECECEC] flex items-center justify-center shrink-0">{icon}</div>
-      <div>
-        <div className="text-[11px] uppercase font-bold tracking-wide text-[#666]">{title}</div>
-        <div className="text-[12px] mt-0.5">{body}</div>
       </div>
     </div>
   );

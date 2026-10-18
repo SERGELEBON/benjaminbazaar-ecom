@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
-import { audit, authErrorResponse, requireRole } from "@/lib/auth";
+import { errorResponse } from "@/lib/http";
+import { audit, requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { afterResponse } from "@/lib/email";
+import { notifyMerchantDecision } from "@/lib/notifications";
 
 type Decision = "approved" | "rejected" | "suspended" | "pending";
 const DECISIONS: Decision[] = ["approved", "rejected", "suspended", "pending"];
@@ -57,8 +60,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       reason: reason || undefined,
       shop: current.name,
     });
+    afterResponse(() => notifyMerchantDecision(id, status));
     return NextResponse.json({ supplier });
   } catch (e) {
-    return authErrorResponse(e);
+    return errorResponse(e);
   }
 }
