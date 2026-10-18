@@ -20,9 +20,26 @@ export function formatPrice(ghs: number, currency: Currency): string {
   const v = ghs * CURRENCY_RATES[currency];
   const sym = CURRENCY_SYMBOL[currency];
   if (currency === "USD") return `${sym}${v.toFixed(2)}`;
-  if (currency === "XOF") return `${Math.round(v).toLocaleString("en-US")} ${sym}`;
+  if (currency === "XOF") return `${Math.round(v).toLocaleString("fr-FR")} F${sym}`;
   return `${sym}${v.toFixed(2)}`;
 }
+
+/** Display label (French) for a stored unit code ("piece", "kilogram"…). Unknown units are shown as is. */
+const UNIT_LABELS: Record<string, string> = {
+  piece: "pièce(s)",
+  pieces: "pièces",
+  pcs: "pièces",
+  pair: "paire(s)",
+  set: "lot(s)",
+  box: "boîte(s)",
+  carton: "carton(s)",
+  kilogram: "kg",
+  kg: "kg",
+  ton: "tonne(s)",
+  meter: "mètre(s)",
+  liter: "litre(s)",
+};
+export const unitLabel = (u: string | null | undefined) => (u ? UNIT_LABELS[u.toLowerCase()] ?? u : "");
 
 export interface PriceTierT {
   minQty: number;
