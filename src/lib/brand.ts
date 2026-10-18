@@ -27,7 +27,7 @@ export const BRAND = {
    * Official WhatsApp icon for the floating button (download it from WhatsApp's brand
    * resources and put it in public/brand/, e.g. "/brand/whatsapp.svg"). null = generic icon.
    */
-  whatsappIcon: null as string | null,
+  whatsappIcon: "/brand/whatsapp-3d.webp" as string | null,
   /** Brand colours — primary blue + Ivorian harmony colours */
   colors: {
     primary: "#1A1F8A",
