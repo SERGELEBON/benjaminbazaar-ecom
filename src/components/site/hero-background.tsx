@@ -35,7 +35,9 @@ export function useHeroSettings() {
 export function HeroBackground({ videoUrl, posterUrl, overlay }: Pick<HeroSettings, "videoUrl" | "posterUrl" | "overlay">) {
   const ref = useRef<HTMLVideoElement>(null);
   const [reduced, setReduced] = useState(false);
-  const [failed, setFailed] = useState(false);
+  // A decode error can be transient (GPU decoder): retry once, then keep the poster.
+  const [attempt, setAttempt] = useState(0);
+  const failed = attempt > 1;
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -57,9 +59,8 @@ export function HeroBackground({ videoUrl, posterUrl, overlay }: Pick<HeroSettin
     });
     io.observe(v);
     return () => io.disconnect();
-  }, [videoUrl, reduced]);
+  }, [videoUrl, reduced, attempt]);
 
-  const webm = videoUrl === HERO_DEFAULTS.videoUrl ? videoUrl.replace(/\.mp4$/, ".webm") : null;
   const showVideo = !reduced && !failed;
 
   return (
@@ -67,7 +68,7 @@ export function HeroBackground({ videoUrl, posterUrl, overlay }: Pick<HeroSettin
       <img src={posterUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
       {showVideo && (
         <video
-          key={videoUrl}
+          key={`${videoUrl}#${attempt}`}
           ref={ref}
           className="absolute inset-0 w-full h-full object-cover"
           autoPlay
@@ -76,9 +77,8 @@ export function HeroBackground({ videoUrl, posterUrl, overlay }: Pick<HeroSettin
           playsInline
           preload="metadata"
           poster={posterUrl}
-          onError={() => setFailed(true)}
+          onError={() => setAttempt((a) => a + 1)}
         >
-          {webm && <source src={webm} type="video/webm" />}
           <source src={videoUrl} />
         </video>
       )}
