@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { settlePayment } from "@/lib/orders";
+import { afterResponse } from "@/lib/email";
+import { notifyPaymentResult } from "@/lib/notifications";
 import { checkCinetpayPayment, cinetpayConfig, verifyCinetpayToken } from "@/lib/payments/cinetpay";
 
 export const dynamic = "force-dynamic";
@@ -50,7 +52,8 @@ export async function POST(req: Request) {
 
   try {
     const result = await checkCinetpayPayment(cfg, transactionId);
-    await settlePayment(payment.id, result);
+    const settled = await settlePayment(payment.id, result);
+    if (settled && settled.status !== payment.status) afterResponse(() => notifyPaymentResult(payment.id));
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error("[cinetpay] check failed", e);
