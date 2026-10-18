@@ -3,6 +3,8 @@ import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { ApiError, errorResponse, noStore } from "@/lib/http";
 import { settlePayment } from "@/lib/orders";
+import { afterResponse } from "@/lib/email";
+import { notifyPaymentResult } from "@/lib/notifications";
 import { checkCinetpayPayment, cinetpayConfig } from "@/lib/payments/cinetpay";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +23,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const cfg = cinetpayConfig();
     if (payment.provider === "cinetpay" && payment.status === "pending" && cfg) {
       const result = await checkCinetpayPayment(cfg, payment.transactionId).catch(() => null);
-      if (result) payment = (await settlePayment(payment.id, result)) ?? payment;
+      if (result) {
+        const before = payment.status;
+        payment = (await settlePayment(payment.id, result)) ?? payment;
+        if (payment.status !== before) afterResponse(() => notifyPaymentResult(id));
+      }
     }
     const orders = await db.order.findMany({ where: { paymentId: id }, select: { id: true, ref: true, status: true, paymentStatus: true, total: true } });
     return NextResponse.json(
