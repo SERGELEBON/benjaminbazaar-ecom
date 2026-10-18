@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  AlertTriangle, Banknote, Check, ChevronRight, Loader2, Lock, MapPin, Plus, ShieldCheck, Smartphone, Truck,
+  AlertTriangle, Banknote, Check, ChevronRight, Loader2, Lock, MapPin, MessageCircle, Plus, ShieldCheck, Smartphone, Truck,
 } from "lucide-react";
+import { whatsappLink, whatsappPaymentText } from "@/lib/brand";
 import { toast } from "sonner";
 import { useApp } from "@/lib/store";
 import { apiFetch, jsonInit } from "@/lib/api-client";
@@ -30,6 +31,11 @@ const METHODS: Record<PaymentMethod, { label: string; desc: string; icon: typeof
     label: "Paiement en ligne",
     desc: "Orange Money, MTN, Moov, Wave ou carte — sur la page sécurisée CinetPay.",
     icon: Smartphone,
+  },
+  whatsapp: {
+    label: "Mobile Money via WhatsApp",
+    desc: "Orange Money, MTN, Moov ou Wave : notre équipe vous envoie les instructions sur WhatsApp.",
+    icon: MessageCircle,
   },
 };
 
@@ -161,8 +167,15 @@ export function CheckoutView() {
         window.location.assign(url);
         return;
       }
-      const refs = res.orders.map((o) => o.ref).join(", ");
-      toast.success(res.orders.length > 1 ? `Commandes envoyées : ${refs}` : `Commande ${refs} envoyée à la boutique.`);
+      const refs = res.orders.map((o) => o.ref);
+      if (res.provider === "whatsapp") {
+        // Mobile Money is arranged with our team: open WhatsApp with the order already written.
+        toast.success(`Commande ${refs.join(", ")} enregistrée. Ouverture de WhatsApp pour le paiement…`);
+        openDashboard("buyer-dashboard", "orders");
+        window.location.assign(whatsappLink(whatsappPaymentText(refs, res.amount)));
+        return;
+      }
+      toast.success(refs.length > 1 ? `Commandes envoyées : ${refs.join(", ")}` : `Commande ${refs[0]} envoyée à la boutique.`);
       openDashboard("buyer-dashboard", "orders");
     } catch (e) {
       const err = e as Error & { status?: number };
@@ -181,7 +194,7 @@ export function CheckoutView() {
     issues.filter((i) => i.productId === productId && (i.variant ?? null) === (variant ?? null));
   const generalIssues = issues.filter((i) => !quote?.groups.some((g) => g.lines.some((l) => l.productId === i.productId)));
 
-  const placeLabel = method === "cinetpay" ? "Payer" : "Commander";
+  const placeLabel = method === "cinetpay" ? "Payer" : method === "whatsapp" ? "Commander et payer" : "Commander";
 
   return (
     <div className="bg-[#f4f1ec] min-h-[60vh] pb-32 lg:pb-10">
@@ -335,8 +348,10 @@ export function CheckoutView() {
                       );
                     })}
               </div>
-              {methods && !methods.includes("cinetpay") && (
-                <p className="px-4 pb-3 text-[11px] text-[#888]">Le paiement en ligne (Mobile Money, carte) sera bientôt disponible.</p>
+              {method === "whatsapp" && (
+                <p className="px-4 pb-3 text-[11px] text-[#555]">
+                  Après validation, WhatsApp s&apos;ouvre avec votre numéro de commande. La boutique prépare la commande dès que notre équipe confirme le paiement.
+                </p>
               )}
               <div className="border-t border-[#ECECEC] p-4">
                 <label htmlFor="co-note" className="block text-[11px] font-bold uppercase text-[#555] mb-1">Note pour la boutique (facultatif)</label>
