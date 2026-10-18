@@ -451,3 +451,11 @@ model AuditLog {
   @@index([targetType, targetId])
   @@index([createdAt])
 }
+
+/// Site-wide settings edited by super admins (e.g. key "hero" = home hero JSON).
+model SiteSetting {
+  key         String   @id
+  value       String // JSON
+  updatedById String?
+  updatedAt   DateTime @updatedAt
+}
