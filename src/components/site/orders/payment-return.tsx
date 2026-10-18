@@ -18,15 +18,39 @@ export function PaymentReturn() {
   const authStatus = useApp((s) => s.authStatus);
   const pending = useRef<string | null>(null);
 
-  // Read and strip the param once, so a reload does not re-run the flow.
+  const openTarget = useRef<string | null>(null);
+
+  // Read and strip the params once, so a reload does not re-run the flow.
   useEffect(() => {
     const url = new URL(window.location.href);
     const id = url.searchParams.get("payment");
-    if (!id) return;
+    const open = url.searchParams.get("open");
+    if (!id && !open) return;
     url.searchParams.delete("payment");
+    url.searchParams.delete("open");
     window.history.replaceState(null, "", url.pathname + url.search + url.hash);
-    if (ID.test(id)) pending.current = id;
+    if (id && ID.test(id)) pending.current = id;
+    else if (open && ["purchases", "sales", "shop", "admin"].includes(open)) openTarget.current = open;
   }, []);
+
+  // Links in e-mails (`/?open=orders|shop|admin`): open the right space once signed in.
+  useEffect(() => {
+    const target = openTarget.current;
+    if (!target || authStatus === "loading") return;
+    openTarget.current = null;
+    const { user, openDashboard, setView, setAuthMode } = useApp.getState();
+    if (!user) {
+      toast.message("Connectez-vous pour accéder à votre espace.");
+      setAuthMode("login");
+      setView("auth");
+      return;
+    }
+    if (target === "admin" && user.role === "ADMIN") openDashboard("admin", "suppliers");
+    else if (target === "shop" && user.supplier) openDashboard("supplier-dashboard", "products");
+    else if (target === "sales" && user.supplier?.status === "approved") openDashboard("supplier-dashboard", "orders");
+    else if (target === "sales" && user.role === "ADMIN") openDashboard("admin", "orders");
+    else openDashboard("buyer-dashboard", "orders");
+  }, [authStatus]);
 
   useEffect(() => {
     const id = pending.current;

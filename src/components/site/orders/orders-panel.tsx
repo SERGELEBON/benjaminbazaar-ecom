@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useApp } from "@/lib/store";
 import { apiFetch, jsonInit } from "@/lib/api-client";
 import { ReasonDialog } from "../admin/shared";
+import { whatsappLink, whatsappPaymentText } from "@/lib/brand";
 import type { OrderDTO } from "@/lib/orders";
 
 type Scope = "buyer" | "supplier" | "admin";
@@ -37,6 +38,12 @@ const PAY_LABEL: Record<string, string> = {
   refunded: "Remboursée",
 };
 
+const METHOD_LABEL: Record<string, string> = {
+  cod: "À la livraison",
+  cinetpay: "En ligne",
+  whatsapp: "Mobile Money",
+};
+
 function StatusPill({ status }: { status: string }) {
   return <span className={`${STATUS_TONE[status] ?? "bg-[#999]"} text-white text-[10px] font-bold uppercase px-2 py-0.5 whitespace-nowrap`}>{STATUS_LABEL[status] ?? status}</span>;
 }
@@ -44,7 +51,7 @@ function PayPill({ o }: { o: OrderDTO }) {
   const tone = o.paymentStatus === "paid" ? "text-[#16A34A] border-[#16A34A]" : o.paymentStatus === "refund_due" ? "text-[#DC2626] border-[#DC2626]" : "text-[#666] border-[#DADAD9]";
   return (
     <span className={`border ${tone} text-[10px] font-bold uppercase px-1.5 py-0.5 whitespace-nowrap`}>
-      {o.paymentMethod === "cod" ? "À la livraison" : "En ligne"} · {PAY_LABEL[o.paymentStatus] ?? o.paymentStatus}
+      {METHOD_LABEL[o.paymentMethod] ?? o.paymentMethod} · {PAY_LABEL[o.paymentStatus] ?? o.paymentStatus}
     </span>
   );
 }
@@ -202,11 +209,20 @@ export function OrdersPanel({ scope }: { scope: Scope }) {
   );
 }
 
+type Action = "confirm" | "ship" | "deliver" | "cancel" | "mark_paid";
+const ACTION_DONE: Record<Action, string> = {
+  confirm: "Commande acceptée",
+  ship: "Commande marquée expédiée",
+  deliver: "Commande livrée",
+  cancel: "Commande annulée",
+  mark_paid: "Paiement enregistré",
+};
+
 function OrderDetail({ id, onBack }: { id: string; onBack: () => void }) {
   const { openChat } = useApp();
   const [o, setO] = useState<OrderDTO | null>(null);
   const [busy, setBusy] = useState(false);
-  const [dialog, setDialog] = useState<"cancel" | "ship" | null>(null);
+  const [dialog, setDialog] = useState<"cancel" | "ship" | "paid" | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -224,17 +240,17 @@ function OrderDetail({ id, onBack }: { id: string; onBack: () => void }) {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }, []);
 
-  async function act(action: "confirm" | "ship" | "deliver" | "cancel", extra: Record<string, string> = {}) {
+  async function act(action: Action, extra: Record<string, string> = {}) {
     setBusy(true);
     try {
       const d = await apiFetch<{ order: OrderDTO }>(`/api/orders/${id}`, jsonInit("PATCH", { action, ...extra }));
       setO(d.order);
-      toast.success({ confirm: "Commande acceptée", ship: "Commande marquée expédiée", deliver: "Commande livrée", cancel: "Commande annulée" }[action]);
+      toast.success(ACTION_DONE[action]);
     } finally {
       setBusy(false);
     }
   }
-  const run = (action: "confirm" | "ship" | "deliver" | "cancel") => act(action).catch((e) => toast.error((e as Error).message));
+  const run = (action: Action) => act(action).catch((e) => toast.error((e as Error).message));
 
   if (!o) return <div className="p-10 flex justify-center"><Loader2 className="w-6 h-6 animate-spin text-[#1A1F8A]" /></div>;
 
@@ -243,6 +259,7 @@ function OrderDetail({ id, onBack }: { id: string; onBack: () => void }) {
     (o.status === "pending" || o.status === "confirmed") &&
     (role !== "buyer" || (o.status === "pending" && o.paymentStatus !== "paid"));
   const awaitingOnlinePayment = o.paymentMethod === "cinetpay" && o.paymentStatus !== "paid" && o.status === "pending";
+  const awaitingWhatsapp = o.paymentMethod === "whatsapp" && o.paymentStatus === "unpaid" && o.status !== "cancelled";
   const steps = ["pending", "confirmed", "shipped", "delivered"];
   const stepIdx = steps.indexOf(o.status);
 
@@ -283,6 +300,33 @@ function OrderDetail({ id, onBack }: { id: string; onBack: () => void }) {
           <span className="flex-1">{role === "buyer" ? "Paiement en ligne en attente." : "En attente du paiement en ligne du client : n'acceptez pas avant sa confirmation."}</span>
           {role === "buyer" && o.payment?.paymentUrl?.startsWith("https://") && (
             <a href={o.payment.paymentUrl} className="btn-benjamin-orange text-[12px] inline-flex items-center gap-1.5"><CreditCard className="w-4 h-4" /> Payer maintenant</a>
+          )}
+        </div>
+      )}
+
+      {awaitingWhatsapp && (
+        <div className="m-4 bg-[#F0FDF4] border-l-[3px] border-[#25D366] px-3 py-2.5 text-[13px] flex flex-wrap items-center gap-3">
+          <span className="flex-1">
+            {role === "buyer"
+              ? "Paiement Mobile Money à finaliser avec notre équipe sur WhatsApp."
+              : role === "supplier"
+                ? "Paiement Mobile Money en cours avec l'équipe : vous serez prévenu dès sa confirmation."
+                : "Paiement Mobile Money via WhatsApp : enregistrez-le dès réception."}
+          </span>
+          {role === "buyer" && (
+            <a
+              href={whatsappLink(whatsappPaymentText([o.ref], o.total))}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#25D366] text-white text-[12px] font-bold uppercase px-3 py-2 inline-flex items-center gap-1.5"
+            >
+              <MessageCircle className="w-4 h-4" /> Payer sur WhatsApp
+            </a>
+          )}
+          {role === "admin" && (
+            <button disabled={busy} onClick={() => setDialog("paid")} className="bg-[#16A34A] text-white text-[12px] font-bold uppercase px-3 py-2 inline-flex items-center gap-1.5 disabled:opacity-50">
+              <Check className="w-4 h-4" /> Marquer payée
+            </button>
           )}
         </div>
       )}
@@ -335,7 +379,7 @@ function OrderDetail({ id, onBack }: { id: string; onBack: () => void }) {
             )}
             {role !== "buyer" && o.status === "shipped" && (
               <button disabled={busy} onClick={() => void run("deliver")} className="w-full bg-[#16A34A] text-white text-[12px] font-bold uppercase py-2.5 flex items-center justify-center gap-1.5 disabled:opacity-50">
-                <PackageCheck className="w-4 h-4" /> {o.paymentMethod === "cod" ? "Livrée et encaissée" : "Marquer livrée"}
+                <PackageCheck className="w-4 h-4" /> {o.paymentMethod !== "cinetpay" && o.paymentStatus === "unpaid" ? "Livrée et encaissée" : "Marquer livrée"}
               </button>
             )}
             {canCancel && (
@@ -372,6 +416,18 @@ function OrderDetail({ id, onBack }: { id: string; onBack: () => void }) {
           description="Le client verra ce motif. Le stock réservé est remis en vente automatiquement."
           confirmLabel="Annuler la commande"
           onConfirm={(reason) => act("cancel", { reason })}
+          onClose={() => setDialog(null)}
+        />
+      )}
+      {dialog === "paid" && (
+        <ReasonDialog
+          title="Paiement Mobile Money reçu"
+          description="Confirmez uniquement après avoir vérifié la réception de l'argent. Optionnel : opérateur et référence de la transaction."
+          confirmLabel="Marquer payée"
+          tone="green"
+          requireReason={false}
+          placeholder="Ex. Wave, réf. T123456"
+          onConfirm={(note) => act("mark_paid", note ? { note } : {})}
           onClose={() => setDialog(null)}
         />
       )}
