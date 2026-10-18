@@ -21,9 +21,13 @@ import { cleanMultiline, cleanText, parseJsonArray, toInt } from "@/lib/sanitize
 import { cinetpayConfig, roundUpTo5 } from "@/lib/payments/cinetpay";
 
 export type Viewer = Awaited<ReturnType<typeof requireUser>>;
-export type PaymentMethod = "cod" | "cinetpay";
+/**
+ * cod = cash / Mobile Money to the courier; whatsapp = Mobile Money arranged with our
+ * team on WhatsApp (until online payment is enabled); cinetpay = hosted online payment.
+ */
+export type PaymentMethod = "cod" | "cinetpay" | "whatsapp";
 export type OrderStatus = "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
-export type OrderAction = "confirm" | "ship" | "deliver" | "cancel";
+export type OrderAction = "confirm" | "ship" | "deliver" | "cancel" | "mark_paid";
 type ActorRole = "buyer" | "supplier" | "admin" | "system";
 
 export const MAX_LINES = 50;
@@ -31,7 +35,8 @@ const MAX_QTY = 1_000_000;
 const CHECKOUTS_PER_10_MIN = 10;
 
 export function availablePaymentMethods(): PaymentMethod[] {
-  return cinetpayConfig() ? ["cod", "cinetpay"] : ["cod"];
+  // Until online payment is configured, Mobile Money is handled with our team on WhatsApp.
+  return cinetpayConfig() ? ["cod", "cinetpay"] : ["cod", "whatsapp"];
 }
 
 // ------------------------------------------------------------------ quote
@@ -171,7 +176,7 @@ export function parseCheckoutInput(body: Record<string, unknown>, idempotencyKey
   if (!idempotencyKey || !/^[A-Za-z0-9-]{16,80}$/.test(idempotencyKey)) {
     throw new ApiError(400, "Requête invalide (clé d'idempotence manquante).");
   }
-  const paymentMethod = body.paymentMethod === "cinetpay" ? "cinetpay" : body.paymentMethod === "cod" ? "cod" : null;
+  const paymentMethod = (["cod", "cinetpay", "whatsapp"] as const).find((m) => m === body.paymentMethod) ?? null;
   if (!paymentMethod) throw new ApiError(400, "Choisissez un mode de paiement.");
   if (!availablePaymentMethods().includes(paymentMethod)) throw new ApiError(400, "Ce mode de paiement n'est pas disponible.");
   const addressId = cleanText(body.addressId, 40);
@@ -221,7 +226,7 @@ export async function placeOrder(buyer: Viewer, input: CheckoutInput): Promise<C
             userId: buyer.id,
             idempotencyKey: input.idempotencyKey,
             provider: input.paymentMethod,
-            status: input.paymentMethod === "cod" ? "cod" : "pending",
+            status: input.paymentMethod === "cod" ? "cod" : "pending", // whatsapp / cinetpay: until the money is received
             amount,
             transactionId: `IJC${Date.now().toString(36).toUpperCase()}${crypto.randomUUID().replace(/-/g, "").slice(0, 10).toUpperCase()}`,
           },
@@ -312,7 +317,7 @@ export async function getOrderFor(viewer: Viewer, id: string): Promise<{ order: 
   throw new ApiError(404, "Commande introuvable");
 }
 
-const TRANSITIONS: Record<OrderAction, { from: OrderStatus[]; to: OrderStatus; roles: ActorRole[] }> = {
+const TRANSITIONS: Record<Exclude<OrderAction, "mark_paid">, { from: OrderStatus[]; to: OrderStatus; roles: ActorRole[] }> = {
   confirm: { from: ["pending"], to: "confirmed", roles: ["supplier", "admin"] },
   ship: { from: ["confirmed"], to: "shipped", roles: ["supplier", "admin"] },
   deliver: { from: ["shipped"], to: "delivered", roles: ["supplier", "admin"] },
@@ -327,8 +332,9 @@ export async function transitionOrder(
   opts: { note?: unknown; reason?: unknown; tracking?: unknown },
 ) {
   const { order, role } = await getOrderFor(viewer, orderId);
+  if (action === "mark_paid") return markPaid(viewer, order, role, opts.note);
+  if (!Object.hasOwn(TRANSITIONS, action)) throw new ApiError(400, "Action inconnue");
   const rule = TRANSITIONS[action];
-  if (!rule) throw new ApiError(400, "Action inconnue");
   if (!rule.roles.includes(role)) throw new ApiError(403, "Action non autorisée");
   if (!rule.from.includes(order.status as OrderStatus)) throw new ApiError(409, "Le statut de la commande a changé. Actualisez la page.");
 
@@ -354,8 +360,8 @@ export async function transitionOrder(
   }
   if (action === "deliver") {
     data.deliveredAt = now;
-    // Cash on delivery: the money is collected at delivery.
-    if (order.paymentMethod === "cod") data.paymentStatus = "paid";
+    // Cash / Mobile Money handled offline: collected at the latest on delivery.
+    if (order.paymentMethod !== "cinetpay" && order.paymentStatus === "unpaid") data.paymentStatus = "paid";
   }
   if (action === "cancel") {
     data.cancelledAt = now;
@@ -375,6 +381,34 @@ export async function transitionOrder(
   return getOrderFor(viewer, orderId);
 }
 
+/**
+ * Admin records a Mobile Money payment received on WhatsApp (manual reconciliation).
+ * Compare-and-set on the payment status; the payment is settled once all its orders are.
+ */
+async function markPaid(viewer: Viewer, order: OrderFull, role: Exclude<ActorRole, "system">, rawNote: unknown) {
+  if (role !== "admin") throw new ApiError(403, "Action non autorisée");
+  if (order.paymentMethod !== "whatsapp") throw new ApiError(409, "Seuls les paiements Mobile Money via WhatsApp se valident manuellement.");
+  if (order.status === "cancelled" || order.paymentStatus !== "unpaid") {
+    throw new ApiError(409, "Le paiement de cette commande est déjà réglé ou la commande est annulée.");
+  }
+  const note = cleanText(rawNote, 200) || "Paiement Mobile Money reçu (WhatsApp)";
+  await db.$transaction(async (tx) => {
+    const r = await tx.order.updateMany({
+      where: { id: order.id, paymentStatus: "unpaid", status: { not: "cancelled" } },
+      data: { paymentStatus: "paid" },
+    });
+    if (r.count !== 1) throw new ApiError(409, "Le statut de la commande a changé. Actualisez la page.");
+    await tx.orderEvent.create({ data: { orderId: order.id, status: order.status, actorId: viewer.id, actorRole: role, note } });
+    if (order.paymentId) {
+      const left = await tx.order.count({ where: { paymentId: order.paymentId, paymentStatus: "unpaid", status: { not: "cancelled" } } });
+      if (left === 0) {
+        await tx.payment.updateMany({ where: { id: order.paymentId, status: "pending" }, data: { status: "paid", paidAt: new Date(), providerStatus: "MANUAL" } });
+      }
+    }
+  });
+  return getOrderFor(viewer, order.id);
+}
+
 // ------------------------------------------------------------------ payments
 /**
  * Applies the authoritative result of an online payment to the payment and its
@@ -382,7 +416,7 @@ export async function transitionOrder(
  */
 export async function settlePayment(paymentId: string, outcome: { status: "paid" | "failed" | "pending"; amount: number | null; currency: string | null; raw: string }) {
   const payment = await db.payment.findUnique({ where: { id: paymentId } });
-  if (!payment || payment.provider === "cod") return payment;
+  if (!payment || payment.provider !== "cinetpay") return payment;
   if (outcome.status === "pending" || payment.status === "paid") {
     if (outcome.raw) await db.payment.update({ where: { id: paymentId }, data: { providerData: outcome.raw } });
     return db.payment.findUnique({ where: { id: paymentId } });
