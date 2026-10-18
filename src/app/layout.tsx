@@ -12,7 +12,7 @@ const openSans = Open_Sans({
 });
 
 const SITE_TITLE = `${BRAND.name} (${BRAND.shortName}) — Marché de gros B2B en Côte d'Ivoire`;
-const SITE_DESCRIPTION = `${BRAND.name} connecte les acheteurs aux fabricants vérifiés dans le monde entier. Sourcez des produits, demandez des devis, personnalisez et échangez avec Trade Assurance. Paiement en XOF, livraison en Côte d'Ivoire et en Afrique de l'Ouest.`;
+const SITE_DESCRIPTION = `${BRAND.name} connecte les acheteurs aux fabricants vérifiés dans le monde entier. Sourcez des produits, demandez des devis, personnalisez et échangez en toute confiance. Paiement en XOF, livraison en Côte d'Ivoire et en Afrique de l'Ouest.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://benjaminbazaar-ecom.vercel.app"),
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   authors: [{ name: BRAND.name }],
   openGraph: {
     title: SITE_TITLE,
-    description: `Sourcez auprès de fabricants vérifiés. Trade Assurance, assistant IA, livraison mondiale. ${BRAND.slogan} !`,
+    description: `Sourcez auprès de fabricants vérifiés. Commandes sécurisées, assistant IA, livraison mondiale. ${BRAND.slogan} !`,
     siteName: BRAND.name,
     locale: "fr_CI",
     type: "website",
