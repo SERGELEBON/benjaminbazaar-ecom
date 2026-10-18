@@ -93,7 +93,7 @@ export function AccountMenu({ compact = false }: { compact?: boolean }) {
             <div className="text-[11px] text-[#888] truncate">{user.email}</div>
             <div className="text-[10px] uppercase font-bold text-[#1A1F8A] mt-1">
               {ROLE_LABEL[user.role]}
-              {user.role === "ADMIN" && user.isSuperAdmin && <span className="text-[#16A34A]"> · super admin</span>}
+              {user.role === "ADMIN" && user.isSuperAdmin && <span className="text-[#16A34A]"> · super administrateur</span>}
               {user.role === "SUPPLIER" && user.supplier && user.supplier.status !== "approved" && (
                 <span className={user.supplier.status === "pending" ? "text-[#FF6A00]" : "text-[#DC2626]"}>
                   {" · "}{{ pending: "en validation", rejected: "demande à corriger", suspended: "boutique suspendue", approved: "" }[user.supplier.status]}

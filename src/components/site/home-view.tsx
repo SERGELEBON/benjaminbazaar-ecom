@@ -10,6 +10,7 @@ import type { CategoryNode, ProductT } from "@/lib/format";
 import { CatIcon } from "./cat-icon";
 import { ProductCard } from "./product-card";
 import { BRAND } from "@/lib/brand";
+import { HeroBackground, useHeroSettings } from "./hero-background";
 
 /* ─────────────────────────────────────────────────────────────
    PromoSlider — slider 3 images pro compact, intégré dans la zone pub.
@@ -19,7 +20,7 @@ import { BRAND } from "@/lib/brand";
 const PROMO_SLIDES = [
   {
     image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/36bec25fd4e4.jpg",
-    badge: "TRADE ASSURANCE",
+    badge: "COMMANDE PROTÉGÉE",
     badgeColor: "#16A34A",
     title: "Sourcez en toute confiance",
     text: "Paiement sécurisé, remboursement garanti, expédition à temps ≥ 98%.",
@@ -168,6 +169,7 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
   const [popupOpen, setPopupOpen] = useState(false);
   const sentinel = useRef<HTMLDivElement>(null);
   const [q, setQ] = useState("");
+  const hero = useHeroSettings();
 
   const loadingRef = useRef(false);
   const hasMoreRef = useRef(true);
@@ -245,21 +247,21 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
 
   return (
     <div className="bg-transparent">
-      {/* HERO — dégradé bleu de la marque, accents orange / vert */}
-      <section className="relative bg-brand-gradient text-white overflow-hidden">
-        {/* motif décoratif vert */}
-        <div className="absolute inset-0 opacity-15 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 15% 20%, #2E35C8 0, transparent 45%), radial-gradient(circle at 85% 80%, #FF6A00 0, transparent 35%)" }} />
-        <div className="relative max-w-[1100px] mx-auto px-4 py-7 sm:py-10 lg:py-14 text-center">
-          <div className="inline-flex items-center gap-2 bg-[#16A34A] px-3 py-1 text-[10px] sm:text-[11px] uppercase font-bold tracking-wider mb-3 sm:mb-4 border border-[#1ea84d]">
-            <Bot className="w-3.5 h-3.5" /> Sourcing IA 2025
-          </div>
-          <h1 className="text-[24px] sm:text-[30px] lg:text-[40px] font-extrabold leading-tight">
-            Sourcez plus intelligemment auprès de <span className="text-[#4ade80]">fabricants vérifiés</span>
+      {/* HERO — vidéo de fond + textes modifiables par le super admin */}
+      <section className="relative text-white overflow-hidden min-h-[300px] sm:min-h-[380px] lg:min-h-[440px] flex items-center">
+        <HeroBackground videoUrl={hero.videoUrl} posterUrl={hero.posterUrl} overlay={hero.overlay} />
+        <div className="relative w-full max-w-[1100px] mx-auto px-4 py-7 sm:py-10 lg:py-14 text-center">
+          {hero.badge && (
+            <div className="inline-flex items-center gap-2 bg-[#16A34A] px-3 py-1 text-[10px] sm:text-[11px] uppercase font-bold tracking-wider mb-3 sm:mb-4 border border-[#1ea84d]">
+              <Bot className="w-3.5 h-3.5" /> {hero.badge}
+            </div>
+          )}
+          <h1 className="text-[24px] sm:text-[30px] lg:text-[40px] font-extrabold leading-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.45)]">
+            {hero.title} {hero.highlight && <span className="text-[#4ade80]">{hero.highlight}</span>}
           </h1>
-          <p className="text-[#CFD6F5] text-[13px] sm:text-[14px] mt-2 max-w-2xl mx-auto">
-            200+ produits en gros · 20 fournisseurs vérifiés · Trade Assurance ·
-            Devis en quelques minutes · Livraison en Côte d'Ivoire, Afrique de l'Ouest &amp; dans le monde.
-          </p>
+          {hero.subtitle && (
+            <p className="text-[#E3E8FF] text-[13px] sm:text-[14px] mt-2 max-w-2xl mx-auto [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">{hero.subtitle}</p>
+          )}
 
           {/* big search */}
           <div className="mt-5 sm:mt-6 max-w-3xl mx-auto flex items-center bg-white h-12 sm:h-14 border-2 border-[#16A34A]">
@@ -397,7 +399,7 @@ export function HomeView({ categories }: { categories: CategoryNode[] }) {
 
           {/* right promo */}
           <div className="bg-white border border-[#DADAD9] md:col-span-2 lg:col-span-1">
-            <div className="benjamin-bar-red">Trade Assurance</div>
+            <div className="benjamin-bar-red">Commande protégée</div>
             <div className="p-4">
               <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=600&q=70" alt="entrepôt" className="w-full h-32 object-cover" />
               <div className="benjamin-section-title mt-3">Protection des commandes</div>

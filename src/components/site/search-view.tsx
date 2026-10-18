@@ -20,10 +20,26 @@ const COUNTRIES = ["All", "China", "Ghana", "India", "Vietnam", "Turkey"];
 const MGMT_CERTS = ["ISO9001", "BSCI", "WRAP"];
 const PROD_CERTS = ["CE", "RoHS", "FCC", "FDA", "HALAL"];
 const RATINGS = [
-  { k: "5.0", v: "5.0" },
-  { k: "4.5", v: "4.5+" },
-  { k: "4.0", v: "4.0+" },
+  { k: "5.0", v: "5,0" },
+  { k: "4.5", v: "4,5+" },
+  { k: "4.0", v: "4,0+" },
 ];
+
+const TAB_LABELS: Record<(typeof TABS)[number], string> = {
+  "AI Mode": "Mode IA",
+  Products: "Produits",
+  Suppliers: "Fournisseurs",
+  Worldwide: "International",
+};
+
+const COUNTRY_LABELS: Record<string, string> = {
+  All: "Tous les pays",
+  China: "Chine",
+  Ghana: "Ghana",
+  India: "Inde",
+  Vietnam: "Vietnam",
+  Turkey: "Turquie",
+};
 
 function Stars({ n, className = "" }: { n: number; className?: string }) {
   return (
@@ -93,32 +109,32 @@ function FiltersBody({
     <div className="space-y-4">
       {/* Ready to ship / Trade Assurance */}
       <div>
-        <div className="benjamin-section-title mb-1.5">Refine by</div>
+        <div className="benjamin-section-title mb-1.5">Affiner par</div>
         <Checkbox
           checked={!!filters.tradeAssurance}
           onChange={(v) => setF("tradeAssurance", v)}
-          label="Trade Assurance"
+          label="Commande protégée"
         />
         <Checkbox
           checked={!!filters.verified}
           onChange={(v) => setF("verified", v)}
-          label="Verified supplier"
+          label="Fournisseur vérifié"
         />
         <Checkbox
           checked={!!filters.paidSamples}
           onChange={(v) => setF("paidSamples", v)}
-          label="Paid samples"
+          label="Échantillons payants"
         />
         <Checkbox
           checked={!!filters.readyToShip}
           onChange={(v) => setF("readyToShip", v)}
-          label="Ready to ship"
+          label="Prêt à expédier"
         />
       </div>
 
       {/* Store rating */}
       <div className="border-t border-[#ECECEC] pt-3">
-        <div className="benjamin-section-title mb-1.5">Store rating</div>
+        <div className="benjamin-section-title mb-1.5">Note de la boutique</div>
         <div className="space-y-1">
           {RATINGS.map((r) => (
             <label
@@ -140,14 +156,14 @@ function FiltersBody({
             className="text-[11px] text-[#337AB7] underline mt-0.5"
             onClick={() => setF("rating", null)}
           >
-            Clear
+            Effacer
           </button>
         </div>
       </div>
 
       {/* Categories */}
       <div className="border-t border-[#ECECEC] pt-3">
-        <div className="benjamin-section-title mb-1.5">Categories</div>
+        <div className="benjamin-section-title mb-1.5">Catégories</div>
         <div className="max-h-56 overflow-y-auto benjamin-scroll -mr-2 pr-2">
           {categories.map((c) => (
             <div key={c.id}>
@@ -184,11 +200,11 @@ function FiltersBody({
 
       {/* Price range */}
       <div className="border-t border-[#ECECEC] pt-3">
-        <div className="benjamin-section-title mb-1.5">Price (GHS)</div>
+        <div className="benjamin-section-title mb-1.5">Prix (GHS)</div>
         <div className="flex items-center gap-2">
           <input
             type="number"
-            placeholder="Min"
+            placeholder="Min."
             value={(filters.minPrice as string) ?? ""}
             onChange={(e) => setF("minPrice", e.target.value)}
             className="w-full h-8 border border-[#DADAD9] px-2 text-[12px] outline-none focus:border-[#FF6A00]"
@@ -196,21 +212,21 @@ function FiltersBody({
           <span className="text-[#999]">—</span>
           <input
             type="number"
-            placeholder="Max"
+            placeholder="Max."
             value={(filters.maxPrice as string) ?? ""}
             onChange={(e) => setF("maxPrice", e.target.value)}
             className="w-full h-8 border border-[#DADAD9] px-2 text-[12px] outline-none focus:border-[#FF6A00]"
           />
         </div>
-        <button className="btn-outline-grey w-full mt-2 text-[11px]">Apply</button>
+        <button className="btn-outline-grey w-full mt-2 text-[11px]">Appliquer</button>
       </div>
 
       {/* Min order */}
       <div className="border-t border-[#ECECEC] pt-3">
-        <div className="benjamin-section-title mb-1.5">Min. order</div>
+        <div className="benjamin-section-title mb-1.5">Commande minimale</div>
         <input
           type="number"
-          placeholder="e.g. 100"
+          placeholder="ex. 100"
           value={(filters.minOrder as string) ?? ""}
           onChange={(e) => setF("minOrder", e.target.value)}
           className="w-full h-8 border border-[#DADAD9] px-2 text-[12px] outline-none focus:border-[#FF6A00]"
@@ -219,21 +235,21 @@ function FiltersBody({
 
       {/* Supplier country */}
       <div className="border-t border-[#ECECEC] pt-3">
-        <div className="benjamin-section-title mb-1.5">Supplier country</div>
+        <div className="benjamin-section-title mb-1.5">Pays du fournisseur</div>
         <select
           value={(filters.country as string) ?? "All"}
           onChange={(e) => setF("country", e.target.value)}
           className="w-full h-8 border border-[#DADAD9] px-2 text-[12px] outline-none bg-white focus:border-[#FF6A00]"
         >
           {COUNTRIES.map((c) => (
-            <option key={c} value={c}>{c}</option>
+            <option key={c} value={c}>{COUNTRY_LABELS[c] ?? c}</option>
           ))}
         </select>
       </div>
 
       {/* Management certs */}
       <div className="border-t border-[#ECECEC] pt-3">
-        <div className="benjamin-section-title mb-1.5">Management certifications</div>
+        <div className="benjamin-section-title mb-1.5">Certifications de gestion</div>
         {MGMT_CERTS.map((c) => (
           <Checkbox
             key={c}
@@ -249,7 +265,7 @@ function FiltersBody({
 
       {/* Product certs */}
       <div className="border-t border-[#ECECEC] pt-3">
-        <div className="benjamin-section-title mb-1.5">Product certifications</div>
+        <div className="benjamin-section-title mb-1.5">Certifications produit</div>
         {PROD_CERTS.map((c) => (
           <Checkbox
             key={c}
@@ -382,7 +398,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
       supplierId: p.supplierId,
       supplierName: p.supplierName ?? "",
     });
-    toast.success("Added to cart", { description: p.title.slice(0, 80) });
+    toast.success("Ajouté au panier", { description: p.title.slice(0, 80) });
   }
 
   function pickCategory(id: string | null) {
@@ -405,7 +421,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
                   : "bg-[#ECECEC] text-[#333] hover:bg-[#DADAD9]"
               }`}
             >
-              {t}
+              {TAB_LABELS[t]}
             </button>
           ))}
         </div>
@@ -419,7 +435,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
               onClick={() => setView("home")}
               className="hover:text-[#FF6A00] hover:underline"
             >
-              Home
+              Accueil
             </button>
             {breadcrumbCat && (
               <>
@@ -434,11 +450,11 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
             )}
             <span className="mx-2 text-[#DADAD9]">|</span>
             <span className="text-[#333] font-semibold">
-              Showing {total.toLocaleString()}+ products
+              {total.toLocaleString("fr-FR")}+ produits
             </span>
             {searchQuery.trim() && (
               <>
-                {" "}for <span className="text-[#FF6A00] font-semibold">'{searchQuery}'</span>
+                {" "}pour <span className="text-[#FF6A00] font-semibold">« {searchQuery} »</span>
               </>
             )}
           </div>
@@ -447,19 +463,19 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
               className="lg:hidden btn-outline-grey flex items-center gap-1.5"
               onClick={() => setSheetOpen(true)}
             >
-              <SlidersHorizontal className="w-3.5 h-3.5" /> Filters
+              <SlidersHorizontal className="w-3.5 h-3.5" /> Filtres
             </button>
             <label className="flex items-center gap-2 text-[12px]">
-              <span className="text-[#888]">Sort by</span>
+              <span className="text-[#888]">Trier par</span>
               <select
                 value={orderBy}
                 onChange={(e) => setOrderBy(e.target.value as OrderBy)}
                 className="h-8 border border-[#DADAD9] px-2 text-[12px] outline-none bg-white focus:border-[#FF6A00]"
               >
-                <option value="popular">Relevance</option>
-                <option value="priceAsc">Price: low to high</option>
-                <option value="priceDesc">Price: high to low</option>
-                <option value="newest">Newest</option>
+                <option value="popular">Pertinence</option>
+                <option value="priceAsc">Prix croissant</option>
+                <option value="priceDesc">Prix décroissant</option>
+                <option value="newest">Nouveautés</option>
               </select>
             </label>
           </div>
@@ -473,12 +489,12 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
           <aside className="hidden lg:block">
             <div className="bg-white border border-[#DADAD9] p-4 sticky top-[124px]">
               <div className="flex items-center justify-between mb-2">
-                <div className="benjamin-section-title">Filters</div>
+                <div className="benjamin-section-title">Filtres</div>
                 <button
                   onClick={resetFilters}
                   className="text-[11px] text-[#337AB7] hover:text-[#FF6A00] underline"
                 >
-                  Clear all
+                  Tout effacer
                 </button>
               </div>
               <FiltersBody
@@ -497,10 +513,10 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
             ) : filtered.length === 0 ? (
               <div className="bg-white border border-[#DADAD9] p-12 text-center">
                 <div className="text-[16px] font-bold text-[#333] mb-2">
-                  No products found
+                  Aucun produit trouvé
                 </div>
                 <p className="text-[12px] text-[#888] mb-4">
-                  Try adjusting your filters or search terms.
+                  Essayez de modifier vos filtres ou vos termes de recherche.
                 </p>
                 <button
                   onClick={() => {
@@ -510,7 +526,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
                   }}
                   className="btn-benjamin-orange"
                 >
-                  Reset search
+                  Réinitialiser la recherche
                 </button>
               </div>
             ) : (
@@ -528,7 +544,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
                       </div>
                       <div className="flex items-center gap-1 text-[11px] text-[#888] mb-2">
                         <Stars n={p.rating} />
-                        <span className="font-semibold text-[#333]">{p.rating.toFixed(1)}</span>
+                        <span className="font-semibold text-[#333]">{p.rating.toFixed(1).replace(".", ",")}</span>
                         <span>({p.reviewCount})</span>
                       </div>
                       <div className="grid grid-cols-2 gap-1.5">
@@ -536,7 +552,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
                           onClick={() => handleAddToCart(p)}
                           className="btn-square-black text-[10px] !px-1 py-1.5 whitespace-nowrap"
                         >
-                          <span className="sm:hidden">Cart</span><span className="hidden sm:inline">Add to cart</span>
+                          <span className="sm:hidden">Panier</span><span className="hidden sm:inline">Ajouter au panier</span>
                         </button>
                         <button
                           onClick={() => {
@@ -546,7 +562,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
                           }}
                           className="btn-benjamin-orange text-[10px] !px-1 py-1.5 whitespace-nowrap flex items-center justify-center gap-1"
                         >
-                          <MessageCircle className="w-3 h-3 shrink-0" /> <span className="sm:hidden">Chat</span><span className="hidden sm:inline">Chat now</span>
+                          <MessageCircle className="w-3 h-3 shrink-0" /> <span className="sm:hidden">Discuter</span><span className="hidden sm:inline">Contacter</span>
                         </button>
                       </div>
                     </div>
@@ -562,7 +578,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
                   className="benjamin-nav-btn"
                   disabled={page === 1}
                   onClick={() => setSkip(Math.max(0, skip - take))}
-                  aria-label="Previous"
+                  aria-label="Page précédente"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -582,7 +598,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
                   className="benjamin-nav-btn"
                   disabled={page >= pageCount}
                   onClick={() => setSkip(skip + take)}
-                  aria-label="Next"
+                  aria-label="Page suivante"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -597,7 +613,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
         <SheetContent side="left" className="w-[300px] sm:max-w-[340px] overflow-y-auto benjamin-scroll p-0">
           <SheetHeader className="bg-[#0A0F4D] text-white p-3 flex flex-row items-center justify-between gap-2">
             <SheetTitle className="text-white text-[13px] uppercase tracking-wide font-bold">
-              ▼ Filters
+              ▼ Filtres
             </SheetTitle>
           </SheetHeader>
           <div className="p-3">
@@ -611,7 +627,7 @@ export function SearchView({ categories }: { categories: CategoryNode[] }) {
               onClick={() => setSheetOpen(false)}
               className="btn-benjamin-orange w-full mt-4"
             >
-              Show {total.toLocaleString()}+ results
+              Afficher {total.toLocaleString("fr-FR")}+ résultats
             </button>
           </div>
         </SheetContent>

@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 import { useApp } from "@/lib/store";
 
 const TOOLS = [
-  { icon: MessageSquare, label: "MESSAGES", color: "#FF6A00" },
-  { icon: Bot, label: "AI ASSISTANT", color: "#FF6A00" },
-  { icon: ImageIcon, label: "IMAGE SEARCH", color: "#FF6A00" },
-  { icon: HelpCircle, label: "HELP", color: "#FF6A00" },
+  { key: "messages", icon: MessageSquare, label: "Messages", color: "#FF6A00" },
+  { key: "ai", icon: Bot, label: "Assistant IA", color: "#FF6A00" },
+  { key: "image", icon: ImageIcon, label: "Recherche image", color: "#FF6A00" },
+  { key: "help", icon: HelpCircle, label: "Aide", color: "#FF6A00" },
 ];
 
 export function RightToolbar() {
@@ -29,17 +29,17 @@ export function RightToolbar() {
       <div className="bg-[#2a2a2a] border border-[#0A0F4D] flex flex-col">
         {TOOLS.map((t) => (
           <button
-            key={t.label}
+            key={t.key}
             onClick={() => {
-              if (t.label === "HELP") setView("help");
-              else if (t.label === "MESSAGES") setView("chat");
+              if (t.key === "help") setView("help");
+              else if (t.key === "messages") setView("chat");
             }}
             className="group flex flex-col items-center justify-center w-12 py-3 border-b border-[#1a1a1a] hover:bg-[#FF6A00] transition-colors"
             title={t.label}
           >
             <span className="relative">
               <t.icon className="w-4 h-4" style={{ color: t.color }} strokeWidth={1.8} />
-              {t.label === "MESSAGES" && chatUnread > 0 && (
+              {t.key === "messages" && chatUnread > 0 && (
                 <span className="absolute -top-1.5 -right-2.5 bg-[#16A34A] text-white text-[8px] font-bold min-w-[14px] h-[14px] px-0.5 flex items-center justify-center">
                   {chatUnread > 99 ? "99+" : chatUnread}
                 </span>
@@ -54,7 +54,7 @@ export function RightToolbar() {
           onClick={() => setShowTop(false)}
           disabled={!showTop}
           className="group flex flex-col items-center justify-center w-12 py-3 hover:bg-[#FF6A00] disabled:hover:bg-[#2a2a2a] transition-colors"
-          title="BACK TO TOP"
+          title="Retour en haut"
         >
           <ChevronUp
             className="w-4 h-4"
@@ -62,7 +62,7 @@ export function RightToolbar() {
             strokeWidth={1.8}
           />
           <span className="text-[8px] text-white font-bold uppercase tracking-tight mt-1">
-            TOP
+            Haut
           </span>
         </button>
       </div>

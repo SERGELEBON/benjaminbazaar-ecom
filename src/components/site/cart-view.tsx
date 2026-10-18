@@ -6,7 +6,7 @@ import {
   ChevronRight, ShieldCheck, Truck,
 } from "lucide-react";
 import { useApp, type CartLine } from "@/lib/store";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, unitLabel } from "@/lib/format";
 
 interface SupplierGroup {
   supplierId: string;
@@ -139,7 +139,7 @@ export function CartView() {
                       onClick={() => useApp.getState().openChat(g.supplierId)}
                       className="btn-outline-grey ml-auto flex items-center gap-1.5 !text-[11px] !py-1.5"
                     >
-                      <MessageSquare className="w-3.5 h-3.5" /> Chat
+                      <MessageSquare className="w-3.5 h-3.5" /> Discuter
                     </button>
                   </div>
 
@@ -188,7 +188,7 @@ export function CartView() {
                           <span className="text-[#FF6A00] font-bold text-[14px]">
                             {formatPrice(l.price, currency)}
                           </span>
-                          <div className="text-[10px] text-[#999]">/ {l.unit}</div>
+                          <div className="text-[10px] text-[#999]">/ {unitLabel(l.unit)}</div>
                         </div>
 
                         {/* quantity stepper */}

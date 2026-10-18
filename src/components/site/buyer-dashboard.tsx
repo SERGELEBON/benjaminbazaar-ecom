@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp, useDashboardTab } from "@/lib/store";
-import { formatPrice, type ProductT, type Currency } from "@/lib/format";
+import { formatPrice, type ProductT, type Currency, unitLabel } from "@/lib/format";
 import { AddressesPanel, FavoritesPanel } from "./client/client-panels";
 import { OrdersPanel } from "./orders/orders-panel";
 
@@ -110,9 +110,20 @@ function StatusBadge({ status }: { status: string }) {
     paid_out: "bg-[#16A34A]",
     pending_payout: "bg-[#FF6A00]",
   };
+  const labels: Record<string, string> = {
+    delivered: "Livrée",
+    shipped: "Expédiée",
+    paid: "Payée",
+    pending: "En attente",
+    cancelled: "Annulée",
+    open: "Ouverte",
+    closed: "Clôturée",
+    paid_out: "Versé",
+    pending_payout: "Versement en attente",
+  };
   return (
     <span className={`${map[status] || "bg-[#999]"} text-white text-[10px] font-bold uppercase px-2 py-0.5 tracking-wide`}>
-      {status}
+      {labels[status] || status}
     </span>
   );
 }
@@ -151,11 +162,11 @@ function RfqsTab() {
     <div>
       <div className="p-4 border-b border-[#ECECEC] flex items-center justify-between">
         <div>
-          <h3 className="benjamin-section-title">Inquiries / RFQs</h3>
-          <p className="text-[11px] text-[#888] mt-0.5">Request quotations from verified suppliers</p>
+          <h3 className="benjamin-section-title">Demandes de devis (RFQ)</h3>
+          <p className="text-[11px] text-[#888] mt-0.5">Demandez des devis aux fournisseurs vérifiés</p>
         </div>
         <button onClick={() => setView("rfq")} className="btn-benjamin-orange text-[11px] flex items-center gap-1.5">
-          <Plus className="w-3.5 h-3.5" /> New RFQ
+          <Plus className="w-3.5 h-3.5" /> Nouvelle demande
         </button>
       </div>
 
@@ -166,8 +177,8 @@ function RfqsTab() {
       ) : rfqs.length === 0 ? (
         <div className="p-8 text-center">
           <FileText className="w-10 h-10 mx-auto text-[#DADAD9]" />
-          <p className="text-[13px] mt-2 text-[#666]">No RFQs yet.</p>
-          <button onClick={() => setView("rfq")} className="btn-benjamin-orange mt-4">Submit your first RFQ</button>
+          <p className="text-[13px] mt-2 text-[#666]">Aucune demande de devis pour le moment.</p>
+          <button onClick={() => setView("rfq")} className="btn-benjamin-orange mt-4">Envoyer votre première demande</button>
         </div>
       ) : (
         <ul className="divide-y divide-[#ECECEC]">
@@ -179,17 +190,17 @@ function RfqsTab() {
                   <StatusBadge status={r.status} />
                 </div>
                 <div className="text-[11px] text-[#888] mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
-                  <span>Category: {r.category}</span>
-                  <span>Qty: {r.quantity} {r.unit}</span>
-                  {r.budget && <span>Budget: {r.budget}</span>}
-                  <span>Created {new Date(r.createdAt).toLocaleDateString()}</span>
+                  <span>Catégorie : {r.category}</span>
+                  <span>Qté : {r.quantity} {unitLabel(r.unit)}</span>
+                  {r.budget && <span>Budget : {r.budget}</span>}
+                  <span>Créée le {new Date(r.createdAt).toLocaleDateString("fr-FR")}</span>
                 </div>
                 {r.details && <p className="text-[12px] text-[#555] mt-1 line-clamp-2">{r.details}</p>}
               </div>
               <div className="text-right md:w-44">
-                <div className="text-[11px] text-[#888] uppercase tracking-wide">Quotes</div>
+                <div className="text-[11px] text-[#888] uppercase tracking-wide">Offres reçues</div>
                 <div className="text-[22px] font-extrabold text-[#FF6A00]">{r.quotes.length}</div>
-                <button onClick={() => toast.info("Viewing quotes")} className="benjamin-link text-[12px]">View quotes →</button>
+                <button onClick={() => toast.info("Affichage des offres bientôt disponible")} className="benjamin-link text-[12px]">Voir les offres →</button>
               </div>
             </li>
           ))}

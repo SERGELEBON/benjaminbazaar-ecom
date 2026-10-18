@@ -12,7 +12,7 @@ const COLS: { title: string; links: string[] }[] = [
   },
   {
     title: "Paiements & protections",
-    links: ["Trade Assurance", "Paiement sécurisé", "Protection remboursement", "Résolution des litiges", "Vérification fournisseur"],
+    links: ["Commande protégée", "Paiement sécurisé", "Protection remboursement", "Résolution des litiges", "Vérification des boutiques"],
   },
   {
     title: `Sourcer sur ${BRAND.shortName}`,
@@ -48,6 +48,7 @@ export function Footer() {
               <a
                 key={i}
                 href="#"
+                aria-label={["Facebook", "Twitter", "Instagram", "YouTube", "LinkedIn"][i]}
                 className="w-8 h-8 border border-[#26308F] flex items-center justify-center hover:bg-[#16A34A] hover:border-[#16A34A] transition-colors"
               >
                 <Ic className="w-4 h-4 text-[#CFD6F5] hover:text-white" strokeWidth={1.6} />
@@ -108,11 +109,11 @@ export function Footer() {
 
         {/* trust badges */}
         <div className="mt-7 pt-5 border-t border-[#26308F] flex flex-wrap items-center justify-center gap-4 text-[11px] text-[#9AA6E0]">
-          <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Trade Assurance</span>
+          <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Commande protégée</span>
           <span className="text-[#26308F]">|</span>
           <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Paiement sécurisé</span>
           <span className="text-[#26308F]">|</span>
-          <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Fournisseurs vérifiés</span>
+          <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Boutiques vérifiées</span>
           <span className="text-[#26308F]">|</span>
           <span className="flex items-center gap-1.5"><span className="text-[#4ade80]">✓</span> Livraison en Côte d'Ivoire 🇨🇮</span>
         </div>

@@ -409,7 +409,7 @@ export function AuthView() {
                 "Mot de passe chiffré, jamais stocké en clair",
                 "Connexion rapide avec votre compte Google",
                 "Marchands vérifiés par notre équipe",
-                "Paiement protégé par Trade Assurance",
+                "Paiements sécurisés grâce à la Commande protégée",
               ].map((b) => (
                 <li key={b} className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#4ade80] mt-0.5 shrink-0" />

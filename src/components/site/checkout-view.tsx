@@ -1,5 +1,6 @@
 "use client";
 
+import { unitLabel } from "@/lib/format";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle, Banknote, Check, ChevronRight, Loader2, Lock, MapPin, MessageCircle, Plus, ShieldCheck, Smartphone, Truck,
@@ -297,7 +298,7 @@ export function CheckoutView() {
                               <div className="text-[13px] text-[#333] line-clamp-2 leading-snug">{l.title}</div>
                               {l.variant && <div className="text-[11px] text-[#888]">{l.variant}</div>}
                               <div className="text-[11px] text-[#666] mt-0.5">
-                                {l.quantity} {l.unit} × {fcfa(l.unitPrice)}
+                                {l.quantity} {unitLabel(l.unit)} × {fcfa(l.unitPrice)}
                               </div>
                               {lineIssues.map((i, n) => (
                                 <p key={n} role="alert" className="text-[11px] text-[#B91C1C] mt-1 flex items-center gap-1">

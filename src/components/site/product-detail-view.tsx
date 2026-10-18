@@ -7,7 +7,7 @@ import {
   FileText, Truck, MapPin,
 } from "lucide-react";
 import { useApp } from "@/lib/store";
-import { formatPrice, type ProductT, type SupplierT } from "@/lib/format";
+import { formatPrice, type ProductT, type SupplierT, unitLabel } from "@/lib/format";
 import { ProductCard } from "./product-card";
 import { toast } from "sonner";
 
@@ -80,7 +80,7 @@ export function ProductDetailView() {
   const [variants, setVariants] = useState<Record<string, string>>({});
   const [showAllAttrs, setShowAllAttrs] = useState(false);
   const [infoTab, setInfoTab] = useState<"attributes" | "reviews" | "supplier" | "description">("attributes");
-  const [shipCountry, setShipCountry] = useState("Ghana");
+  const [shipCountry, setShipCountry] = useState("Côte d'Ivoire");
   const [shipQty, setShipQty] = useState(1);
 
   useEffect(() => {
@@ -132,12 +132,12 @@ export function ProductDetailView() {
       <div className="bg-[#f4f1ec] min-h-screen">
         <div className="max-w-[600px] mx-auto px-4 py-16 text-center">
           <div className="bg-white border border-[#DADAD9] p-10">
-            <div className="benjamin-section-title mb-3">Select a product</div>
+            <div className="benjamin-section-title mb-3">Sélectionnez un produit</div>
             <p className="text-[12px] text-[#888] mb-5">
-              Browse our marketplace to find a product to view in detail.
+              Parcourez notre marketplace pour trouver un produit à consulter en détail.
             </p>
             <button onClick={() => setView("home")} className="btn-benjamin-orange">
-              Go to homepage
+              Aller à l&apos;accueil
             </button>
           </div>
         </div>
@@ -151,9 +151,9 @@ export function ProductDetailView() {
       <div className="bg-[#f4f1ec] min-h-screen">
         <div className="max-w-[600px] mx-auto px-4 py-16 text-center">
           <div className="bg-white border border-[#DADAD9] p-10">
-            <div className="text-[14px] font-bold mb-2">Product not found</div>
+            <div className="text-[14px] font-bold mb-2">Produit introuvable</div>
             <button onClick={() => setView("home")} className="btn-benjamin-orange">
-              Back home
+              Retour à l&apos;accueil
             </button>
           </div>
         </div>
@@ -166,8 +166,8 @@ export function ProductDetailView() {
 
   const breadcrumbCat = product.categoryName;
   const subtotal = (tier?.price ?? 0) * qty;
-  const shippingEst = subtotal > 0 ? Math.max(2, subtotal * 0.06) : 0;
-  const total = subtotal + shippingEst;
+  // Delivery is agreed with the shop after the order (same rule as checkout): no invented fee.
+  const total = subtotal;
 
   function handleAddToCart(buyNow = false) {
     if (!tier) return;
@@ -184,10 +184,10 @@ export function ProductDetailView() {
       supplierName: product.supplierName ?? "",
     });
     if (buyNow) {
-      toast.success("Proceeding to checkout", { description: product.title.slice(0, 80) });
+      toast.success("Redirection vers le paiement", { description: product.title.slice(0, 80) });
       setView("cart");
     } else {
-      toast.success("Added to cart", { description: product.title.slice(0, 80) });
+      toast.success("Ajouté au panier", { description: product.title.slice(0, 80) });
     }
   }
 
@@ -208,11 +208,11 @@ export function ProductDetailView() {
       <div className="bg-white border-b border-[#ECECEC]">
         <div className="max-w-[1280px] mx-auto px-3 lg:px-6 py-2 text-[12px] text-[#555]">
           <button onClick={() => setView("home")} className="hover:text-[#FF6A00] hover:underline">
-            Home
+            Accueil
           </button>
           <span className="mx-1 text-[#DADAD9]">›</span>
           <button onClick={openCategory} className="hover:text-[#FF6A00] hover:underline">
-            {breadcrumbCat ?? "Category"}
+            {breadcrumbCat ?? "Catégorie"}
           </button>
           <span className="mx-1 text-[#DADAD9]">›</span>
           <span className="hidden sm:inline text-[#333]">{product.title}</span>
@@ -288,7 +288,7 @@ export function ProductDetailView() {
                         onClick={() => setMediaTab("video")}
                         className={`px-2 py-1 border ${mediaTab === "video" ? "border-[#FF6A00] text-[#FF6A00] font-bold" : "border-[#DADAD9]"}`}
                       >
-                        <Play className="w-3 h-3 inline mr-1" /> Video
+                        <Play className="w-3 h-3 inline mr-1" /> Vidéo
                       </button>
                     )}
                   </div>
@@ -298,7 +298,7 @@ export function ProductDetailView() {
 
             {/* Supplier card */}
             <div className="order-4 lg:order-none bg-white border border-[#DADAD9]">
-              <div className="benjamin-bar">Supplier information</div>
+              <div className="benjamin-bar">Informations sur la boutique</div>
               <div className="p-4">
                 <div className="flex items-start gap-3">
                   <div className="w-14 h-14 bg-[#ECECEC] border border-[#DADAD9] overflow-hidden shrink-0 flex items-center justify-center">
@@ -327,29 +327,29 @@ export function ProductDetailView() {
                       {product.city}, {product.country}
                     </div>
                     <div className="text-[11px] text-[#888] mt-0.5">
-                      {product.years} yrs · {product.storeRating ? "★" : ""} {product.storeRating?.toFixed(1) ?? "-"} · {product.type}
+                      {product.years} ans · {product.storeRating ? "★" : ""} {product.storeRating?.toFixed(1) ?? "-"} · {product.type}
                     </div>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-2 mt-3 text-center border-y border-[#ECECEC] py-3">
                   <div>
-                    <div className="text-[10px] text-[#888] uppercase">Response</div>
+                    <div className="text-[10px] text-[#888] uppercase">Réponse</div>
                     <div className="text-[11px] font-bold text-[#333]">{product.responseTime ?? "—"}</div>
                   </div>
                   <div className="border-x border-[#ECECEC]">
-                    <div className="text-[10px] text-[#888] uppercase">On-time</div>
+                    <div className="text-[10px] text-[#888] uppercase">Ponctualité</div>
                     <div className="text-[11px] font-bold text-[#16A34A]">{product.onTimeDispatch ?? 0}%</div>
                   </div>
                   <div>
-                    <div className="text-[10px] text-[#888] uppercase">Reorder</div>
+                    <div className="text-[10px] text-[#888] uppercase">Fidélité</div>
                     <div className="text-[11px] font-bold text-[#FF6A00]">{Math.round(product.reorderRate)}%</div>
                   </div>
                 </div>
                 <button
-                  onClick={() => toast.success("Supplier vetting report", { description: "Generating AI vetting report…" })}
+                  onClick={() => toast.success("Rapport de vérification de la boutique", { description: "Génération du rapport de vérification par l'IA…" })}
                   className="btn-outline-grey w-full mt-3 text-[11px] flex items-center justify-center gap-1.5"
                 >
-                  <FileText className="w-3.5 h-3.5" /> Supplier vetting / Generate report
+                  <FileText className="w-3.5 h-3.5" /> Vérification de la boutique / Générer le rapport
                 </button>
               </div>
             </div>
@@ -368,18 +368,18 @@ export function ProductDetailView() {
                   onClick={() => setInfoTab("reviews")}
                   className="benjamin-link ml-0.5"
                 >
-                  ({product.reviewCount} reviews)
+                  ({product.reviewCount} avis)
                 </button>
               </div>
               <span className="text-[#DADAD9]">|</span>
               <span>
-                <span className="font-bold text-[#333]">{product.sold.toLocaleString()}</span> sold
+                <span className="font-bold text-[#333]">{product.sold.toLocaleString("fr-FR")}</span> vendus
               </span>
               {product.rank > 0 && (
                 <>
                   <span className="text-[#DADAD9]">|</span>
                   <span className="text-[#FF6A00] font-semibold">
-                    #{product.rank} most popular in {breadcrumbCat ?? "category"}
+                    N°{product.rank} des plus populaires en {breadcrumbCat ?? "catégorie"}
                   </span>
                 </>
               )}
@@ -389,22 +389,22 @@ export function ProductDetailView() {
             <div className="flex flex-wrap gap-1.5 mt-3">
               {product.tradeAssurance && (
                 <span className="inline-flex items-center gap-1 bg-[#16A34A]/10 text-[#16A34A] text-[11px] font-bold px-2 py-1 border border-[#16A34A]/30">
-                  <ShieldCheck className="w-3.5 h-3.5" /> Trade Assurance
+                  <ShieldCheck className="w-3.5 h-3.5" /> Commande protégée
                 </span>
               )}
               {product.readyToShip && (
                 <span className="inline-flex items-center gap-1 bg-[#FF6A00]/10 text-[#FF6A00] text-[11px] font-bold px-2 py-1 border border-[#FF6A00]/30">
-                  <Truck className="w-3.5 h-3.5" /> Ready to ship
+                  <Truck className="w-3.5 h-3.5" /> Prêt à expédier
                 </span>
               )}
               {product.customizable && (
                 <span className="inline-flex items-center gap-1 bg-[#0A0F4D]/5 text-[#333] text-[11px] font-bold px-2 py-1 border border-[#0A0F4D]/15">
-                  Customizable
+                  Personnalisable
                 </span>
               )}
               {product.lowestPrice && (
                 <span className="inline-flex items-center gap-1 bg-[#FF6A00]/10 text-[#FF6A00] text-[11px] font-bold px-2 py-1 border border-[#FF6A00]/30">
-                  <RefreshCw className="w-3.5 h-3.5" /> 180-day lowest
+                  <RefreshCw className="w-3.5 h-3.5" /> Prix le plus bas sur 180 jours
                 </span>
               )}
             </div>
@@ -412,8 +412,8 @@ export function ProductDetailView() {
             {/* PRICE TIERS */}
             <div className="mt-4 border border-[#DADAD9]">
               <div className="bg-[#ECECEC] px-3 py-2 flex items-center justify-between">
-                <span className="text-[12px] font-bold uppercase text-[#333]">Pricing tiers</span>
-                <span className="text-[11px] text-[#666]">per {product.unit}</span>
+                <span className="text-[12px] font-bold uppercase text-[#333]">Prix par quantité</span>
+                <span className="text-[11px] text-[#666]">par {unitLabel(product.unit)}</span>
               </div>
               <div className="divide-y divide-[#ECECEC]">
                 {[...product.priceTiers]
@@ -428,7 +428,7 @@ export function ProductDetailView() {
                       >
                         <div className="text-[12px] font-semibold">
                           {t.minQty}
-                          {t.maxQty ? ` - ${t.maxQty}` : "+"} {t.unit}
+                          {t.maxQty ? ` - ${t.maxQty}` : "+"} {unitLabel(t.unit)}
                         </div>
                         <div className="text-[15px] font-extrabold">
                           {formatPrice(t.price, currency)}
@@ -438,7 +438,7 @@ export function ProductDetailView() {
                   })}
               </div>
               <div className="px-3 py-2 bg-[#fafafa] text-[11px] text-[#888] border-t border-[#ECECEC]">
-                Min. order: <span className="font-bold text-[#333]">{product.minOrder} {product.minOrderUnit}</span>
+                Commande min. : <span className="font-bold text-[#333]">{product.minOrder} {unitLabel(product.minOrderUnit)}</span>
                 {product.stock != null && (
                   <span className={`ml-3 font-bold ${product.stock === 0 ? "text-[#DC2626]" : "text-[#16A34A]"}`}>
                     {product.stock === 0 ? "Rupture de stock" : `${product.stock.toLocaleString("fr-FR")} en stock`}
@@ -453,7 +453,7 @@ export function ProductDetailView() {
                 {product.variants.map((v) => (
                   <div key={v.name}>
                     <div className="text-[12px] font-bold uppercase text-[#555] mb-1.5">
-                      {v.name}: <span className="text-[#333]">{variants[v.name] ?? v.options[0]}</span>
+                      {v.name} : <span className="text-[#333]">{variants[v.name] ?? v.options[0]}</span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {v.options.map((o) => (
@@ -477,7 +477,7 @@ export function ProductDetailView() {
 
             {/* Quantity */}
             <div className="mt-4 flex items-center gap-3">
-              <div className="text-[12px] font-bold uppercase text-[#555]">Quantity</div>
+              <div className="text-[12px] font-bold uppercase text-[#555]">Quantité</div>
               <div className="flex items-center border border-[#DADAD9]">
                 <button
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
@@ -498,10 +498,10 @@ export function ProductDetailView() {
                   <Plus className="w-3.5 h-3.5 mx-auto" />
                 </button>
               </div>
-              <span className="text-[11px] text-[#888]">{product.unit}</span>
+              <span className="text-[11px] text-[#888]">{unitLabel(product.unit)}</span>
               {tier && (
                 <span className="text-[12px] text-[#333] ml-auto">
-                  Subtotal:{" "}
+                  Sous-total :{" "}
                   <span className="font-extrabold text-[#FF6A00]">{formatPrice(tier.price * qty, currency)}</span>
                 </span>
               )}
@@ -511,10 +511,10 @@ export function ProductDetailView() {
             {product.customizable && (
               <div className="mt-4 border border-[#ECECEC] p-3 bg-[#fafafa]">
                 <div className="text-[12px] font-bold text-[#333] mb-1.5">
-                  Supplier's customization ability
+                  Capacités de personnalisation de la boutique
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {["OEM", "ODM", "Custom logo", "Custom packaging"].map((c) => (
+                  {["OEM", "ODM", "Logo personnalisé", "Emballage personnalisé"].map((c) => (
                     <span key={c} className="text-[10px] font-bold uppercase border border-[#DADAD9] bg-white text-[#333] px-1.5 py-0.5">
                       {c}
                     </span>
@@ -526,7 +526,7 @@ export function ProductDetailView() {
             {/* KEY ATTRIBUTES */}
             {product.keyAttributes.length > 0 && (
               <div className="mt-5">
-                <div className="benjamin-section-title mb-2">Key attributes</div>
+                <div className="benjamin-section-title mb-2">Caractéristiques principales</div>
                 <div className="border border-[#DADAD9]">
                   {product.keyAttributes
                     .slice(0, showAllAttrs ? undefined : 4)
@@ -547,7 +547,7 @@ export function ProductDetailView() {
                     onClick={() => setShowAllAttrs((v) => !v)}
                     className="benjamin-link text-[12px] mt-1.5"
                   >
-                    {showAllAttrs ? "Show less" : `Show more (${product.keyAttributes.length - 4} more)`}
+                    {showAllAttrs ? "Afficher moins" : `Afficher plus (${product.keyAttributes.length - 4} de plus)`}
                   </button>
                 )}
               </div>
@@ -557,12 +557,12 @@ export function ProductDetailView() {
           {/* RIGHT: order box */}
           <div className="order-3 lg:order-none">
             <div className="bg-white border border-[#DADAD9] lg:sticky lg:top-[124px]">
-              <div className="benjamin-bar-red">Start order</div>
+              <div className="benjamin-bar-red">Commander</div>
               <div className="p-4 space-y-3">
                 {/* Shipping calculator */}
                 <div>
                   <div className="text-[11px] uppercase font-bold text-[#888] mb-1">
-                    Shipping
+                    Livraison
                   </div>
                   <div className="grid grid-cols-2 gap-1.5">
                     <select
@@ -570,11 +570,11 @@ export function ProductDetailView() {
                       onChange={(e) => setShipCountry(e.target.value)}
                       className="h-9 border border-[#DADAD9] px-2 text-[12px] bg-white outline-none focus:border-[#FF6A00]"
                     >
+                      <option>Côte d&apos;Ivoire</option>
                       <option>Ghana</option>
                       <option>Nigeria</option>
-                      <option>Côte d'Ivoire</option>
-                      <option>USA</option>
-                      <option>UK</option>
+                      <option value="USA">États-Unis</option>
+                      <option value="UK">Royaume-Uni</option>
                     </select>
                     <input
                       type="number"
@@ -586,22 +586,22 @@ export function ProductDetailView() {
                   </div>
                   <div className="text-[11px] text-[#666] mt-1 flex items-center gap-1">
                     <Truck className="w-3 h-3 text-[#FF6A00]" />
-                    Lead time: {product.readyToShip ? "Ready to ship ≤7d" : "15-25d"} · Shipping: {formatPrice(shippingEst, currency)}
+                    Délai : {product.readyToShip ? "Prêt à expédier ≤ 7 j" : "15-25 j"} · Frais de livraison à convenir avec la boutique
                   </div>
                 </div>
 
                 {/* Totals */}
                 <div className="border-t border-[#ECECEC] pt-3 space-y-1.5">
                   <div className="flex justify-between text-[12px]">
-                    <span className="text-[#888]">Item subtotal ({qty} {product.unit})</span>
+                    <span className="text-[#888]">Sous-total articles ({qty} {unitLabel(product.unit)})</span>
                     <span className="font-semibold">{formatPrice(subtotal, currency)}</span>
                   </div>
                   <div className="flex justify-between text-[12px]">
-                    <span className="text-[#888]">Shipping to {shipCountry}</span>
-                    <span className="font-semibold">{formatPrice(shippingEst, currency)}</span>
+                    <span className="text-[#888]">Livraison vers {shipCountry === "USA" ? "États-Unis" : shipCountry === "UK" ? "Royaume-Uni" : shipCountry}</span>
+                    <span className="font-semibold">À convenir</span>
                   </div>
                   <div className="flex justify-between text-[14px] border-t border-[#ECECEC] pt-2 mt-1">
-                    <span className="font-bold">Total</span>
+                    <span className="font-bold">Total articles</span>
                     <span className="font-extrabold text-[#FF6A00]">{formatPrice(total, currency)}</span>
                   </div>
                 </div>
@@ -609,11 +609,11 @@ export function ProductDetailView() {
                 {/* protection */}
                 <div className="bg-[#16A34A]/5 border border-[#16A34A]/30 p-2.5">
                   <div className="text-[11px] font-bold text-[#16A34A] flex items-center gap-1.5 mb-1">
-                    <ShieldCheck className="w-4 h-4" /> Order protection
+                    <ShieldCheck className="w-4 h-4" /> Protection de commande
                   </div>
                   <div className="text-[11px] text-[#555] space-y-0.5">
-                    <div>✓ Secure payment escrow</div>
-                    <div>✓ Money-back protection</div>
+                    <div>✓ Paiement sécurisé sous séquestre</div>
+                    <div>✓ Garantie de remboursement</div>
                   </div>
                 </div>
 
@@ -630,7 +630,7 @@ export function ProductDetailView() {
                     }}
                     className="btn-benjamin-orange w-full flex items-center justify-center gap-1.5 py-2.5"
                   >
-                    <MessageCircle className="w-4 h-4" /> Send inquiry
+                    <MessageCircle className="w-4 h-4" /> Contacter la boutique
                   </button>
                   <button
                     onClick={() => {
@@ -643,28 +643,28 @@ export function ProductDetailView() {
                     }}
                     className="btn-square-black w-full flex items-center justify-center gap-1.5 py-2.5"
                   >
-                    <MessageCircle className="w-4 h-4" /> Chat now
+                    <MessageCircle className="w-4 h-4" /> Discuter maintenant
                   </button>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => handleAddToCart(false)}
                       className="btn-square-black py-2.5"
                     >
-                      Add to cart
+                      Ajouter au panier
                     </button>
                     <button
                       onClick={() => handleAddToCart(true)}
                       className="btn-benjamin-orange py-2.5"
                     >
-                      Buy now
+                      Acheter maintenant
                     </button>
                   </div>
                 </div>
 
                 {/* trust mini */}
                 <div className="flex items-center justify-center gap-3 text-[10px] text-[#888] pt-1">
-                  <span className="flex items-center gap-1"><CreditCard className="w-3 h-3" /> Secure payment</span>
-                  <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Refund</span>
+                  <span className="flex items-center gap-1"><CreditCard className="w-3 h-3" /> Paiement sécurisé</span>
+                  <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Remboursement</span>
                 </div>
               </div>
             </div>
@@ -674,7 +674,7 @@ export function ProductDetailView() {
         {/* RELATED CAROUSEL */}
         {related.length > 0 && (
           <div className="mt-6">
-            <div className="benjamin-bar mb-3">Other recommendations</div>
+            <div className="benjamin-bar mb-3">Autres recommandations</div>
             <div className="overflow-x-auto benjamin-scroll">
               <div className="flex gap-3 min-w-max pb-2">
                 {related.map((p) => (
@@ -700,9 +700,9 @@ export function ProductDetailView() {
                     : "text-[#666] hover:text-[#FF6A00]"
                 }`}
               >
-                {t === "attributes" && "Attributes"}
-                {t === "reviews" && `Reviews (${product.reviewCount})`}
-                {t === "supplier" && "Supplier"}
+                {t === "attributes" && "Caractéristiques"}
+                {t === "reviews" && `Avis (${product.reviewCount})`}
+                {t === "supplier" && "Boutique"}
                 {t === "description" && "Description"}
               </button>
             ))}
@@ -712,7 +712,7 @@ export function ProductDetailView() {
             {infoTab === "attributes" && (
               <div>
                 {product.keyAttributes.length === 0 ? (
-                  <p className="text-[12px] text-[#888]">No attributes available.</p>
+                  <p className="text-[12px] text-[#888]">Aucune caractéristique disponible.</p>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
                     {product.keyAttributes.map((a, i) => (
@@ -725,7 +725,7 @@ export function ProductDetailView() {
                 )}
                 {product.certifications.length > 0 && (
                   <div className="mt-4">
-                    <div className="benjamin-section-title mb-1.5">Product certifications</div>
+                    <div className="benjamin-section-title mb-1.5">Certifications du produit</div>
                     <div className="flex flex-wrap gap-1.5">
                       {product.certifications.map((c) => <CertChip key={c} c={c} />)}
                     </div>
@@ -740,7 +740,7 @@ export function ProductDetailView() {
                   <div className="text-center">
                     <div className="text-[28px] font-extrabold text-[#FF6A00]">{product.rating.toFixed(1)}</div>
                     <Stars n={product.rating} />
-                    <div className="text-[11px] text-[#888] mt-1">{product.reviewCount} reviews</div>
+                    <div className="text-[11px] text-[#888] mt-1">{product.reviewCount} avis</div>
                   </div>
                   <div className="flex-1 space-y-1">
                     {[5, 4, 3, 2, 1].map((s) => {
@@ -758,7 +758,7 @@ export function ProductDetailView() {
                   </div>
                 </div>
                 {product.reviews.length === 0 ? (
-                  <p className="text-[12px] text-[#888]">No reviews yet. Be the first to review this product.</p>
+                  <p className="text-[12px] text-[#888]">Aucun avis pour le moment. Soyez le premier à donner votre avis sur ce produit.</p>
                 ) : (
                   <div className="space-y-4">
                     {product.reviews.map((r) => (
@@ -769,12 +769,12 @@ export function ProductDetailView() {
                             <span className="text-[12px] font-bold">{r.title}</span>
                             {r.verified && (
                               <span className="inline-flex items-center gap-0.5 text-[10px] text-[#16A34A] font-bold">
-                                <BadgeCheck className="w-3 h-3" /> Verified
+                                <BadgeCheck className="w-3 h-3" /> Vérifié
                               </span>
                             )}
                           </div>
                           <span className="text-[11px] text-[#999]">
-                            {new Date(r.createdAt).toLocaleDateString()}
+                            {new Date(r.createdAt).toLocaleDateString("fr-FR")}
                           </span>
                         </div>
                         <p className="text-[12px] text-[#555] leading-relaxed">{r.content}</p>
@@ -801,17 +801,17 @@ export function ProductDetailView() {
                   </div>
                   <div className="text-[12px] text-[#555] space-y-0.5">
                     <div>📍 {product.city}, {product.country}</div>
-                    <div>🏭 {product.years} yrs · {product.type}</div>
-                    <div>★ Store rating: {product.storeRating?.toFixed(1) ?? "—"}</div>
-                    <div>⏱ Response time: {product.responseTime ?? "—"}</div>
-                    <div>🚚 On-time dispatch: {product.onTimeDispatch ?? 0}%</div>
-                    <div>🔁 Reorder rate: {Math.round(product.reorderRate)}%</div>
+                    <div>🏭 {product.years} ans · {product.type}</div>
+                    <div>★ Note de la boutique : {product.storeRating?.toFixed(1) ?? "—"}</div>
+                    <div>⏱ Délai de réponse : {product.responseTime ?? "—"}</div>
+                    <div>🚚 Expédition dans les délais : {product.onTimeDispatch ?? 0}%</div>
+                    <div>🔁 Taux de recommande : {Math.round(product.reorderRate)}%</div>
                   </div>
                 </div>
                 <div>
                   <div className="benjamin-section-title mb-1.5">Certifications</div>
                   {product.certifications.length === 0 ? (
-                    <p className="text-[12px] text-[#888]">No certifications listed.</p>
+                    <p className="text-[12px] text-[#888]">Aucune certification indiquée.</p>
                   ) : (
                     <div className="flex flex-wrap gap-1.5">
                       {product.certifications.map((c) => <CertChip key={c} c={c} />)}
@@ -821,7 +821,7 @@ export function ProductDetailView() {
                     onClick={openSupplier}
                     className="btn-outline-grey mt-3 text-[11px] flex items-center gap-1"
                   >
-                    Visit supplier store <ChevronRight className="w-3 h-3" />
+                    Visiter la boutique <ChevronRight className="w-3 h-3" />
                   </button>
                 </div>
               </div>
@@ -850,13 +850,13 @@ export function ProductDetailView() {
           }}
           className="btn-square-black flex-1 py-3.5"
         >
-          <MessageCircle className="w-4 h-4 inline mr-1.5" /> Chat now
+          <MessageCircle className="w-4 h-4 inline mr-1.5" /> Discuter maintenant
         </button>
         <button
           onClick={() => handleAddToCart(true)}
           className="btn-benjamin-orange flex-1 py-3.5"
         >
-          Send inquiry
+          Commander
         </button>
       </div>
     </div>

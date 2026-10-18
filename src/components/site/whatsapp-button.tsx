@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useApp } from "@/lib/store";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Phone } from "lucide-react";
 import { BRAND, whatsappLink } from "@/lib/brand";
 
 export function WhatsAppButton() {
@@ -44,14 +44,24 @@ export function WhatsAppButton() {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`fixed left-4 md:left-6 z-[60] group flex items-center ${view === "product" ? "bottom-20 lg:bottom-6" : "bottom-4 md:bottom-6"}`}
+      className={`wa-fab fixed left-4 md:left-6 z-[60] group flex items-center ${view === "product" ? "bottom-20 lg:bottom-6" : "bottom-4 md:bottom-6"}`}
       aria-label="Discuter avec nous sur WhatsApp"
     >
-      <span className="wa-pulse w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-none">
-        <MessageCircle className="w-6 h-6 md:w-7 md:h-7" strokeWidth={2} />
+      <span className="relative isolate w-14 h-14 md:w-[60px] md:h-[60px] bg-[#25D366] hover:bg-[#1EBE5A] transition-colors flex items-center justify-center text-white border-2 border-white">
+        <span className="wa-ring absolute inset-0 bg-[#25D366]" aria-hidden="true" />
+        {BRAND.whatsappIcon ? (
+          // Official WhatsApp glyph supplied by the site owner (public/brand/…).
+          <img src={BRAND.whatsappIcon} alt="" className="relative w-8 h-8 md:w-9 md:h-9" />
+        ) : (
+          <span className="relative">
+            <MessageCircle className="w-8 h-8 md:w-9 md:h-9" strokeWidth={2} />
+            <Phone className="absolute inset-0 m-auto w-3.5 h-3.5 md:w-4 md:h-4 fill-white" strokeWidth={0} />
+          </span>
+        )}
       </span>
-      <span className="ml-2 hidden group-hover:block bg-black text-white text-[11px] uppercase font-bold tracking-wide px-2 py-1 whitespace-nowrap">
-        Écrivez-nous
+      <span className="ml-2 hidden md:group-hover:flex flex-col bg-white text-[#111] border border-[#DADAD9] px-3 py-1.5 whitespace-nowrap">
+        <span className="text-[12px] font-bold">Besoin d&apos;aide ?</span>
+        <span className="text-[11px] text-[#16A34A] font-semibold">Écrivez-nous sur WhatsApp</span>
       </span>
     </a>
   );

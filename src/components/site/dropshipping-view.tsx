@@ -45,10 +45,10 @@ export function DropshippingView() {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
-        toast.success(`Removed "${title}" from dropship list`);
+        toast.success(`« ${title} » retiré de votre liste dropshipping`);
       } else {
         next.add(id);
-        toast.success(`Added "${title}" to dropship list`);
+        toast.success(`« ${title} » ajouté à votre liste dropshipping`);
       }
       return next;
     });
@@ -60,20 +60,20 @@ export function DropshippingView() {
       <div className="bg-brand-gradient text-white">
         <div className="max-w-[1100px] mx-auto px-4 py-10 lg:py-12 text-center">
           <div className="inline-flex items-center gap-2 bg-[#FF6A00] px-3 py-1 text-[11px] uppercase font-bold tracking-wider mb-4">
-            <Rocket className="w-3.5 h-3.5" /> Dropshipping Center
+            <Rocket className="w-3.5 h-3.5" /> Espace dropshipping
           </div>
           <h1 className="text-[26px] lg:text-[34px] font-extrabold leading-tight">
-            Sell without inventory
+            Vendez sans stock
           </h1>
           <p className="text-[#CFD6F5] text-[13px] mt-2 max-w-2xl mx-auto">
-            Source from verified suppliers and ship directly to your customers.
-            Low MOQ, automated fulfillment, no upfront stock needed.
+            Approvisionnez-vous auprès de fournisseurs vérifiés et faites livrer directement vos clients.
+            Quantité minimale réduite, traitement automatisé des commandes, aucun stock à financer.
           </p>
           <button
             onClick={() => setView("auth")}
             className="btn-benjamin-orange mt-4 inline-flex items-center gap-2"
           >
-            Start dropshipping <ArrowRight className="w-4 h-4" />
+            Commencer le dropshipping <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -83,29 +83,29 @@ export function DropshippingView() {
         <section className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <BenefitCard
             icon={Package}
-            title="No inventory needed"
-            desc="List and sell products without buying stock upfront. Pay only when your customer orders."
+            title="Aucun stock nécessaire"
+            desc="Publiez et vendez des produits sans acheter de stock à l'avance. Vous ne payez que lorsque votre client commande."
           />
           <BenefitCard
             icon={Zap}
-            title="Automated fulfillment"
-            desc="Orders route to suppliers automatically. Tracking numbers sync back to your store in real time."
+            title="Traitement automatisé"
+            desc="Les commandes sont transmises automatiquement aux fournisseurs. Les numéros de suivi remontent dans votre boutique en temps réel."
           />
           <BenefitCard
             icon={Boxes}
-            title="Low MOQ"
-            desc="Source from as little as 1 piece. Test products before scaling up to bulk wholesale."
+            title="Quantité minimale réduite"
+            desc="Commandez dès 1 pièce. Testez vos produits avant de passer aux achats en gros."
           />
         </section>
 
         {/* ---- how it works 4-step ---- */}
         <section className="bg-white border border-[#DADAD9]">
-          <div className="benjamin-bar">How it works</div>
+          <div className="benjamin-bar">Comment ça marche</div>
           <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <Step n={1} icon={Search} title="Find products" desc="Browse dropshipping-ready products from verified suppliers." />
-            <Step n={2} icon={Store} title="List on your store" desc="Add to your Shopify, WooCommerce, or social store in one click." />
-            <Step n={3} icon={ShoppingCart} title="Customer orders" desc="Your customer places an order on your store at retail price." />
-            <Step n={4} icon={Truck} title="Supplier ships" desc="We auto-forward to the supplier, who ships directly to your customer." />
+            <Step n={1} icon={Search} title="Trouvez des produits" desc="Parcourez les produits prêts pour le dropshipping proposés par des fournisseurs vérifiés." />
+            <Step n={2} icon={Store} title="Publiez-les dans votre boutique" desc="Ajoutez-les à votre boutique Shopify, WooCommerce ou sur les réseaux sociaux en un clic." />
+            <Step n={3} icon={ShoppingCart} title="Votre client commande" desc="Votre client passe commande dans votre boutique au prix de détail." />
+            <Step n={4} icon={Truck} title="Le fournisseur expédie" desc="Nous transmettons automatiquement la commande au fournisseur, qui livre directement votre client." />
           </div>
         </section>
 
@@ -114,11 +114,11 @@ export function DropshippingView() {
           <div className="benjamin-bar mb-3 flex items-center justify-between">
             <span className="flex items-center gap-2">
               <Truck className="w-4 h-4 text-[#FF6A00]" />
-              Dropshipping-ready products
+              Produits prêts pour le dropshipping
             </span>
             {dropList.size > 0 && (
               <span className="text-[11px] normal-case tracking-normal text-white/80">
-                {dropList.size} in dropship list
+                {dropList.size} dans votre liste dropshipping
               </span>
             )}
           </div>
@@ -143,10 +143,10 @@ export function DropshippingView() {
                     }`}
                   >
                     {dropList.has(p.id) ? (
-                      <>✓ In dropship list</>
+                      <>✓ Dans votre liste</>
                     ) : (
                       <>
-                        <Plus className="w-3.5 h-3.5" /> Add to dropship list
+                        <Plus className="w-3.5 h-3.5" /> Ajouter à ma liste
                       </>
                     )}
                   </button>
@@ -157,7 +157,7 @@ export function DropshippingView() {
 
           {products.length === 0 && !loading && (
             <div className="bg-white border border-[#DADAD9] px-4 py-12 text-center text-[12px] text-[#999] uppercase tracking-wide">
-              No dropshipping-ready products found
+              Aucun produit prêt pour le dropshipping
             </div>
           )}
         </section>
@@ -166,20 +166,20 @@ export function DropshippingView() {
         <section className="bg-[#FF6A00] text-white p-6 lg:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <div className="text-[11px] uppercase font-bold tracking-wider opacity-80">
-              Ready to start?
+              Prêt à vous lancer ?
             </div>
             <div className="text-[22px] font-extrabold mt-1">
-              Create your free dropshipper account
+              Créez gratuitement votre compte dropshipper
             </div>
             <div className="text-[13px] opacity-90 mt-1">
-              No credit card required · List products in minutes · Cancel anytime
+              Sans carte bancaire · Produits en ligne en quelques minutes · Sans engagement
             </div>
           </div>
           <button
             onClick={() => setView("auth")}
             className="bg-[#0A0F4D] text-white px-6 py-3 text-[13px] uppercase font-bold tracking-wide hover:opacity-85 flex items-center gap-2 whitespace-nowrap"
           >
-            Start dropshipping <ArrowRight className="w-4 h-4" />
+            Commencer le dropshipping <ArrowRight className="w-4 h-4" />
           </button>
         </section>
       </div>
