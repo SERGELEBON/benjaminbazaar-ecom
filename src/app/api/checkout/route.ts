@@ -3,6 +3,8 @@ import { audit, requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { ApiError, errorResponse, readJson } from "@/lib/http";
 import { abortPayment, parseCheckoutInput, placeOrder } from "@/lib/orders";
+import { afterResponse } from "@/lib/email";
+import { notifyCheckout } from "@/lib/notifications";
 import { cinetpayConfig, initCinetpayPayment } from "@/lib/payments/cinetpay";
 
 export const dynamic = "force-dynamic";
@@ -55,6 +57,7 @@ export async function POST(req: Request) {
     }
 
     await audit(user.id, "order.checkout", "user", user.id, { refs: result.orders.map((o) => o.ref), provider: result.provider });
+    afterResponse(() => notifyCheckout(result.paymentId)); // idempotent per payment: a replay sends nothing new
     return NextResponse.json({ ...result, paymentUrl }, { status: 201 });
   } catch (e) {
     return errorResponse(e);
