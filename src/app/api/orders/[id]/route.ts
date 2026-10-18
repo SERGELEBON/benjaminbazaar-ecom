@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { audit, requireUser } from "@/lib/auth";
 import { errorResponse, noStore, readJson } from "@/lib/http";
 import { getOrderFor, orderView, transitionOrder, type OrderAction } from "@/lib/orders";
+import { afterResponse } from "@/lib/email";
+import { notifyOrderAction } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 type Ctx = { params: Promise<{ id: string }> };
@@ -18,7 +20,7 @@ export async function GET(_req: Request, { params }: Ctx) {
   }
 }
 
-/** { action: "confirm" | "ship" | "deliver" | "cancel", note?, reason?, tracking? } */
+/** { action: "confirm" | "ship" | "deliver" | "cancel" | "mark_paid", note?, reason?, tracking? } */
 export async function PATCH(req: Request, { params }: Ctx) {
   try {
     const user = await requireUser();
@@ -29,6 +31,7 @@ export async function PATCH(req: Request, { params }: Ctx) {
     if (role === "admin" || action === "cancel") {
       await audit(user.id, `order.${action}`, "order", id, { ref: order.ref, by: role, reason: order.cancelReason ?? undefined });
     }
+    afterResponse(() => notifyOrderAction(id, action, role));
     return NextResponse.json({ order: orderView(order, role) });
   } catch (e) {
     return errorResponse(e);
