@@ -2,8 +2,9 @@
 
 import { Image as ImageIcon, BadgeCheck, Star } from "lucide-react";
 import type { ProductT } from "@/lib/format";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, unitLabel } from "@/lib/format";
 import { useApp } from "@/lib/store";
+
 
 export function ProductCard({ product }: { product: ProductT }) {
   const setView = useApp((s) => s.setView);
@@ -37,7 +38,7 @@ export function ProductCard({ product }: { product: ProductT }) {
         </span>
         {product.readyToShip && (
           <span className="absolute top-2 left-2 bg-[#16A34A] text-white text-[10px] font-bold uppercase px-1.5 py-0.5">
-            Ready to ship
+            Prêt à expédier
           </span>
         )}
       </div>
@@ -66,11 +67,11 @@ export function ProductCard({ product }: { product: ProductT }) {
       <div className="px-2 sm:px-3 pt-1 text-[10px] sm:text-[11px] truncate">
         {product.lowestPrice ? (
           <span className="text-[#FF6A00] font-semibold">
-            ✓ 180-day lowest prices
+            ✓ Prix le plus bas sur 180 jours
           </span>
         ) : (
           <span className="text-[#16A34A] font-semibold">
-            ✓ Reorder rate {Math.round(product.reorderRate)}%
+            ✓ Taux de recommande {Math.round(product.reorderRate)} %
           </span>
         )}
       </div>
@@ -88,9 +89,9 @@ export function ProductCard({ product }: { product: ProductT }) {
 
       {/* moq + sold */}
       <div className="px-2 sm:px-3 pt-0.5 text-[10px] sm:text-[11px] text-[#666]">
-        MOQ: {product.minOrder} {product.minOrderUnit}
+        Qté min. : {product.minOrder} {unitLabel(product.minOrderUnit)}
         <span className="mx-1 text-[#DADAD9]">|</span>
-        <span>{product.sold.toLocaleString()} sold</span>
+        <span>{product.sold.toLocaleString("fr-FR")} vendus</span>
       </div>
 
       {/* supplier verified */}
@@ -98,19 +99,19 @@ export function ProductCard({ product }: { product: ProductT }) {
         {product.supplierVerified && (
           <span className="inline-flex items-center gap-1 text-[#16A34A] font-semibold">
             <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} />
-            Verified
+            Vérifié
           </span>
         )}
         <span className="mx-1 text-[#DADAD9]">|</span>
         <span>
-          {product.years} yrs · {product.country === "China" ? "CN" : product.country?.slice(0, 2).toUpperCase()}
+          {product.years} ans · {product.country === "China" ? "CN" : product.country?.slice(0, 2).toUpperCase()}
         </span>
       </div>
 
       {/* rating footer */}
       <div className="px-2 sm:px-3 pb-2.5 flex items-center gap-1 text-[11px] text-[#888] border-t border-[#ECECEC] pt-2">
         <Star className="w-3 h-3 fill-[#FF6A00] text-[#FF6A00]" />
-        <span className="font-semibold text-[#333]">{product.rating.toFixed(1)}</span>
+        <span className="font-semibold text-[#333]">{product.rating.toFixed(1).replace(".", ",")}</span>
         <span>({product.reviewCount})</span>
       </div>
     </div>

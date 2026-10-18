@@ -14,56 +14,56 @@ import { useApp } from "@/lib/store";
 import { BRAND, brandEmail } from "@/lib/brand";
 
 const CATEGORY_TILES = [
-  { key: "start", label: "Getting started", icon: Rocket, body: "Place your first order in minutes" },
-  { key: "orders", label: "Orders & shipping", icon: Truck, body: "Track, dispatch, delivery windows" },
-  { key: "payments", label: "Payments", icon: CreditCard, body: "MoMo, bank transfer, escrow" },
-  { key: "ta", label: "Trade Assurance", icon: ShieldCheck, body: "Order protection & refunds" },
-  { key: "disputes", label: "Disputes", icon: ShieldAlert, body: "Resolve a conflict" },
-  { key: "account", label: "Account", icon: UserCircle, body: "Profile, password, settings" },
-  { key: "rfq", label: "RFQ", icon: FileText, body: "Request quotations like a pro" },
-  { key: "drop", label: "Dropshipping", icon: Boxes, body: "Sell without inventory" },
+  { key: "start", label: "Premiers pas", icon: Rocket, body: "Passez votre première commande en quelques minutes" },
+  { key: "orders", label: "Commandes et livraison", icon: Truck, body: "Suivi, expédition, délais de livraison" },
+  { key: "payments", label: "Paiements", icon: CreditCard, body: "Mobile Money, virement bancaire, séquestre" },
+  { key: "ta", label: "Commande protégée", icon: ShieldCheck, body: "Protection de commande et remboursements" },
+  { key: "disputes", label: "Litiges", icon: ShieldAlert, body: "Résoudre un différend" },
+  { key: "account", label: "Compte", icon: UserCircle, body: "Profil, mot de passe, paramètres" },
+  { key: "rfq", label: "Demande de devis", icon: FileText, body: "Demandez des devis comme un pro" },
+  { key: "drop", label: "Dropshipping", icon: Boxes, body: "Vendez sans stock" },
 ];
 
 const FAQS = [
   {
-    q: "How do I place my first wholesale order?",
-    a: "Search for a product, set your quantity above the MOQ (minimum order quantity), then click Add to cart or Buy now. You can pay via MTN MoMo, bank transfer, or Trade Assurance escrow. Verified suppliers dispatch within their stated lead time.",
+    q: "Comment passer ma première commande en gros ?",
+    a: "Recherchez un produit, choisissez une quantité supérieure ou égale au minimum de commande, puis cliquez sur « Ajouter au panier » ou « Acheter maintenant ». Vous pouvez payer par Mobile Money (MTN MoMo, Orange Money), par virement bancaire ou via le séquestre de la Commande protégée. Les boutiques vérifiées expédient dans le délai indiqué.",
   },
   {
-    q: "What is Trade Assurance and how does it protect me?",
-    a: `Trade Assurance is ${BRAND.name}'s free order protection. Your payment is held in escrow and only released to the supplier once you confirm receipt. It covers on-time dispatch, product quality, and order accuracy. Claims are resolved within 7 days.`,
+    q: "Qu'est-ce que la Commande protégée et comment me protège-t-elle ?",
+    a: `La Commande protégée est la protection gratuite des commandes de ${BRAND.name}. Votre paiement est conservé sous séquestre et n'est versé à la boutique qu'après votre confirmation de réception. Elle couvre l'expédition dans les délais, la qualité des produits et la conformité de la commande. Les réclamations sont traitées sous 7 jours.`,
   },
   {
-    q: "How long does shipping take to Ghana?",
-    a: "Express courier (DHL/FedEx) reaches Accra in 3-5 business days. Standard air freight is 7-12 days. Sea freight via Tema port takes 25-35 days. Lead times are displayed on each product page alongside the supplier's response time.",
+    q: "Quels sont les délais de livraison en Côte d'Ivoire ?",
+    a: "La livraison express (DHL/FedEx) atteint Abidjan en 3 à 5 jours ouvrés. Le fret aérien standard prend 7 à 12 jours. Le fret maritime via le port d'Abidjan prend 25 à 35 jours. Les délais sont indiqués sur chaque fiche produit, avec le délai de réponse de la boutique.",
   },
   {
-    q: "Which payment methods are supported?",
-    a: "Buyers in Ghana and Côte d'Ivoire can pay with MTN MoMo, Vodafone Cash, Orange Money, or bank transfer (GHS / XOF). International buyers can use Visa, Mastercard, or USD bank transfer. All eligible orders are covered by Trade Assurance.",
+    q: "Quels moyens de paiement sont acceptés ?",
+    a: "Les acheteurs en Côte d'Ivoire et au Ghana peuvent payer par MTN MoMo, Orange Money, Vodafone Cash ou virement bancaire (XOF / GHS). Les acheteurs internationaux peuvent utiliser Visa, Mastercard ou un virement bancaire en USD. Toutes les commandes éligibles sont couvertes par la Commande protégée.",
   },
   {
-    q: "Can I negotiate bulk pricing?",
-    a: "Yes. Click Send inquiry or open an RFQ (Request for Quotation) describing your quantity, target price, and customization needs. Verified suppliers typically respond within 2 hours and provide 3-tier pricing for higher volumes.",
+    q: "Puis-je négocier des prix de gros ?",
+    a: "Oui. Cliquez sur « Contacter la boutique » ou publiez une demande de devis en précisant la quantité, le prix visé et vos besoins de personnalisation. Les boutiques vérifiées répondent généralement en moins de 2 heures et proposent des prix dégressifs pour les gros volumes.",
   },
   {
-    q: "What is an RFQ and when should I use one?",
-    a: "An RFQ lets multiple suppliers compete for your order. Use it when you need custom products, quantities above 500 units, or haven't found the exact match in search. Most RFQs receive 3-8 quotes within 24 hours.",
+    q: "Qu'est-ce qu'une demande de devis et quand l'utiliser ?",
+    a: "Une demande de devis met plusieurs boutiques en concurrence pour votre commande. Utilisez-la pour des produits personnalisés, des quantités supérieures à 500 unités, ou si vous n'avez pas trouvé exactement ce qu'il vous faut dans la recherche. La plupart des demandes reçoivent 3 à 8 devis sous 24 heures.",
   },
   {
-    q: "How do returns and refunds work?",
-    a: "If an item doesn't match the listing, file a dispute within 15 days of delivery. Trade Assurance covers full refunds for quality issues, missing items, or late dispatch. Resolved refunds are paid out to your original payment method in 5-10 business days.",
+    q: "Comment fonctionnent les retours et remboursements ?",
+    a: "Si un article ne correspond pas à sa description, ouvrez un litige dans les 15 jours suivant la livraison. La Commande protégée couvre le remboursement intégral en cas de problème de qualité, d'article manquant ou d'expédition en retard. Les remboursements validés sont versés sur votre moyen de paiement d'origine sous 5 à 10 jours ouvrés.",
   },
   {
-    q: "Are suppliers verified?",
-    a: "All suppliers with a green Verified badge have passed business registration, bank account, and trade license checks. Factory-audited suppliers carry an additional ISO badge. You can request a fresh audit report from any supplier's storefront.",
+    q: "Les boutiques sont-elles vérifiées ?",
+    a: "Toutes les boutiques portant le badge vert « Vérifié » ont passé les contrôles d'immatriculation de l'entreprise, de compte bancaire et de licence commerciale. Les fabricants audités portent en plus un badge ISO. Vous pouvez demander un rapport d'audit récent depuis la page de n'importe quelle boutique.",
   },
   {
-    q: `Can I dropship from ${BRAND.name}?`,
-    a: "Yes. Switch on Dropshipping mode in your account settings and suppliers will hide their branding from shipments. You can also automate order routing via our API for Shopify, WooCommerce, or TikTok Shop integrations.",
+    q: `Puis-je faire du dropshipping avec ${BRAND.name} ?`,
+    a: "Oui. Activez le mode Dropshipping dans les paramètres de votre compte et les boutiques retireront leur marque de vos colis. Vous pouvez aussi automatiser le traitement des commandes via notre API pour Shopify, WooCommerce ou TikTok Shop.",
   },
   {
-    q: "How are currency conversions handled?",
-    a: "All prices are stored in GHS (Ghana Cedi). You can switch the display currency to GHS, XOF (West African CFA franc), or USD from the toolbar. Conversions use daily mid-market rates updated every hour.",
+    q: "Comment sont gérées les conversions de devises ?",
+    a: "Tous les prix sont enregistrés en GHS (cedi ghanéen). Vous pouvez afficher les prix en XOF (franc CFA), en GHS ou en USD depuis la barre d'outils. Les conversions utilisent les taux moyens du marché, mis à jour toutes les heures.",
   },
 ];
 
@@ -74,37 +74,37 @@ export function HelpView() {
   return (
     <div className="bg-[#ECECEC] min-h-screen">
 
-      <div className="benjamin-bar">Help Center</div>
+      <div className="benjamin-bar">Centre d&apos;aide</div>
 
       <div className="bg-brand-gradient text-white">
         <div className="max-w-[900px] mx-auto px-4 py-10 text-center">
           <h1 className="text-[26px] lg:text-[34px] font-extrabold leading-tight">
-            How can we help?
+            Comment pouvons-nous vous aider ?
           </h1>
           <p className="text-[#CFD6F5] text-[13px] mt-2 max-w-xl mx-auto">
-            Search articles, browse categories, or chat with our team 24/7.
+            Recherchez un article, parcourez les rubriques ou discutez avec notre équipe 24 h/24, 7 j/7.
           </p>
           <div className="mt-5 max-w-xl mx-auto flex items-center bg-white h-12 border-2 border-[#FF6A00]">
             <Search className="w-5 h-5 text-[#999] ml-3" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && toast.info(`Searching "${q || "…"}"`)}
-              placeholder="Search help articles…"
+              onKeyDown={(e) => e.key === "Enter" && toast.info(`Recherche : « ${q || "…"} »`)}
+              placeholder="Rechercher dans l'aide…"
               className="flex-1 h-full px-3 text-[13px] text-[#333] outline-none bg-transparent placeholder:text-[#999]"
             />
             <button
-              onClick={() => toast.info(`Searching "${q || "…"}"`)}
+              onClick={() => toast.info(`Recherche : « ${q || "…"} »`)}
               className="bg-[#FF6A00] text-white px-5 h-full font-bold uppercase tracking-wider hover:bg-[#E55A00] flex items-center gap-2"
             >
-              <Search className="w-4 h-4" /> Search
+              <Search className="w-4 h-4" /> Rechercher
             </button>
           </div>
           <div className="mt-3 flex flex-wrap justify-center gap-2 text-[11px]">
-            {["Trade Assurance", "Shipping to Ghana", "Refunds", "RFQ"].map((s) => (
+            {["Commande protégée", "Livraison en Côte d'Ivoire", "Remboursements", "Demande de devis"].map((s) => (
               <button
                 key={s}
-                onClick={() => { setQ(s); toast.info(`Searching "${s}"`); }}
+                onClick={() => { setQ(s); toast.info(`Recherche : « ${s} »`); }}
                 className="bg-white/10 hover:bg-[#FF6A00] px-2.5 py-1 border border-white/20"
               >
                 {s}
@@ -117,14 +117,14 @@ export function HelpView() {
       <div className="max-w-[1280px] mx-auto px-3 lg:px-6 py-8 space-y-8">
         {/* CATEGORY TILES */}
         <section>
-          <div className="benjamin-section-title mb-3">Browse by category</div>
+          <div className="benjamin-section-title mb-3">Parcourir par rubrique</div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {CATEGORY_TILES.map((c) => {
               const Icon = c.icon;
               return (
                 <button
                   key={c.key}
-                  onClick={() => toast.info(`Opening: ${c.label}`)}
+                  onClick={() => toast.info(`Ouverture : ${c.label}`)}
                   className="benjamin-tile flex-col items-start !p-4 text-left"
                 >
                   <div className="flex items-center gap-2 w-full">
@@ -142,7 +142,7 @@ export function HelpView() {
         {/* FAQ */}
         <section className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
           <div className="bg-white border border-[#DADAD9]">
-            <div className="benjamin-bar">Frequently asked questions</div>
+            <div className="benjamin-bar">Questions fréquentes</div>
             <Accordion type="single" collapsible className="px-4">
               {FAQS.map((f, i) => (
                 <AccordionItem key={i} value={`item-${i}`} className="border-b border-[#ECECEC]">
@@ -160,30 +160,30 @@ export function HelpView() {
           {/* AI ASSISTANT PROMO */}
           <aside className="space-y-5">
             <div className="bg-[#0A0F4D] text-white">
-              <div className="benjamin-bar-red">AI Assistant</div>
+              <div className="benjamin-bar-red">Assistant IA</div>
               <div className="p-5">
                 <div className="w-12 h-12 bg-[#FF6A00] flex items-center justify-center mb-3">
                   <Bot className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-[18px] font-extrabold leading-tight">
-                  Get instant answers
+                  Des réponses instantanées
                 </h3>
                 <p className="text-[12px] text-[#CFD6F5] mt-2 leading-relaxed">
-                  Draft RFQs, compare quotes, translate specs and resolve disputes —
-                  all with the {BRAND.shortName} AI Assistant. Available 24/7.
+                  Rédigez vos demandes de devis, comparez les offres, traduisez les fiches techniques et réglez vos litiges —
+                  le tout avec l&apos;Assistant IA {BRAND.shortName}. Disponible 24 h/24, 7 j/7.
                 </p>
                 <button
-                  onClick={() => toast.success("AI Assistant opening…")}
+                  onClick={() => toast.success("Ouverture de l'Assistant IA…")}
                   className="btn-benjamin-orange w-full mt-4"
                 >
-                  Try AI assistant
+                  Essayer l&apos;Assistant IA
                 </button>
               </div>
             </div>
 
             {/* contact strip */}
             <div className="bg-white border border-[#DADAD9]">
-              <div className="benjamin-bar">Still need help?</div>
+              <div className="benjamin-bar">Besoin d&apos;aide supplémentaire ?</div>
               <div className="p-4 space-y-2.5">
                 <button
                   onClick={() => {
@@ -193,7 +193,7 @@ export function HelpView() {
                   }}
                   className="btn-square-black w-full flex items-center gap-2 justify-center"
                 >
-                  <MessageCircle className="w-4 h-4" /> Chat now
+                  <MessageCircle className="w-4 h-4" /> Discuter maintenant
                 </button>
                 <a
                   href="https://wa.me/2250707365136"
@@ -213,23 +213,23 @@ export function HelpView() {
                   href={`mailto:${brandEmail("support")}`}
                   className="w-full inline-flex items-center justify-center gap-2 bg-[#337AB7] text-white text-[12px] font-bold uppercase tracking-wide px-4 py-2.5 hover:opacity-90"
                 >
-                  <Mail className="w-4 h-4" /> Email support
+                  <Mail className="w-4 h-4" /> Écrire au support
                 </a>
                 <div className="text-[11px] text-[#888] pt-1 text-center">
-                  Avg. response time: <span className="font-bold text-[#16A34A]">under 2 min</span>
+                  Délai de réponse moyen : <span className="font-bold text-[#16A34A]">moins de 2 min</span>
                 </div>
               </div>
             </div>
 
             {/* popular quick links */}
             <div className="bg-white border border-[#DADAD9] p-4">
-              <div className="benjamin-section-title mb-2">Quick actions</div>
+              <div className="benjamin-section-title mb-2">Actions rapides</div>
               <ul className="text-[12px] space-y-1">
-                <QuickLink label="Open a dispute" onClick={() => toast.info("Opening dispute form")} />
-                <QuickLink label="Track an order" onClick={() => toast.info("Track order")} />
-                <QuickLink label="Request a quotation" onClick={() => setView("rfq")} />
-                <QuickLink label="Become a supplier" onClick={() => setView("auth")} />
-                <QuickLink label="Browse products" onClick={() => setView("home")} />
+                <QuickLink label="Ouvrir un litige" onClick={() => toast.info("Ouverture du formulaire de litige")} />
+                <QuickLink label="Suivre une commande" onClick={() => toast.info("Suivi de commande")} />
+                <QuickLink label="Demander un devis" onClick={() => setView("rfq")} />
+                <QuickLink label="Devenir vendeur" onClick={() => setView("auth")} />
+                <QuickLink label="Parcourir les produits" onClick={() => setView("home")} />
               </ul>
             </div>
           </aside>

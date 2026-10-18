@@ -10,6 +10,14 @@ import { toast } from "sonner";
 import { BRAND } from "@/lib/brand";
 
 const UNITS = ["piece", "kilogram", "box", "carton", "set", "ton"];
+const UNIT_LABELS: Record<string, string> = {
+  piece: "pièce",
+  kilogram: "kilogramme",
+  box: "boîte",
+  carton: "carton",
+  set: "lot",
+  ton: "tonne",
+};
 
 interface RfqRef {
   id: string;
@@ -59,11 +67,11 @@ export function RfqView() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.title.trim()) {
-      toast.error("Please enter a product name.");
+      toast.error("Veuillez saisir le nom du produit.");
       return;
     }
     if (!form.quantity || parseInt(form.quantity) <= 0) {
-      toast.error("Please enter a valid quantity.");
+      toast.error("Veuillez saisir une quantité valide.");
       return;
     }
     setSubmitting(true);
@@ -98,9 +106,9 @@ export function RfqView() {
         budget: "", details: "",
       });
       setFiles([]);
-      toast.success("RFQ submitted! Suppliers will respond soon.");
+      toast.success("Demande de devis envoyée ! Les boutiques vous répondront bientôt.");
     } catch {
-      toast.error("Failed to submit RFQ. Please try again.");
+      toast.error("Échec de l'envoi de la demande de devis. Veuillez réessayer.");
     } finally {
       setSubmitting(false);
     }
@@ -112,14 +120,14 @@ export function RfqView() {
       <div className="bg-brand-gradient text-white">
         <div className="max-w-[1100px] mx-auto px-4 py-10 lg:py-12 text-center">
           <div className="inline-flex items-center gap-2 bg-[#FF6A00] px-3 py-1 text-[11px] uppercase font-bold tracking-wider mb-4">
-            <FileText className="w-3.5 h-3.5" /> Sourcing on your terms
+            <FileText className="w-3.5 h-3.5" /> Achetez selon vos conditions
           </div>
           <h1 className="text-[26px] lg:text-[34px] font-extrabold leading-tight">
-            Request for Quotation <span className="text-[#FF6A00]">(RFQ)</span>
+            Demande de devis <span className="text-[#FF6A00]">(RFQ)</span>
           </h1>
           <p className="text-[#CFD6F5] text-[13px] mt-2 max-w-2xl mx-auto">
-            Tell us what you need — verified suppliers will send you quotes
-            within 24h. Free, no commitment, Trade Assurance protected.
+            Dites-nous ce dont vous avez besoin — des boutiques vérifiées vous enverront
+            leurs devis sous 24 h. Gratuit, sans engagement, avec la Commande protégée.
           </p>
         </div>
       </div>
@@ -135,66 +143,66 @@ export function RfqView() {
                     <Check className="w-7 h-7 text-white" strokeWidth={2.5} />
                   </div>
                   <div>
-                    <div className="text-[18px] font-bold text-[#16A34A]">RFQ submitted!</div>
-                    <div className="text-[12px] text-[#666]">Suppliers will respond soon.</div>
+                    <div className="text-[18px] font-bold text-[#16A34A]">Demande de devis envoyée !</div>
+                    <div className="text-[12px] text-[#666]">Les boutiques vous répondront bientôt.</div>
                   </div>
                 </div>
                 <div className="bg-[#FAFAFA] border border-[#ECECEC] p-3 mb-4">
-                  <div className="text-[11px] uppercase text-[#999] tracking-wide">Your RFQ reference</div>
+                  <div className="text-[11px] uppercase text-[#999] tracking-wide">Référence de votre demande</div>
                   <div className="text-[18px] font-extrabold text-[#FF6A00] font-mono">
                     #{success.ref}
                   </div>
                   {success.title && (
                     <div className="text-[12px] text-[#333] mt-1">
-                      For: <span className="font-semibold">{success.title}</span>
+                      Pour : <span className="font-semibold">{success.title}</span>
                     </div>
                   )}
                 </div>
                 <div className="text-[13px] text-[#444] mb-4 leading-relaxed">
-                  <span className="font-bold text-[#16A34A]">3–5 quotes expected within 24h.</span>{" "}
-                  We&apos;ll notify you by email &amp; SMS as suppliers respond.
-                  You can compare quotes, negotiate with AI assistance, and
-                  place your order directly from your dashboard.
+                  <span className="font-bold text-[#16A34A]">3 à 5 devis attendus sous 24 h.</span>{" "}
+                  Nous vous préviendrons par email et SMS dès que les boutiques répondront.
+                  Vous pourrez comparer les devis, négocier avec l&apos;aide de l&apos;IA et
+                  passer commande directement depuis votre tableau de bord.
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => setSuccess(null)}
                     className="btn-benjamin-orange"
                   >
-                    Submit another RFQ
+                    Nouvelle demande de devis
                   </button>
                   <button
                     onClick={() => setView("buyer-dashboard")}
                     className="btn-outline-grey"
                   >
-                    Go to dashboard
+                    Aller au tableau de bord
                   </button>
                 </div>
               </div>
             ) : (
               <form onSubmit={submit} className="bg-white border border-[#DADAD9]">
-                <div className="benjamin-bar">Tell us what you need</div>
+                <div className="benjamin-bar">Dites-nous ce dont vous avez besoin</div>
                 <div className="p-4 space-y-4 max-w-2xl">
                   {/* title */}
-                  <Field label="Product name / title" required>
+                  <Field label="Nom du produit / intitulé" required>
                     <input
                       value={form.title}
                       onChange={(e) => setField("title", e.target.value)}
-                      placeholder="e.g. Cotton t-shirts with custom logo"
+                      placeholder="Ex. : T-shirts en coton avec logo personnalisé"
                       className={inputCls}
                     />
                   </Field>
 
                   {/* category + budget */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <Field label="Category">
+                    <Field label="Catégorie">
                       {categories.length ? (
                         <select
                           value={form.category}
                           onChange={(e) => setField("category", e.target.value)}
                           className={inputCls}
                         >
-                          <option value="">Select a category…</option>
+                          <option value="">Choisissez une catégorie…</option>
                           {categories.map((c) => (
                             <option key={c} value={c}>{c}</option>
                           ))}
@@ -203,16 +211,16 @@ export function RfqView() {
                         <input
                           value={form.category}
                           onChange={(e) => setField("category", e.target.value)}
-                          placeholder="e.g. Apparel / T-shirts"
+                          placeholder="Ex. : Vêtements / T-shirts"
                           className={inputCls}
                         />
                       )}
                     </Field>
-                    <Field label="Budget (optional)">
+                    <Field label="Budget (facultatif)">
                       <input
                         value={form.budget}
                         onChange={(e) => setField("budget", e.target.value)}
-                        placeholder="e.g. GH₵5–8 / piece"
+                        placeholder="Ex. : 500–800 FCFA / pièce"
                         className={inputCls}
                       />
                     </Field>
@@ -220,48 +228,48 @@ export function RfqView() {
 
                   {/* quantity + unit */}
                   <div className="grid grid-cols-1 sm:grid-cols-[1fr_180px] gap-3">
-                    <Field label="Quantity" required>
+                    <Field label="Quantité" required>
                       <input
                         type="number"
                         value={form.quantity}
                         onChange={(e) => setField("quantity", e.target.value)}
-                        placeholder="e.g. 1000"
+                        placeholder="Ex. : 1000"
                         min={1}
                         className={inputCls}
                       />
                     </Field>
-                    <Field label="Unit">
+                    <Field label="Unité">
                       <select
                         value={form.unit}
                         onChange={(e) => setField("unit", e.target.value)}
                         className={inputCls}
                       >
                         {UNITS.map((u) => (
-                          <option key={u} value={u}>{u}</option>
+                          <option key={u} value={u}>{UNIT_LABELS[u] ?? u}</option>
                         ))}
                       </select>
                     </Field>
                   </div>
 
                   {/* details */}
-                  <Field label="Details (specs, target market, customization…)">
+                  <Field label="Détails (caractéristiques, marché cible, personnalisation…)">
                     <textarea
                       value={form.details}
                       onChange={(e) => setField("details", e.target.value)}
-                      placeholder="Describe the product, materials, certifications needed, target market, packaging, customization…"
+                      placeholder="Décrivez le produit, les matériaux, les certifications requises, le marché cible, l'emballage, la personnalisation…"
                       rows={5}
                       className={`${inputCls} resize-y min-h-[110px]`}
                     />
                   </Field>
 
                   {/* attachments */}
-                  <Field label="Attachments (specs, images, references)">
+                  <Field label="Pièces jointes (fiches techniques, images, références)">
                     <label className="flex items-center gap-2 border border-dashed border-[#DADAD9] bg-[#FAFAFA] px-3 py-3 cursor-pointer hover:border-[#FF6A00]">
                       <Paperclip className="w-4 h-4 text-[#FF6A00]" />
                       <span className="text-[12px] text-[#666]">
                         {files.length
-                          ? `${files.length} file${files.length === 1 ? "" : "s"} selected`
-                          : "Click to attach files (images, PDF, DOCX)"}
+                          ? `${files.length} fichier${files.length === 1 ? "" : "s"} sélectionné${files.length === 1 ? "" : "s"}`
+                          : "Cliquez pour joindre des fichiers (images, PDF, DOCX)"}
                       </span>
                       <input
                         type="file"
@@ -294,15 +302,15 @@ export function RfqView() {
                     className="btn-benjamin-orange flex items-center gap-2 disabled:opacity-60"
                   >
                     {submitting ? (
-                      "Submitting…"
+                      "Envoi en cours…"
                     ) : (
                       <>
-                        <Send className="w-4 h-4" /> Submit RFQ
+                        <Send className="w-4 h-4" /> Envoyer la demande
                       </>
                     )}
                   </button>
                   <p className="text-[11px] text-[#999]">
-                    By submitting, you agree to {BRAND.name}&apos;s Terms &amp; Privacy Policy.
+                    En envoyant cette demande, vous acceptez les conditions d&apos;utilisation et la politique de confidentialité de {BRAND.name}.
                   </p>
                 </div>
               </form>
@@ -310,11 +318,11 @@ export function RfqView() {
 
             {/* How it works */}
             <div className="bg-white border border-[#DADAD9]">
-              <div className="benjamin-bar">How it works</div>
+              <div className="benjamin-bar">Comment ça marche</div>
               <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <Step n={1} title="Post your request" desc="Describe the product, quantity and target price." />
-                <Step n={2} title="Receive quotes" desc="Verified suppliers respond with quotes within 24h." />
-                <Step n={3} title="Compare &amp; order" desc="Negotiate with AI, compare, place order with Trade Assurance." />
+                <Step n={1} title="Publiez votre demande" desc="Décrivez le produit, la quantité et le prix visé." />
+                <Step n={2} title="Recevez des devis" desc="Les boutiques vérifiées vous répondent sous 24 h." />
+                <Step n={3} title="Comparez et commandez" desc="Négociez avec l'IA, comparez, puis commandez avec la Commande protégée." />
               </div>
             </div>
           </div>
@@ -323,27 +331,27 @@ export function RfqView() {
           <aside>
             <div className="sticky top-[140px] space-y-4">
               <div className="bg-white border border-[#DADAD9]">
-                <div className="benjamin-bar-red">Why use RFQ</div>
+                <div className="benjamin-bar-red">Pourquoi demander un devis</div>
                 <ul className="p-4 space-y-3 text-[12px]">
                   <Benefit
                     icon={BadgeCheck}
-                    title="Free, no commitment"
-                    desc="Post unlimited RFQs at zero cost."
+                    title="Gratuit, sans engagement"
+                    desc="Publiez autant de demandes de devis que vous voulez, sans frais."
                   />
                   <Benefit
                     icon={ShieldCheck}
-                    title="Verified suppliers only"
-                    desc="Responses come from vetted, Trade- Assurance-ready suppliers."
+                    title="Boutiques vérifiées uniquement"
+                    desc="Les réponses proviennent de boutiques contrôlées et éligibles à la Commande protégée."
                   />
                   <Benefit
                     icon={Bot}
-                    title="AI-assisted negotiation"
-                    desc="Our AI drafts counter-offers &amp; translates specs."
+                    title="Négociation assistée par IA"
+                    desc="Notre IA rédige vos contre-offres et traduit les caractéristiques techniques."
                   />
                   <Benefit
                     icon={Truck}
-                    title="On-time dispatch ≥ 98%"
-                    desc="Trade Assurance protects your money &amp; delivery."
+                    title="Expédition dans les délais ≥ 98 %"
+                    desc="La Commande protégée sécurise votre argent et votre livraison."
                   />
                 </ul>
               </div>
@@ -351,11 +359,11 @@ export function RfqView() {
               <div className="bg-[#FF6A00] text-white p-4">
                 <div className="flex items-center gap-2 mb-1.5">
                   <Sparkles className="w-4 h-4" />
-                  <div className="text-[13px] font-bold uppercase tracking-wide">Pro tip</div>
+                  <div className="text-[13px] font-bold uppercase tracking-wide">Conseil</div>
                 </div>
                 <p className="text-[12px] leading-snug opacity-95">
-                  The more detail you provide (specs, target market, certifications),
-                  the more accurate the quotes you&apos;ll receive.
+                  Plus vous donnez de détails (caractéristiques, marché cible, certifications),
+                  plus les devis que vous recevrez seront précis.
                 </p>
               </div>
 
@@ -363,7 +371,7 @@ export function RfqView() {
                 onClick={() => setView("home")}
                 className="btn-outline-grey w-full flex items-center justify-center gap-1.5"
               >
-                <ArrowRight className="w-4 h-4 rotate-180" /> Back to home
+                <ArrowRight className="w-4 h-4 rotate-180" /> Retour à l&apos;accueil
               </button>
             </div>
           </aside>

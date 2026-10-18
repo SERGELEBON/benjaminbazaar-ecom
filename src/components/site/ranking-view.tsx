@@ -14,6 +14,25 @@ import { toast } from "sonner";
 const TIME_RANGES = ["Today", "This week", "This month"] as const;
 const COUNTRIES = ["Worldwide", "Ghana", "Côte d'Ivoire", "Nigeria", "China", "India"];
 
+const RANGE_LABELS: Record<(typeof TIME_RANGES)[number], string> = {
+  Today: "Aujourd'hui",
+  "This week": "Cette semaine",
+  "This month": "Ce mois-ci",
+};
+const TOP3_LABELS: Record<(typeof TIME_RANGES)[number], string> = {
+  Today: "Top 3 du jour",
+  "This week": "Top 3 de la semaine",
+  "This month": "Top 3 du mois",
+};
+const COUNTRY_LABELS: Record<string, string> = {
+  Worldwide: "Monde entier",
+  Ghana: "Ghana",
+  "Côte d'Ivoire": "Côte d'Ivoire",
+  Nigeria: "Nigeria",
+  China: "Chine",
+  India: "Inde",
+};
+
 const PAGE_SIZE = 10;
 
 export function RankingView({ categories }: { categories: CategoryNode[] }) {
@@ -77,14 +96,14 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
       <div className="bg-brand-gradient text-white">
         <div className="max-w-[1100px] mx-auto px-4 py-10 lg:py-12 text-center">
           <div className="inline-flex items-center gap-2 bg-[#FF6A00] px-3 py-1 text-[11px] uppercase font-bold tracking-wider mb-4">
-            <Trophy className="w-3.5 h-3.5" /> Weekly rankings
+            <Trophy className="w-3.5 h-3.5" /> Classements hebdomadaires
           </div>
           <h1 className="text-[26px] lg:text-[34px] font-extrabold leading-tight">
-            Top Ranking Products
+            Produits les plus populaires
           </h1>
           <p className="text-[#CFD6F5] text-[13px] mt-2 max-w-2xl mx-auto">
-            Most popular wholesale products this week, ranked by sales.
-            Compare verified suppliers &amp; place your order with confidence.
+            Les produits de gros les plus demandés cette semaine, classés par ventes.
+            Comparez les fournisseurs vérifiés et commandez en toute confiance.
           </p>
         </div>
       </div>
@@ -93,14 +112,14 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
         {/* Filters */}
         <div className="bg-white border border-[#DADAD9] p-3 flex flex-wrap items-center gap-2 mb-4">
           <span className="text-[11px] uppercase font-bold text-[#999] tracking-wide mr-1">
-            Filter:
+            Filtrer :
           </span>
           <select
             value={catId}
             onChange={(e) => { setCatId(e.target.value); setPage(1); }}
             className="border border-[#DADAD9] bg-white px-2.5 py-1.5 text-[12px] focus:border-[#FF6A00] outline-none"
           >
-            <option value="">All categories</option>
+            <option value="">Toutes les catégories</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
@@ -117,7 +136,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                     : "bg-white text-[#555] hover:bg-[#ECECEC]"
                 }`}
               >
-                {r}
+                {RANGE_LABELS[r]}
               </button>
             ))}
           </div>
@@ -128,7 +147,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
             className="border border-[#DADAD9] bg-white px-2.5 py-1.5 text-[12px] focus:border-[#FF6A00] outline-none ml-auto"
           >
             {COUNTRIES.map((c) => (
-              <option key={c} value={c}>{c}</option>
+              <option key={c} value={c}>{COUNTRY_LABELS[c] ?? c}</option>
             ))}
           </select>
         </div>
@@ -148,7 +167,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
             {/* ---- TOP 3 spotlight ---- */}
             <div className="benjamin-bar mb-3 flex items-center gap-2">
               <Flame className="w-4 h-4 text-[#FF6A00]" />
-              Top 3 this {range.toLowerCase()}
+              {TOP3_LABELS[range]}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
               {top3.map((p, i) => {
@@ -203,17 +222,17 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                       <div className="mt-1.5 flex items-center gap-2 text-[11px] text-[#666]">
                         <span className="inline-flex items-center gap-0.5 text-[#16A34A] font-bold">
                           <TrendingUp className="w-3 h-3" />
-                          {p.sold.toLocaleString()} sold
+                          {p.sold.toLocaleString("fr-FR")} vendus
                         </span>
                         <span className="text-[#DADAD9]">|</span>
                         <span className="inline-flex items-center gap-0.5">
                           <Star className="w-3 h-3 fill-[#FF6A00] text-[#FF6A00]" />
-                          {p.rating.toFixed(1)} ({p.reviewCount})
+                          {p.rating.toFixed(1).replace(".", ",")} ({p.reviewCount})
                         </span>
                       </div>
 
                       <div className="mt-1.5 text-[11px] text-[#666]">
-                        by{" "}
+                        par{" "}
                         <button
                           onClick={() => { setSupplierId(p.supplierId); setView("supplier"); }}
                           className="font-semibold text-[#333] hover:text-[#FF6A00] hover:underline inline-flex items-center gap-1"
@@ -229,7 +248,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                         onClick={() => { setProductId(p.id); setView("product"); }}
                         className="btn-benjamin-orange w-full mt-3"
                       >
-                        View product ›
+                        Voir le produit ›
                       </button>
                     </div>
                   </div>
@@ -240,24 +259,24 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
             {/* ---- Ranked table ---- */}
             <div className="benjamin-bar mb-3 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-[#FF6A00]" />
-              Full ranking ({filtered.length} products)
+              Classement complet ({filtered.length} produits)
             </div>
 
             {/* header row */}
             <div className="hidden md:grid bg-[#0A0F4D] text-white text-[11px] uppercase font-bold tracking-wide grid-cols-[60px_70px_1fr_180px_140px_100px_180px] gap-2 px-4 py-2">
-              <span>Rank</span>
+              <span>Rang</span>
               <span>Image</span>
-              <span>Product</span>
-              <span>Category</span>
-              <span>Price range</span>
-              <span>Sold</span>
+              <span>Produit</span>
+              <span>Catégorie</span>
+              <span>Fourchette de prix</span>
+              <span>Vendus</span>
               <span className="text-right">Actions</span>
             </div>
 
             <div className="bg-white border border-[#DADAD9]">
               {pageItems.length === 0 ? (
                 <div className="px-4 py-10 text-center text-[12px] text-[#999] uppercase">
-                  No products match these filters
+                  Aucun produit ne correspond à ces filtres
                 </div>
               ) : (
                 pageItems.map((p, i) => {
@@ -292,7 +311,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                         </button>
                         <div className="flex items-center gap-1.5 text-[11px] text-[#666] mt-0.5">
                           <Star className="w-3 h-3 fill-[#FF6A00] text-[#FF6A00]" />
-                          <span className="font-semibold text-[#333]">{p.rating.toFixed(1)}</span>
+                          <span className="font-semibold text-[#333]">{p.rating.toFixed(1).replace(".", ",")}</span>
                           <span className="text-[#999]">({p.reviewCount})</span>
                           <span className="text-[#DADAD9] mx-0.5">|</span>
                           <button
@@ -326,7 +345,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                       {/* sold */}
                       <span className="text-[12px] text-[#16A34A] font-bold inline-flex items-center gap-1">
                         <TrendingUp className="w-3 h-3" />
-                        {p.sold.toLocaleString()}
+                        {p.sold.toLocaleString("fr-FR")}
                       </span>
 
                       {/* actions */}
@@ -343,13 +362,13 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                               supplierId: p.supplierId,
                               supplierName: p.supplierName ?? "",
                             });
-                            toast.success("Added to cart");
+                            toast.success("Ajouté au panier");
                           }}
                           className="btn-benjamin-orange !py-1.5 !px-2.5 flex items-center gap-1"
-                          title="Add to cart"
+                          title="Ajouter au panier"
                         >
                           <ShoppingCart className="w-3.5 h-3.5" />
-                          <span className="hidden lg:inline">Add</span>
+                          <span className="hidden lg:inline">Ajouter</span>
                         </button>
                         <button
                           onClick={() => {
@@ -357,10 +376,10 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                             useApp.getState().setView("chat");
                           }}
                           className="btn-square-black !py-1.5 !px-2.5 flex items-center gap-1"
-                          title="Chat with supplier"
+                          title="Discuter avec le fournisseur"
                         >
                           <MessageSquare className="w-3.5 h-3.5" />
-                          <span className="hidden lg:inline">Chat</span>
+                          <span className="hidden lg:inline">Discuter</span>
                         </button>
                       </div>
                     </div>
@@ -375,7 +394,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
                 className="benjamin-nav-btn"
-                aria-label="Previous page"
+                aria-label="Page précédente"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -392,7 +411,7 @@ export function RankingView({ categories }: { categories: CategoryNode[] }) {
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
                 className="benjamin-nav-btn"
-                aria-label="Next page"
+                aria-label="Page suivante"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

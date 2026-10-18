@@ -185,7 +185,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
             <button
               onClick={() => setView("chat")}
               className="relative flex items-center gap-1 px-2 hover:text-[#FF6A00]"
-              aria-label={chatUnread ? `Messages (${chatUnread} non lus)` : "Messages"}
+              aria-label={chatUnread ? (lang === "fr" ? `Messages (${chatUnread} non lus)` : `Messages (${chatUnread} unread)`) : "Messages"}
             >
               <div className="relative">
                 <MessageCircle className="w-6 h-6" strokeWidth={1.6} />
@@ -200,7 +200,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
           )}
 
           {/* cart */}
-          <button onClick={() => setView("cart")} aria-label="Panier" className="relative flex items-center gap-1 px-2 hover:text-[#FF6A00]">
+          <button onClick={() => setView("cart")} aria-label={lang === "fr" ? "Panier" : "Cart"} className="relative flex items-center gap-1 px-2 hover:text-[#FF6A00]">
             <div className="relative">
               <ShoppingCart className="w-6 h-6" strokeWidth={1.6} />
               {cartCount > 0 && (
@@ -233,7 +233,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
             <button className="px-2.5 h-full border-l border-[#ECECEC]" aria-label={lang === "fr" ? "Recherche par image" : "Image search"} onClick={() => doSearch()}>
               <Camera className="w-5 h-5 text-[#555]" strokeWidth={1.6} />
             </button>
-            <button onClick={() => doSearch()} className="bg-[#FF6A00] text-white w-11 h-full flex items-center justify-center shrink-0" aria-label="Search">
+            <button onClick={() => doSearch()} className="bg-[#FF6A00] text-white w-11 h-full flex items-center justify-center shrink-0" aria-label={lang === "fr" ? "Rechercher" : "Search"}>
               <Search className="w-5 h-5" />
             </button>
           </div>
@@ -360,7 +360,7 @@ export function Header({ categories }: { categories: CategoryNode[] }) {
           <div className="absolute left-0 top-0 bottom-0 w-[85vw] max-w-[320px] bg-white overflow-y-auto benjamin-scroll" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between p-3 border-b border-[#ECECEC]">
               <BrandLogo size={36} />
-              <button onClick={() => setMobileMenu(false)}><X className="w-5 h-5" /></button>
+              <button onClick={() => setMobileMenu(false)} aria-label={lang === "fr" ? "Fermer le menu" : "Close menu"}><X className="w-5 h-5" /></button>
             </div>
             {/* account quick links */}
             <div className="p-3 border-b border-[#ECECEC]">

@@ -1,5 +1,6 @@
 "use client";
 
+import { unitLabel } from "@/lib/format";
 import { useCallback, useEffect, useState } from "react";
 import {
   ArrowLeft, Check, CreditCard, Loader2, MapPin, MessageCircle, Package, RefreshCw, Search, Truck, X, PackageCheck, Clock,
@@ -340,7 +341,7 @@ function OrderDetail({ id, onBack }: { id: string; onBack: () => void }) {
                 {i.image ? <img src={i.image} alt="" className="w-12 h-12 object-cover bg-[#F3F3F3]" /> : <div className="w-12 h-12 bg-[#F3F3F3]" />}
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] font-semibold line-clamp-2">{i.title}</div>
-                  <div className="text-[11px] text-[#777]">{i.quantity} {i.unit} × {fcfa(i.price)}{i.variant ? ` · ${i.variant}` : ""}</div>
+                  <div className="text-[11px] text-[#777]">{i.quantity} {unitLabel(i.unit)} × {fcfa(i.price)}{i.variant ? ` · ${i.variant}` : ""}</div>
                 </div>
                 <div className="text-[13px] font-bold whitespace-nowrap">{fcfa(i.price * i.quantity)}</div>
               </li>
